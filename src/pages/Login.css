@@ -1,0 +1,115 @@
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #eef3f7;
+  max-width: 1280px;
+  margin: 0 auto; /* 브라우저 중앙 */
+}
+
+.login-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  min-height: 100vh;
+  background-color: white;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-title {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.login-subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.login-input {
+  display: block;
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.9rem;
+  background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+  box-sizing: border-box;
+}
+
+.login-button:hover {
+  background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+}
+
+/* 🔥 회원가입 이동 버튼 스타일 */
+.register-move-button {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 0.7rem;
+  background: none;
+  color: #4facfe;
+  border: 2px solid #4facfe;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.register-move-button:hover {
+  background: #4facfe;
+  color: white;
+}
+
+.login-right {
+  flex: 1;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.login-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .login-page {
+    flex-direction: column;
+    max-width: 100%;
+  }
+  .login-left {
+    min-height: 50vh;
+    justify-content: center;
+    align-items: center;
+  }
+  .login-right {
+    display: none;
+  }
+}
