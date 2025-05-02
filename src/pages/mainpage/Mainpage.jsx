@@ -23,7 +23,7 @@ function Mainpage() {
         }, [])
 
   return (
-    <>
+    <Grid sx={{display:"flex", flexDirection:"column", bgcolor: "#f5f5f5"}}>
       
       {/* 첫 번째 상단 섹션 */}
       <Grid 
@@ -117,7 +117,7 @@ function Mainpage() {
         </Grid>
       </Grid>
     
-    </>
+    </Grid>
   );
 }
 
