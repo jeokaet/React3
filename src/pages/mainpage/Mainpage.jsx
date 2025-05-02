@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import { Box, Button, Grid, Typography, TextField } from "@mui/material";
 import InstagramIcon from '@mui/icons-material/Instagram';
 import YouTubeIcon from '@mui/icons-material/YouTube';
+import { Link } from "react-router-dom";
 import caxios from "../../api/caxios";
 
 function Mainpage() {
@@ -53,7 +54,7 @@ function Mainpage() {
             >
                 고민하던 여행계획을 어쩌구
             </Typography>
-            <Button variant="contained">근처 여행지</Button>
+            <Link to="/recommendPage"><Button variant="contained">근처 여행지</Button></Link>
             </Grid>
 
             <Grid item xs={12} lg={6} sx={{ display: { xs: "none", lg: "flex" }, justifyContent: "center", alignItems: "center", bgcolor: "#ffffff", py: 8, px: 2, }}>
@@ -81,20 +82,7 @@ function Mainpage() {
                 <Typography>Jeju</Typography>
             </Grid>
         </Grid>
-        <Grid item xs={12} sx= {{ display: "flex", justifyContent: "center", padding : 15, gap : 10}}>
-            <Grid>
-                <Box sx={{ width: 400, height: 400, bgcolor: "grey.300" }}></Box>
-                <Typography>Seoul</Typography>
-            </Grid>
-            <Grid>
-                <Box sx={{ width: 400, height: 400, bgcolor: "grey.300" }}></Box>
-                <Typography>Busan</Typography>
-            </Grid>
-            <Grid>
-                <Box sx={{ width: 400, height: 400, bgcolor: "grey.300" }}></Box>
-                <Typography>Jeju</Typography>
-            </Grid>
-        </Grid>
+        
 
 
         {/* 풋터 */}
