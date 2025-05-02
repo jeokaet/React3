@@ -1,12 +1,27 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Routes, Route } from "react-router-dom";
 import { Box, Button, Grid, Typography, TextField } from "@mui/material";
 import InstagramIcon from '@mui/icons-material/Instagram';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import { Link } from "react-router-dom";
 import caxios from "../../api/caxios";
+import { grey } from "@mui/material/colors";
 
 function Mainpage() {
+     const [ regionList, setRegionList ] = useState([]);
+    
+    
+        useEffect (() => {
+            caxios.get("/region")
+            .catch((error) => {
+                console.error("에러 발생:", error);
+                alert("지역 목록을 불러오는데 실패했습니다.");
+            })
+            .then((resp) =>{
+                setRegionList(resp.data);
+            })
+        }, [])
+
   return (
     <>
       
@@ -69,31 +84,35 @@ function Mainpage() {
           <TextField label="여행지를 입력해주세요" variant="outlined" sx={{ width: 400 }} />
         </Grid>
         <Grid item xs={12} sx= {{ display: "flex", justifyContent: "center", padding : 15, gap : 10}}>
-            <Grid>
-                <Box sx={{ width: 400, height: 400, bgcolor: "grey.300" }}></Box>
-                <Typography>Seoul</Typography>
-            </Grid>
-            <Grid>
-                <Box sx={{ width: 400, height: 400, bgcolor: "grey.300" }}></Box>
-                <Typography>Busan</Typography>
-            </Grid>
-            <Grid>
-                <Box sx={{ width: 400, height: 400, bgcolor: "grey.300" }}></Box>
-                <Typography>Jeju</Typography>
-            </Grid>
+            <Grid container spacing={3} sx={{ display: "flex", justifyContent:"center"}}>
+            {
+                regionList.map((region, i) => (
+                    <Grid key={i} >
+                        <Box sx={{ width: 400, height: 400, border: "1px solid black" }}></Box>
+                        <Typography>{region.regionName}</Typography>
+                    </Grid>
+                ))
+            }
+            </Grid>  
         </Grid>
         
 
 
         {/* 풋터 */}
-        <Grid item xs={12}>
-            <Grid>
+        <Grid item xs={12} md={12} sx={{width : "100%" ,height: 500,  display: "flex" , gap:100, backgroundColor:grey[400], p:15, }}>
+            <Grid item xs={12} md={6}>
                 <Typography>
+                    (주) CodeBreaker<br></br>
+                    서울특별시 관악구 봉천로 227<br></br>
+                    CodeBreaker@gmail.com<br></br>
 
+                    이용약관 | 개인정보처리방침 | 고객지원 | 문의<br></br>
+                    CopyRight CodeBreaker.ALL RIGHTS RESERVED.
                 </Typography>
             </Grid>
-            <Grid>
-                <InstagramIcon/> <YouTubeIcon />
+            <Grid item xs={12} md={6} sx={{display: "flex", gap :2, justifyItems:"flex-end"}}>
+            <InstagramIcon sx={{ fontSize: 50, color: "#E1306C" }} />
+            <YouTubeIcon sx={{ fontSize: 50, color: "red" }} />
             </Grid>
         </Grid>
       </Grid>

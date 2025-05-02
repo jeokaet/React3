@@ -19,7 +19,7 @@ function App() {
           <Route path="/register" element={<Register/>}/>
           <Route path="/recommendPage" element={<RecommendPage/>}/>
           <Route Path="/myPage" element={<MyPage/>}/>
-          <Route path="admin" element={<AdminPage />}/>
+          <Route path="/admin/*" element={<AdminPage />}/>
         </Routes>
       </Router>
     </div>
