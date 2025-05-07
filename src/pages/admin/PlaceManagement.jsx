@@ -33,6 +33,7 @@ function PlaceManagement() {
         });
     }
 
+    
 
     const [rows , setRows] = useState([]);
     useEffect (() => {
@@ -60,18 +61,24 @@ function PlaceManagement() {
     
     const [ checked, setChecked ] = useState(false);
     const handleSelectAll = (e) => {
-        //if 문 조건도 수정 해야함. 하나라도 체크 안되어 있으면 전체 선택도 false 줘야 함.
-        if(!checked||handleSelect()){
-            setChecked(e.target.checked);
-            //여기다가 아래 목록 체크박스들 다 체크드 줘야함.
-        }else{
-            setChecked(false);
+        const isChecked = e.target.checked;
+        setChecked(isChecked);
+        if (isChecked) {
+          const allIds = rows.map((row) => row.regionId);
+          setSelected(allIds);
+        } else {
+          setSelected([]);
         }
         
     }
     const handleDelete = () => {
 
     }
+    useEffect(() => {
+        const allSelected = rows.length > 0 && selected.length === rows.length;
+        setChecked(allSelected);
+      }, [selected, rows]);
+      
 
     return (
         <Box sx={{ p: 4 }}>
@@ -146,7 +153,13 @@ function PlaceManagement() {
                         </TableCell>
                         <TableCell sx={{width : "10%"}}>{row.regionName}</TableCell>
                         <TableCell sx={{width : "50%"}}>{row.regionDetail}</TableCell>
-                        <TableCell sx={{width : "25%"}}>{row.filePath}</TableCell>
+                        <TableCell sx={{width : "25%"}}>
+                            {
+                                row.filePath && (
+                                    <img src={row.filePath} alt="지역이미지" width="100"></img>
+                                )
+                            }
+                        </TableCell>
                         <TableCell sx={{width : "10%"}}><Button>수정</Button></TableCell>
                         </TableRow>
                     ))}
