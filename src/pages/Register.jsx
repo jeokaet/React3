@@ -92,11 +92,11 @@ function Register() {
   return (
     <div className="register-page">
       <form className="register-form" onSubmit={handleRegister}>
-        <h1 className="register-title">회원가입 ✈️</h1>
+        <h1 className="register-title">회원가입</h1>
 
         {/* 기초 정보 */}
         <fieldset className="register-fieldset">
-          <legend>👤 기본 정보</legend>
+          <legend>기본 정보</legend>
 
           <div className="id-check-wrapper">
             <input
@@ -134,7 +134,7 @@ function Register() {
 
         {/* 프로필 업로드 */}
         <fieldset className="register-fieldset">
-          <legend>🖼 프로필 사진</legend>
+          <legend>프로필 사진</legend>
 
           <div className="profile-upload-wrapper">
             <input
@@ -151,7 +151,7 @@ function Register() {
 
         {/* 연락처 정보 */}
         <fieldset className="register-fieldset">
-          <legend>📞 연락처 정보</legend>
+          <legend>연락처 정보</legend>
 
           <input
             type="text"
@@ -173,22 +173,30 @@ function Register() {
 
         {/* 주소 정보 */}
         <fieldset className="register-fieldset">
-          <legend>🏠 주소 정보</legend>
+          <legend>주소 정보</legend>
 
           <div className="address-search-wrapper">
             <input
               type="text"
-              name="mainAddress"
-              placeholder="기본 주소 입력"
+              name="postCode"
+              placeholder="우편번호 입력"
               className="register-input"
-              value={formData.mainAddress}
+              value={formData.postCode}
               readOnly
             />
             <button type="button" className="address-search-button" onClick={openPostCode}>
               주소 검색
             </button>
           </div>
-
+          <input
+            type="number"
+            name="mainAddress"
+            placeholder="주소 입력"
+            className="register-input"
+            value={formData.mainAddress}
+            onChange={handleChange}
+            readOnly
+          />
           <input
             type="text"
             name="subAddress"
@@ -197,15 +205,7 @@ function Register() {
             value={formData.subAddress}
             onChange={handleChange}
           />
-          <input
-            type="number"
-            name="postCode"
-            placeholder="우편번호 입력"
-            className="register-input"
-            value={formData.postCode}
-            onChange={handleChange}
-            readOnly
-          />
+          
         </fieldset>
 
         <button type="submit" className="register-button">

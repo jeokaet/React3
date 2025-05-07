@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import { Routes, Route } from "react-router-dom";
 import { Box, Button, Grid, Typography, TextField } from "@mui/material";
 import InstagramIcon from '@mui/icons-material/Instagram';
 import YouTubeIcon from '@mui/icons-material/YouTube';
@@ -23,7 +22,7 @@ function Mainpage() {
         }, [])
 
   return (
-    <>
+    <Grid sx={{display:"flex", flexDirection:"column", bgcolor: "#f5f5f5"}}>
       
       {/* 첫 번째 상단 섹션 */}
       <Grid 
@@ -117,7 +116,7 @@ function Mainpage() {
         </Grid>
       </Grid>
     
-    </>
+    </Grid>
   );
 }
 
