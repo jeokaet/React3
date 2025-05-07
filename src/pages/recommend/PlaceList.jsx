@@ -1,13 +1,15 @@
-import React, { useEffect, useRef } from "react";
+import React, { useLayoutEffect, useRef } from "react";
 import styles from "./PlaceList.module.css";
 
 const PlaceList = () => {
   const mapRef = useRef(null);
 
-  useEffect(() => {
-    if (!window.kakao || !window.kakao.maps) return;
+  useLayoutEffect(() => {
+    if (!window.kakao || !window.kakao.maps || !mapRef.current) {
+      console.warn("Kakao or mapRef not ready");
+      return;
+    }
 
-    // ✅ 지도 API가 로드된 후 실행
     window.kakao.maps.load(() => {
       const center = new window.kakao.maps.LatLng(37.5665, 126.9780);
 
@@ -19,6 +21,10 @@ const PlaceList = () => {
       new window.kakao.maps.Marker({
         map,
         position: center,
+      });
+
+      window.addEventListener("resize", () => {
+        map.relayout();
       });
     });
   }, []);
