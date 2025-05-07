@@ -1,17 +1,9 @@
-/* 🔥 브라우저 기본 높이 설정 */
-html, body, #root {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+
   
   /* Register 전체 페이지 */
   .register-page {
     width: 100%;
-    min-height: 100vh; /* 기본은 화면 꽉 채우기 */
-    height: auto;      /* 폼 내용이 많으면 자연스럽게 늘어나게 */
+  
     display: flex;
     justify-content: center;
     align-items: center;
@@ -22,8 +14,7 @@ html, body, #root {
   
   /* 폼 전체 */
   .register-form {
-    width: 100%;
-    max-width: 400px;
+    width: 800px;
     background-color: white;
     padding: 2rem;
     border-radius: 1rem;

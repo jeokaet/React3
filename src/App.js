@@ -7,6 +7,7 @@ import Mainpage from "./pages/mainpage/Mainpage";
 import RecommendPage from "./pages/recommend/RecommendPage";
 import MyPage from "./pages/myPage/MyPage";
 import AdminPage from "./pages/admin/Adminpage";
+import Agreement from "./pages/Agreement";
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
           <Route path="/register" element={<Register/>}/>
           <Route path="/recommendPage" element={<RecommendPage/>}/>
           <Route Path="/myPage" element={<MyPage/>}/>
-          <Route path="admin" element={<AdminPage />}/>
+          <Route path="/admin/*" element={<AdminPage />}/>
+          <Route path="/agreement" element={<Agreement/>}/>
         </Routes>
       </Router>
     </div>
