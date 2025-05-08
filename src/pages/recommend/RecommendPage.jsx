@@ -2,7 +2,7 @@ import React from "react";
 import StepBar from "./StepBar";
 import PlaceList from "./PlaceList";
 import { Grid, Box } from "@mui/material";
-
+import MainContent from "./MainContent";
 function RecommendPage() {
   return (
     <Box
@@ -27,6 +27,9 @@ function RecommendPage() {
           }}
         >
           <StepBar />
+        </Grid>
+        <Grid item xs={12} md={3.5}>
+
         </Grid>
 
         {/* 오른쪽 지도 */}
