@@ -1,0 +1,30 @@
+.regionItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .regionItem:hover {
+    transform: scale(1.07);
+  }
+  
+  .regionCard {
+    width: 400px;
+    height: 400px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+  }
+  
+  .regionText {
+    margin-top: 8px;
+    font-weight: bold;
+    transition: color 0.3s ease;
+  }
+  
+  .regionItem:hover .regionText {
+    color: #1976d2; /* 예: hover 시 글자 색 바뀌게 */
+  }
+  
