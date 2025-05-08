@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Box, Button, Grid, Typography, TextField } from "@mui/material";
+
+import React, {useEffect, useState} from "react";
+import { Box, Button, Grid, Typography, TextField,} from "@mui/material";
 import InstagramIcon from '@mui/icons-material/Instagram';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import { Link } from "react-router-dom";
@@ -8,6 +9,7 @@ import { grey } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
 import usePlaceStore from "../../store/usePlaceStore";
 import styles from './Mainpage.module.css';
+
 
 function Mainpage() {
     const [regionList, setRegionList] = useState([]);
