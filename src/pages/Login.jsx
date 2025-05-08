@@ -196,7 +196,7 @@ function Login() {
           >
             여행 시작하기
           </Button>
-          <Link to="/register">
+          <Link to="/agreement">
           <Button
             fullWidth
             variant="outlined"
