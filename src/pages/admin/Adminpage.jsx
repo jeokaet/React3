@@ -4,6 +4,7 @@ import { Box } from "@mui/material";
 import PlaceManagement from "./PlaceManagement";
 import AdminSidebar from './AdminSIdebar';
 import DashBoard from "./DashBoard";
+import UserStats from "./UserStats";
 
 
 function AdminPage() {
@@ -15,6 +16,7 @@ function AdminPage() {
             <Route path="/" element={<DashBoard/>}></Route>
             <Route path="/dashBoard" element={<DashBoard/>}></Route>
             <Route path="/placeManagement" element={<PlaceManagement />}></Route>
+            <Route path="/user-stats" element={<UserStats/>} />
         </Routes>
 </Box> 
   );
