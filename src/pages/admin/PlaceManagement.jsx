@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Grid, TextField, Typography, Button, InputLabel, Input, TableContainer, Paper, TableHead, TableRow, Table, TableBody, Checkbox, TableCell, FormControlLabel, } from '@mui/material';
 import { grey } from "@mui/material/colors";
+import RegionUpdate from './RegionUpdate';
 import caxios from '../../api/caxios';
 
 function PlaceManagement() {
@@ -72,13 +73,31 @@ function PlaceManagement() {
         
     }
     const handleDelete = () => {
-
+        if(window.confirm("한번 삭제된 지역은 복구가 불가능합니다. 정말 삭제하시겠습니까?")){
+            caxios.delete("/region/delete", {data:selected})
+            .catch((error) => {
+                console.error("에러 발생:", error);
+                alert("지역 목록을 불러오는데 실패했습니다.");
+            })
+            .then(() => {alert("삭제가 완료되었습니다.")})
+        }else{
+            return;
+        }
+        
     }
+
     useEffect(() => {
         const allSelected = rows.length > 0 && selected.length === rows.length;
         setChecked(allSelected);
-      }, [selected, rows]);
-      
+    }, [selected, rows]);
+    
+    const [open, setOpen] = useState(false);
+    const [ editRegion, setEditRegion ] = useState();
+    const handleUpdate = (row) => {
+        setEditRegion(row); 
+        setOpen(true);  
+    }
+
 
     return (
         <Box sx={{ p: 4 }}>
@@ -160,13 +179,18 @@ function PlaceManagement() {
                                 )
                             }
                         </TableCell>
-                        <TableCell sx={{width : "10%"}}><Button>수정</Button></TableCell>
+                        <TableCell sx={{width : "10%"}}><Button onClick={() => handleUpdate(row)}>수정</Button></TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
         </TableContainer>
+        {
+           <RegionUpdate  open={open} onClose={() => setOpen(false)}/>
+        }
         </Box>
+
+        
     );
 }
 
