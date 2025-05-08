@@ -1,6 +1,6 @@
 import React from "react";
 import StepBar from "./StepBar";
-import PlaceList from "./PlaceList";
+import Map from "./Map";
 import { Grid, Box } from "@mui/material";
 import MainContent from "./MainContent";
 function RecommendPage() {
@@ -43,7 +43,7 @@ function RecommendPage() {
             overflow: "hidden",
           }}
         >
-          <PlaceList />
+          <Map />
         </Grid>
       </Grid>
     </Box>

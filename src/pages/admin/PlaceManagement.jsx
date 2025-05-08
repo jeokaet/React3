@@ -21,7 +21,7 @@ function PlaceManagement() {
                 regionDetail: '',
                 filePath: null
             });
-            console.error("에러 발생:", error);
+            console.log("에러 발생:", error);
             alert("등록 실패");
           })
           .then((resp) => {
