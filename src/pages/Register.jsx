@@ -1,95 +1,88 @@
 import React, { useState } from "react";
-import caxios from "../api/caxios"; // API 인스턴스 맞게 경로 설정
-import "./Register.css";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 function Register() {
   const [formData, setFormData] = useState({
     loginId: "",
     loginPw: "",
-    nickName: "",
-    profilePicture: "",
+    name: "",
+    rrn1: "",
+    rrn2: "",
     phoneNumber: "",
+    emailAddress: "",
     mainAddress: "",
     subAddress: "",
     postCode: "",
-    emailAddress: "",
   });
-
-  const [idChecked, setIdChecked] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (name === "loginId") {
-      setIdChecked(false); // 아이디를 다시 수정하면 중복체크 초기화
-    }
-  };
-
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    if (!idChecked) {
-      alert("아이디 중복확인을 해주세요!");
-      return;
-    }
-    try {
-      await caxios.post("/auth/register", formData);
-      alert("회원가입 성공! 로그인 하세요.");
-      window.location.href = "/";
-    } catch (error) {
-      alert("회원가입 실패: " + (error.response?.data || ""));
-    }
-  };
-
-  const checkDuplicateId = async () => {
-    if (!formData.loginId) {
-      alert("아이디를 입력해주세요.");
-      return;
-    }
-    try {
-      const response = await caxios.get(`/auth/check-duplicate?loginId=${formData.loginId}`);
-      if (response.data.exists) {
-        alert("이미 사용 중인 아이디입니다.");
-        setIdChecked(false);
-      } else {
-        alert("사용 가능한 아이디입니다!");
-        setIdChecked(true);
-      }
-    } catch (error) {
-      alert("중복확인 실패");
-    }
-  };
-
-  const handleProfilePictureUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const formDataToUpload = new FormData();
-    formDataToUpload.append("file", file);
-
-    try {
-      const response = await caxios.post("/upload/profile", formDataToUpload, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      setFormData(prev => ({ ...prev, profilePicture: response.data.url }));
-      alert("프로필 사진 업로드 성공!");
-    } catch (error) {
-      alert("프로필 사진 업로드 실패");
-    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const openPostCode = () => {
     new window.daum.Postcode({
-      oncomplete: function(data) {
-        setFormData(prev => ({
+      oncomplete: function (data) {
+        setFormData((prev) => ({
           ...prev,
           mainAddress: data.address,
-          postCode: data.zonecode
+          postCode: data.zonecode,
         }));
-      }
+      },
     }).open();
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // validation & submit logic here
+    console.log(formData);
+  };
+
   return (
+<<<<<<< HEAD
+    <Container maxWidth="sm" sx={{ mt: 10, mb: 5 }}>
+      <Paper elevation={4} sx={{ p: 4 }}>
+        <Typography variant="h5" gutterBottom>
+          회원가입 ✈️
+        </Typography>
+
+        <form onSubmit={handleSubmit}>
+          {/* 로그인 정보 */}
+          <Typography variant="h6" gutterBottom>
+            🔐 로그인 정보
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="아이디"
+                name="loginId"
+                value={formData.loginId}
+                onChange={handleChange}
+                required
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="비밀번호"
+                name="loginPw"
+                type="password"
+                value={formData.loginPw}
+                onChange={handleChange}
+                required
+              />
+            </Grid>
+          </Grid>
+=======
     <div className="register-page">
       <form className="register-form" onSubmit={handleRegister}>
         <h1 className="register-title">회원가입</h1>
@@ -97,41 +90,123 @@ function Register() {
         {/* 기초 정보 */}
         <fieldset className="register-fieldset">
           <legend>기본 정보</legend>
+>>>>>>> 4e8d314ded1dc083abf9ac44802a94d400eac30a
 
-          <div className="id-check-wrapper">
-            <input
-              type="text"
-              name="loginId"
-              placeholder="아이디 입력"
-              className="register-input"
-              value={formData.loginId}
-              onChange={handleChange}
-              required
-            />
-            <button type="button" className="id-check-button" onClick={checkDuplicateId}>
-              중복확인
-            </button>
-          </div>
+          {/* 기본 정보 */}
+          <Typography variant="h6" sx={{ mt: 4 }} gutterBottom>
+            👤 기본 정보
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="이름"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                label="주민등록번호 앞자리"
+                name="rrn1"
+                value={formData.rrn1}
+                onChange={handleChange}
+                inputProps={{ maxLength: 6 }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                label="뒷자리 첫글자"
+                name="rrn2"
+                value={formData.rrn2}
+                onChange={handleChange}
+                inputProps={{ maxLength: 1 }}
+              />
+            </Grid>
+          </Grid>
 
-          <input
-            type="password"
-            name="loginPw"
-            placeholder="비밀번호 입력"
-            className="register-input"
-            value={formData.loginPw}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="nickName"
-            placeholder="닉네임 입력"
-            className="register-input"
-            value={formData.nickName}
-            onChange={handleChange}
-          />
-        </fieldset>
+          {/* 연락처 */}
+          <Typography variant="h6" sx={{ mt: 4 }} gutterBottom>
+            📞 연락처
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="전화번호"
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="이메일"
+                name="emailAddress"
+                value={formData.emailAddress}
+                onChange={handleChange}
+              />
+            </Grid>
+          </Grid>
 
+<<<<<<< HEAD
+          {/* 주소 정보 */}
+          <Typography variant="h6" sx={{ mt: 4 }} gutterBottom>
+            🏠 주소 정보
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={9}>
+              <TextField
+                fullWidth
+                label="기본 주소"
+                name="mainAddress"
+                value={formData.mainAddress}
+                onChange={handleChange}
+                InputProps={{ readOnly: true }}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <Button
+                fullWidth
+                variant="contained"
+                sx={{ height: '100%' }}
+                onClick={openPostCode}
+              >
+                주소 검색
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="상세 주소"
+                name="subAddress"
+                value={formData.subAddress}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label="우편번호"
+                name="postCode"
+                value={formData.postCode}
+                onChange={handleChange}
+                InputProps={{ readOnly: true }}
+              />
+            </Grid>
+          </Grid>
+
+          <Button type="submit" variant="contained" fullWidth sx={{ mt: 4 }}>
+            회원가입 완료
+          </Button>
+        </form>
+      </Paper>
+    </Container>
+=======
         {/* 프로필 업로드 */}
         <fieldset className="register-fieldset">
           <legend>프로필 사진</legend>
@@ -213,6 +288,7 @@ function Register() {
         </button>
       </form>
     </div>
+>>>>>>> 4e8d314ded1dc083abf9ac44802a94d400eac30a
   );
 }
 
