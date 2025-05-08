@@ -12,27 +12,22 @@ function PlaceManagement() {
         setRegion({ ...region, [name]: files ? files[0] : value });
     }
 
-    const handleInsertRegion = () => {
-        console.log(region);
-        caxios.post("/region", region)
-        .catch((error) => {
-            setRegion({
-                regionName: '',
-                regionDetail: '',
-                filePath: null
-            });
-            console.log("에러 발생:", error);
-            alert("등록 실패");
-          })
-          .then((resp) => {
-            setRegion({
-                regionName: '',
-                regionDetail: '',
-                filePath: null
-            });
-            alert("지역이 등록되었습니다.");
-        });
-    }
+    const handleInsertRegion = async () => {
+        try {
+          const response = await caxios.post("/region", region);
+          setRegion({
+            regionName: '',
+            regionDetail: '',
+            filePath: null
+          });
+          alert("지역이 등록되었습니다.");
+        } catch (error) {
+            const errorMessage = error?.response?.data || "등록 실패";
+            alert(errorMessage);
+        }
+      };
+      
+
 
     
 

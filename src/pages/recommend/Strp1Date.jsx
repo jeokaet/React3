@@ -4,13 +4,13 @@ import caxios from '../../api/caxios';
 
 const Step1Date = ()=>{
 
-    const ps = new kakao.maps.services.Places();
+    // const ps = new kakao.maps.services.Places();
 
     return(
         <Box>
             <Typography>스탭1</Typography>
                 <Grid item xs={12}>
-                    <TextField fullWidth label="장소 검색" name="seachPlace" value={region.regionDetail} multiline rows={4} variant="outlined"  onChange={handleInputRegion}/>
+                    <TextField fullWidth label="장소 검색" name="seachPlace" multiline rows={4} variant="outlined" />
                 </Grid>
         </Box>
     );

@@ -20,7 +20,7 @@ function RecommendPage() {
           xs={12}
           md={4}
           sx={{
-            width:"15%",
+            width:"5%",
             height: { xs: "30vh", md: "100%" },
             overflowY: "auto",
             backgroundColor: "#f9f9f9",
@@ -28,7 +28,7 @@ function RecommendPage() {
         >
           <StepBar />
         </Grid>
-        <Grid item xs={12} md={3.5}>
+        <Grid item xs={12} md={3.5} sx={{width:"10%", height:{ xs: "30vh", md: "100%" }, overflow:"auto",background:"f9f9f9"}}>
 
         </Grid>
 
