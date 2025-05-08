@@ -28,6 +28,7 @@ function PlaceManagement() {
       };
       
 
+
     
 
     const [rows , setRows] = useState([]);
