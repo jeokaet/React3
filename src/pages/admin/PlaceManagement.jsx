@@ -186,7 +186,7 @@ function PlaceManagement() {
             </Table>
         </TableContainer>
         {
-           <RegionUpdate  open={open} onClose={() => setOpen(false)}/>
+           <RegionUpdate  open={open} onClose={() => setOpen(false)} editRegion={editRegion}/>
         }
         </Box>
 

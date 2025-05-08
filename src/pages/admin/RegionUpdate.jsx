@@ -1,10 +1,17 @@
 import {  Box, Grid, TextField, Typography, Button, InputLabel, Input, TableContainer, Paper, TableHead, TableRow, Table, TableBody, Checkbox, TableCell, FormControlLabel, Modal, IconButton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
+import caxios from '../../api/caxios';
 
-function RegionUpdate ({ open, onClose }) {
+function RegionUpdate ({ open, onClose, editRegion }) {
 
     const [ region, setRegion ] = useState({});
+
+    useEffect(() => {
+        if (editRegion) {
+          setRegion(editRegion);
+        }
+      }, [editRegion]);
     
     const handleInputRegion = (e) => {
         const { name, value, files } = e.target;
@@ -12,7 +19,15 @@ function RegionUpdate ({ open, onClose }) {
     }
 
     const handleUpdateRegion = () => {
-
+        caxios.put("/region/update", region)
+        .catch((error) => {
+            console.log(error);
+            alert("수정 실패했습니다.")
+        })
+        .then(()=>{
+            onClose();
+            alert("수정이 완료되었습니다.")
+        })
     }
 
     return(
