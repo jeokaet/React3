@@ -1,51 +1,61 @@
 import React from "react";
 import StepBar from "./StepBar";
-import PlaceList from "./PlaceList";
+import Map from "./Map";
 import { Grid, Box } from "@mui/material";
 import MainContent from "./MainContent";
+import Panel from "./Panel";
+
+
 function RecommendPage() {
+
+  
   return (
     <Box
       sx={{
-        height: "calc(100vh - 64px)", // 헤더 fixed 고려
-        marginTop: "64px",
-        display: "flex",
-        flexDirection: "column",
+        width: "100vw",
+        height: "100vh",
+        overflow: "hidden",
+        position: "relative",
+        paddingTop: "64px"
       }}
     >
-      <Grid container sx={{ flex: 1 }}>
-        {/* 왼쪽 사이드바 */}
-        <Grid
-          item
-          xs={12}
-          md={4}
-          sx={{
-            width:"15%",
-            height: { xs: "30vh", md: "100%" },
-            overflowY: "auto",
-            backgroundColor: "#f9f9f9",
-          }}
-        >
-          <StepBar />
-        </Grid>
-        <Grid item xs={12} md={3.5}>
+      
+      {/* <Grid container sx={{ flex: 1, height: "100%" }}> */}
+      <Box
+        sx={{
+          position: "relative",
+          zIndex: 1,
+          display: "flex",
+          height: "100%",
+        }}
+      >
 
+        <Grid item xs={12} md={4.5} sx={{ width:"30%", height: "100%",  borderRight: "1px solid #ccc", display:"flex" }}>
+          <Grid sx={{ width:"20%", height: "100%",  borderRight: "1px solid #ccc" }}>
+            <StepBar/>
+          </Grid>
+          <Grid sx={{ width:"80%", height: "100%",  borderRight: "1px solid #ccc" }}>
+            <MainContent />
+          </Grid>
         </Grid>
 
-        {/* 오른쪽 지도 */}
-        <Grid
-          item
-          xs={12}
-          md={8}
-          sx={{
-            width:"85%",
-            height: { xs: "70vh", md: "100%" },
-            overflow: "hidden",
-          }}
-        >
-          <PlaceList />
-        </Grid>
-      </Grid>
+
+        {/* <Grid item xs={12} md={7.5} sx={{ width:"10%", height: "100%", overflow: "hidden", }}>
+          <Panel />
+        </Grid> */}
+
+        
+<Grid sx={{ flex: 1, height: "100%", display: "flex", flexDirection: "row" }}>
+  <Panel />  {/* 가변 width */}
+  <Box sx={{ flex: 1 }}>
+    <Map />
+  </Box>
+</Grid>
+
+
+
+        </Box>
+      {/* </Grid> */}
     </Box>
   );
 }

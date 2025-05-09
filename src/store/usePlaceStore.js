@@ -29,6 +29,13 @@ const usePlaceStore = create((set) => ({
   isPanelOpen: true,
   togglePanel: () =>
     set((state) => ({ isPanelOpen: !state.isPanelOpen })),
+
+  isSlideOpen: true,
+  toggleSlide: () =>
+    set((state) => ({
+      isSlideOpen: !state.isSlideOpen,
+    })),
+
 }));
 
 export default usePlaceStore;

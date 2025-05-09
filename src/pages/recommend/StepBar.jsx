@@ -85,11 +85,11 @@ const StepBar = () => {
       </Box>
 
       {/* 본문 */}
-      <Box sx={{ flex: 1, overflowY: "auto" }}>
+      {/* <Box sx={{ flex: 1, overflowY: "auto" }}>
         {step === 1 && <Step1Date />}
         {step === 2 && <Step2Place />}
         {step === 3 && <Step3Confirm />}
-      </Box>
+      </Box> */}
 
       {/* 하단 버튼 */}
       <Button
