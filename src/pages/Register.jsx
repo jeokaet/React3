@@ -58,8 +58,7 @@ function Register() {
   };
 
   return (
-
-    <Container maxWidth="sm" sx={{ mt: 10, mb: 5 }}>
+    <Container maxWidth="sm" sx={{ mt: 12, mb: 5 }}>
       <Paper elevation={4} sx={{ p: 4 }}>
         <Typography variant="h5" gutterBottom>
           회원가입 ✈️
@@ -101,8 +100,6 @@ function Register() {
             </Grid>
           </Grid>
 
-
-          {/* 기본 정보 */}
           <Typography variant="h6" sx={{ mt: 4 }} gutterBottom>
             👤 기본 정보
           </Typography>
@@ -174,8 +171,6 @@ function Register() {
             </Grid>
           </Grid>
 
-
-          {/* 주소 정보 */}
           <Typography variant="h6" sx={{ mt: 4 }} gutterBottom>
             🏠 주소 정보
           </Typography>
@@ -227,7 +222,6 @@ function Register() {
         </form>
       </Paper>
     </Container>
-
   );
 }
 
