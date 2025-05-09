@@ -4,10 +4,12 @@ import caxios from '../../api/caxios';
 
 const Step1Date = () => {
     const [date, setDate] = useState("");
+
+    
   
     return (
       <Box>
-        <Typography variant="h6" gutterBottom>스탭1</Typography>
+        <Typography variant="h6" gutterBottom>날짜 및 위치</Typography>
   
         <Grid item xs={12} sx={{ mb: 2 }}>
           <TextField
@@ -16,9 +18,7 @@ const Step1Date = () => {
             fullWidth
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            InputLabelProps={{
-              shrink: true,
-            }}
+            InputLabelProps={{shrink: true }}
           />
         </Grid>
   
