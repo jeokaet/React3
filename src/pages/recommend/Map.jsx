@@ -1,12 +1,15 @@
-import React, { useLayoutEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import styles from "./Map.module.css";
+import useLocationStore from "../../store/useLocationStore";
 
 const Map = () => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markerInstance = useRef(null);
 
-  useLayoutEffect(() => {
+  const {latitude,longitude} = useLocationStore();
+
+  useEffect(() => {
     const kakao = window.kakao;
     const google = window.google;
 
@@ -14,9 +17,9 @@ const Map = () => {
       console.warn("Kakao or Google Maps not ready");
       return;
     }
-
+    console.log("내위치:",latitude,longitude)
     kakao.maps.load(() => {
-      const center = new kakao.maps.LatLng(37.5665, 126.9780); // 나중에 여기 lating 을 선택한 지역 경도위도로 넣도록 수정 필요.
+      const center = new kakao.maps.LatLng(latitude||37.5665,longitude||126.9780); // 나중에 여기 lating d을 선택한 지역 경도위도로 넣도록 수정 필요.
 
       const map = new kakao.maps.Map(mapRef.current, {
         center,
@@ -80,6 +83,24 @@ const Map = () => {
       });
     });
   }, []);
+
+   useEffect(() => {
+    if (
+      latitude !== null &&
+      longitude !== null &&
+      window.kakao &&
+      mapInstance.current &&
+      window.kakao.maps
+    ) {
+      const center = new window.kakao.maps.LatLng(latitude, longitude);
+      console.log("📍 지도 중심 이동:", latitude, longitude);
+
+      mapInstance.current.setCenter(center); // 지도 중심 이동
+      if (markerInstance.current) {
+        markerInstance.current.setPosition(center); // 마커도 이동
+      }
+    }
+  }, [latitude, longitude]);
 
   return (
     <div className={styles.mapWrapper}>
