@@ -93,7 +93,7 @@ const Step2Place = () => {
                 onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault(); // 줄바꿈 막음
-                        handleSearch();     // 검색 실행
+                        handleSearch();     // 검색 실행ㄷ
                     }
                 }}
                 sx={{ mb: 2 }}
