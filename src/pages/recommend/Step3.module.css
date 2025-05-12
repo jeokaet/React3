@@ -1,0 +1,32 @@
+/* .placebox {
+    border: 1px solid black;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap:16px;
+}
+
+.pic1 {
+    border: 1px solid black;
+    width: 60px;
+    height: 60px;
+} */
+
+.pic1 {
+  border: 1px solid black;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 8px;
+  object-fit: cover;
+}
+
+/* 반응형 방향 전환 (모바일은 세로 → 아래로 화살표) */
+@media (max-width: 600px) {
+ .pic1{
+    width: 40px;
+    height: 40px;
+ }
+}
+
+
