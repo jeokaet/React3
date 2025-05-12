@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import caxios from "../../api/caxios"; 
+import caxios from "../../api/caxios";
 import { Box, Typography, TextField, TableHead, TableBody, TableRow, TableCell, Grid, Table, Button } from "@mui/material";
+import textFilter from "../../utils/textFilter";
 
 // 🔸 더미 장소 데이터 (LLM이 필터링 대상으로 사용할 리스트)
 const mockPlaces = [
@@ -47,19 +48,31 @@ const Step2Place = () => {
 
     // ✅ 사용자 입력 기반 서버 요청 (LLM 호출 포함)
     const handleSearch = async () => {
+        if (textFilter.isAbusiveOnlyInput(query)) {
+            alert("부적절한 단어만 입력되어 요청을 처리할 수 없습니다.");
+            setQuery("");
+            return;
+        }
         try {
             const res = await caxios.post("/api/llm-recommend", {
                 userInput: query,
                 examplePlaces: mockPlaces
             });
 
-            // ✅ 결과 세팅
+            if (res.data.error) {
+                alert(res.data.error); 
+                return; 
+            }
+
+            // ✅ 정상 결과만 있을 경우 리스트 업데이트
             setFilteredResults(res.data.results);
+            setQuery("");
         } catch (err) {
             console.error("LLM 요청 실패:", err);
             alert("추천 요청 중 오류가 발생했습니다.");
         }
     };
+
 
     return (
         <Box>
@@ -77,6 +90,12 @@ const Step2Place = () => {
                 variant="outlined"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault(); // 줄바꿈 막음
+                        handleSearch();     // 검색 실행ㄷ
+                    }
+                }}
                 sx={{ mb: 2 }}
             />
 
