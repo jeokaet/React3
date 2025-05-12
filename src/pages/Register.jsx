@@ -1,32 +1,30 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  Paper,
-  TextField,
-  Typography,
-} from "@mui/material";
-import caxios from "../api/caxios"; // ✅ axios 인스턴스
+import { useLocation } from "react-router-dom"; 
+import { Button, Container, Grid, Paper, TextField, Typography, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import caxios from "../api/caxios";
 
 function Register() {
+
+  const location = useLocation();
+  const { agreement } = location.state || {}; 
+
   const [formData, setFormData] = useState({
     loginId: "",
-    loginPw: "",
-    name: "",
-    rrn1: "",
-    rrn2: "",
-    phoneNumber: "",
-    emailAddress: "",
-    mainAddress: "",
-    subAddress: "",
+    pw: "",
+    userName: "",
+    birth: "",
+    gender: "",
+    email: "",
+    address1: "",
+    address2: "",
     postCode: "",
+    agreement: agreement,
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const updated = setFormData((prev) => ({ ...prev, [name]: value }));
+    console.log("변경된 formData:", updated);
   };
 
   const openPostCode = () => {
@@ -44,11 +42,11 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const payload = {
-        ...formData,
-        rrn: `${formData.rrn1}-${formData.rrn2}`,
-      };
-      await caxios.post("/auth/register", payload);
+      // const payload = {
+      //   ...formData,
+      //   rrn: `${formData.rrn1}-${formData.rrn2}`,
+      // };
+      await caxios.post("/auth/register", formData);
       alert("회원가입 성공! 로그인 해주세요.");
       window.location.href = "/";
     } catch (err) {
@@ -58,16 +56,15 @@ function Register() {
   };
 
   return (
-
-    <Container maxWidth="sm" sx={{ mt: 10, mb: 5 }}>
+    <Container maxWidth="sm" sx={{ mt: 12, mb: 5 }}>
       <Paper elevation={4} sx={{ p: 4 }}>
         <Typography variant="h5" gutterBottom>
-          회원가입 ✈️
+          회원가입
         </Typography>
 
         <form onSubmit={handleSubmit}>
           <Typography variant="h6" gutterBottom>
-            🔐 로그인 정보
+            로그인 정보
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -88,9 +85,9 @@ function Register() {
               <TextField
                 fullWidth
                 label="비밀번호"
-                name="loginPw"
+                name="pw"
                 type="password"
-                value={formData.loginPw}
+                value={formData.pw}
                 onChange={handleChange}
                 required
                 inputProps={{
@@ -101,27 +98,25 @@ function Register() {
             </Grid>
           </Grid>
 
-
-          {/* 기본 정보 */}
           <Typography variant="h6" sx={{ mt: 4 }} gutterBottom>
-            👤 기본 정보
+            기본 정보
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
                 fullWidth
                 label="이름"
-                name="name"
-                value={formData.name}
+                name="userName"
+                value={formData.userName}
                 onChange={handleChange}
               />
             </Grid>
             <Grid item xs={6}>
               <TextField
                 fullWidth
-                label="주민등록번호 앞자리"
-                name="rrn1"
-                value={formData.rrn1}
+                label="생년월일 (YYMMDD)"
+                name="birth"
+                value={formData.birth}
                 onChange={handleChange}
                 inputProps={{
                   maxLength: 6,
@@ -131,61 +126,51 @@ function Register() {
               />
             </Grid>
             <Grid item xs={6}>
-              <TextField
-                fullWidth
-                label="뒷자리 첫글자"
-                name="rrn2"
-                value={formData.rrn2}
-                onChange={handleChange}
-                inputProps={{
-                  maxLength: 1,
-                  pattern: "^[1-4]$",
-                  title: "1~4 사이 숫자 (성별코드)"
+              <ToggleButtonGroup
+                value={formData.gender}
+                exclusive
+                onChange={(e, newGender) => {
+                  if (newGender !== null) {
+                    handleChange({
+                      target: {
+                        name: "gender",
+                        value: newGender,
+                      },
+                    });
+                  }
                 }}
-              />
+              >
+                <ToggleButton value="male">남성</ToggleButton>
+                <ToggleButton value="female">여성</ToggleButton>
+              </ToggleButtonGroup>
             </Grid>
           </Grid>
 
           <Typography variant="h6" sx={{ mt: 4 }} gutterBottom>
-            📞 연락처
+            이메일
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="전화번호"
-                name="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                inputProps={{
-                  pattern: "^01[016789]-?\\d{3,4}-?\\d{4}$",
-                  title: "형식: 010-1234-5678 또는 01012345678"
-                }}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
                 label="이메일"
-                name="emailAddress"
-                value={formData.emailAddress}
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
               />
             </Grid>
           </Grid>
 
-
-          {/* 주소 정보 */}
           <Typography variant="h6" sx={{ mt: 4 }} gutterBottom>
-            🏠 주소 정보
+            주소 정보
           </Typography>
           <Grid container spacing={2}>
             <Grid item xs={9}>
               <TextField
                 fullWidth
                 label="기본 주소"
-                name="mainAddress"
-                value={formData.mainAddress}
+                name="address1"
+                value={formData.address1}
                 onChange={handleChange}
                 InputProps={{ readOnly: true }}
               />
@@ -204,8 +189,8 @@ function Register() {
               <TextField
                 fullWidth
                 label="상세 주소"
-                name="subAddress"
-                value={formData.subAddress}
+                name="address2"
+                value={formData.address2}
                 onChange={handleChange}
               />
             </Grid>
@@ -227,7 +212,6 @@ function Register() {
         </form>
       </Paper>
     </Container>
-
   );
 }
 
