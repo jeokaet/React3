@@ -19,7 +19,7 @@ const Map = () => {
     }
     console.log("내위치:",latitude,longitude)
     kakao.maps.load(() => {
-      const center = new kakao.maps.LatLng(latitude||37.5665,longitude||126.9780); // 나중에 여기 lating 을 선택한 지역 경도위도로 넣도록 수정 필요.
+      const center = new kakao.maps.LatLng(latitude||37.5665,longitude||126.9780); // 나중에 여기 lating d을 선택한 지역 경도위도로 넣도록 수정 필요.
 
       const map = new kakao.maps.Map(mapRef.current, {
         center,
