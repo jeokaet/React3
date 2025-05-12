@@ -14,7 +14,7 @@ function RecommendPage() {
   return (
     <Box
       sx={{
-        width: "100vw",
+        width: "120vw",
         height: "100vh",
         overflow: "hidden",
         position: "relative",
@@ -32,11 +32,11 @@ function RecommendPage() {
         }}
       >
 
-        <Grid item xs={12} md={4.5} sx={{ width:"30%", height: "100%",  borderRight: "1px solid #ccc", display:"flex" }}>
-          <Grid sx={{ width:"20%", height: "100%",  borderRight: "1px solid #ccc" }}>
+        <Grid item xs={12} md={4.5} sx={{ width:"40%", height: "100%",  borderRight: "1px solid #ccc", display:"flex" }}>
+          <Grid sx={{ width:"30%", height: "100%",  borderRight: "1px solid #ccc" }}>
             <StepBar/>
           </Grid>
-          <Grid sx={{ width:"80%", height: "100%",  borderRight: "1px solid #ccc" }}>
+          <Grid sx={{ width:"70%", height: "100%",  borderRight: "1px solid #ccc" }}>
             <MainContent />
           </Grid>
         </Grid>

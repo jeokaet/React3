@@ -19,7 +19,12 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register/>}/>
           <Route path="/recommendPage" element={<RecommendPage/>}/>
-          <Route Path="/myPage" element={<MyPage/>}/>
+
+          <Route path="/myPage" element={<MyPage/>}>
+          {/* <Route />
+          <Route /> */}
+          </Route>
+
           <Route path="/admin/*" element={<AdminPage />}/>
           <Route path="/agreement" element={<Agreement/>}/>
         </Routes>

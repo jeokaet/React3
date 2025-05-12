@@ -1,6 +1,7 @@
 import styles from "./Step3.module.css";
 import {Grid, Typography, Box} from "@mui/material";
 import React from "react";
+import RouteMap from "./RouteMap.jsx";
 
 const places = ["장소1", "장소2", "장소3", "장소4", "장소5"];
 
@@ -45,7 +46,7 @@ const Step3Confirm = ()=>{
             </Grid>
         </Box>
 
-        <Box sx={{p:2}}>
+        {/* <Box sx={{p:2}}>
             <Typography variant="h6" gutterBottom
              sx={{fontSize:{
                 xs:"1rem",
@@ -53,10 +54,20 @@ const Step3Confirm = ()=>{
                 md:"1.3rem",
                 lg:"1.5rem",
             }}}>추천 동선</Typography>
-            <button>자가용</button>
-            <button>대중교통</button>
-
-        </Box>
+            <Grid 
+            container
+            spacing={2}>
+                <Grid item xs={6} sm={3}>
+                    <button fullWidth variant="contained">자가용</button>
+                </Grid>
+                 <Grid item xs={6} sm={3}>
+                    <button fullWidth variant="outlined">대중교통</button>
+                </Grid>
+            </Grid>
+        </Box> */}
+        <Box sx={{p:2}}>
+            <RouteMap/>
+        </Box>    
 
         </Box>
 
