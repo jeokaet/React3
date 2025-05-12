@@ -10,22 +10,41 @@ function PlaceManagement() {
     const handleInputRegion = (e) => {
         const { name, value, files } = e.target;
         setRegion({ ...region, [name]: files ? files[0] : value });
-    }
+      };
+      
 
     const handleInsertRegion = async () => {
         try {
-          const response = await caxios.post("/region", region);
+            console.log(region.files);
+          const formData = new FormData();
+          formData.append("regionName", region.regionName);
+          formData.append("regionDetail", region.regionDetail);
+          formData.append("file", region.files);  
+      
+          await caxios.post("/region", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data"
+            }
+          });
+      
           setRegion({
             regionName: '',
             regionDetail: '',
-            filePath: null
+            files: null,
           });
+      
           alert("지역이 등록되었습니다.");
         } catch (error) {
-            const errorMessage = error?.response?.data || "등록 실패";
-            alert(errorMessage);
+          const errorMessage = error?.response?.data || "등록 실패";
+          alert(errorMessage);
+          setRegion({
+            regionName: '',
+            regionDetail: '',
+            files: null,
+          });
         }
       };
+      
       
 
 
@@ -41,6 +60,7 @@ function PlaceManagement() {
         .then((resp) =>{
             setRows(resp.data);
         })
+
     }, [region])
 
     const [selected, setSelected] = useState([]);
@@ -111,7 +131,7 @@ function PlaceManagement() {
 
             <Grid item xs={12}>
             <InputLabel htmlFor="region-image">지역 대표 이미지</InputLabel>
-            <Input id="region-image" type="file" name="filePath" inputProps={{ accept: 'image/*' }} fullWidth  onChange={handleInputRegion}/>
+            <Input id="region-image" type="file" name="files" inputProps={{ accept: 'image/*' }} fullWidth  onChange={handleInputRegion}/>
             </Grid>
 
             <Grid item xs={12}>

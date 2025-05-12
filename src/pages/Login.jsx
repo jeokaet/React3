@@ -17,7 +17,7 @@ function Login() {
   const navigate = useNavigate();
   const { setToken } = useAuthStore();
   const [loginId, setLoginId] = useState("");
-  const [loginPw, setLoginPw] = useState("");
+  const [ pw, setPw ] = useState("");
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -31,12 +31,12 @@ function Login() {
     try {
       const response = await caxios.post("/auth/login", {
         loginId,
-        loginPw,
+        pw,
       });
       const token = response.data;
       setToken(token);
       alert("로그인 성공!");
-      navigate("/main");
+      navigate("/");
     } catch (error) {
       alert("로그인 실패: 아이디 또는 비밀번호를 확인하세요.");
     }
@@ -96,8 +96,8 @@ function Login() {
             type="password"
             placeholder="비밀번호 입력"
             variant="outlined"
-            value={loginPw}
-            onChange={(e) => setLoginPw(e.target.value)}
+            value={pw}
+            onChange={(e) => setPw(e.target.value)}
             sx={{
               mb: 2,
               "& input": {
@@ -105,7 +105,7 @@ function Login() {
               },
             }}
           />
-
+          
           <Button
             type="submit"
             fullWidth

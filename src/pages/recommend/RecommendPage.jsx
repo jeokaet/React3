@@ -4,10 +4,12 @@ import Map from "./Map";
 import { Grid, Box } from "@mui/material";
 import MainContent from "./MainContent";
 import Panel from "./Panel";
+import usePlaceStore from "../../store/usePlaceStore";
 
 
 function RecommendPage() {
 
+  const step = usePlaceStore((s) => s.step);
   
   return (
     <Box
@@ -46,7 +48,7 @@ function RecommendPage() {
 
         
 <Grid sx={{ flex: 1, height: "100%", display: "flex", flexDirection: "row" }}>
-  <Panel />  {/* 가변 width */}
+  {step ===2 && <Panel />}
   <Box sx={{ flex: 1 }}>
     <Map />
   </Box>

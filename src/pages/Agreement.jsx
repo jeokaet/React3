@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { Box, Button, Grid, Typography, TextField, Checkbox, FormControlLabel, FormGroup, FormLabel, FormControl } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { grey } from "@mui/material/colors";
 
 
@@ -35,6 +35,23 @@ function Agreement(){
     const handleLocationChange = (event) => {
         setLocationAgreement(event.target.checked);
     };
+
+
+    const navigate = useNavigate();
+    const checkAgreement = () => {
+        if(usingAgreement && personalInfo){
+            if(locationAgreement){
+                navigate("/register", { state: { agreement:"Y"}});
+            }else{
+                navigate("/register", { state: { agreement:"N"}});
+            }
+            
+        }else {
+            alert("필수 동의사항을 확인해주세요.");
+            return;
+        }
+
+    }
 
     return (
         <Grid sx={{ marginTop: "64px", display: "flex", flexDirection: "column", bgcolor: "#f5f5f5", padding:5}}>
@@ -392,7 +409,7 @@ function Agreement(){
                 본 약관은 2025년 5월 22일부터 적용됩니다.
             </Typography>
             </Box>
-            <Link to="/register"><Button>다음으로</Button></Link>
+            <Button onClick={checkAgreement}>다음으로</Button>
         </Grid>
     )
 }
