@@ -16,7 +16,7 @@ const Step1Date = () => {
 
   const handleFindMyLocation = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
+        navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
         console.log("Mapbox 기준 위치:", latitude, longitude);
@@ -49,14 +49,14 @@ const Step1Date = () => {
 
     const request = {
       location: location,
-      radius: 100, 
+      radius: 100,
       type: 'point_of_interest',
       rankBy: google.maps.places.RankBy.PROMINENCE,
     };
 
     service.nearbySearch(request, function (results, status) {
       if (status === google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
-        const poi = results.find(r => r.name) || results[0]; // 이름 있는 장소
+        const poi = results.find(r => r.name) || results[0]; // 이름 있는 장소 d
         if (poi && poi.name) {
           setLocaName(poi.name); // 바로 이름 할당
         } else {

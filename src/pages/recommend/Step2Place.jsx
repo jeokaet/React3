@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import caxios from "../../api/caxios";
-import { Box, Typography, TextField, TableHead, TableBody, TableRow, TableCell, Grid, Table, Button } from "@mui/material";
+import { Box, Typography, TextField, TableHead, TableBody, TableRow, TableCell, Grid, Table, Button, CircularProgress } from "@mui/material";
 import textFilter from "../../utils/textFilter";
+
 
 // 🔸 더미 장소 데이터 (LLM이 필터링 대상으로 사용할 리스트)
 const mockPlaces = [
@@ -44,7 +45,8 @@ const mockPlaces = [
 
 const Step2Place = () => {
     const [query, setQuery] = useState("");
-    const [filteredResults, setFilteredResults] = useState([]);
+    const [filteredResults, setFilteredResults] = useState(mockPlaces);
+    const [loading, setLoading] = useState(false);
 
     // ✅ 사용자 입력 기반 서버 요청 (LLM 호출 포함)
     const handleSearch = async () => {
@@ -53,6 +55,7 @@ const Step2Place = () => {
             setQuery("");
             return;
         }
+        setLoading(true);
         try {
             const res = await caxios.post("/api/llm-recommend", {
                 userInput: query,
@@ -60,8 +63,8 @@ const Step2Place = () => {
             });
 
             if (res.data.error) {
-                alert(res.data.error); 
-                return; 
+                alert(res.data.error);
+                return;
             }
 
             // ✅ 정상 결과만 있을 경우 리스트 업데이트
@@ -70,6 +73,8 @@ const Step2Place = () => {
         } catch (err) {
             console.error("LLM 요청 실패:", err);
             alert("추천 요청 중 오류가 발생했습니다.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -99,9 +104,20 @@ const Step2Place = () => {
                 sx={{ mb: 2 }}
             />
 
-            <Button variant="contained" onClick={handleSearch} sx={{ mb: 3 }}>
-                장소 추천 받기
+            <Button
+                variant="contained"
+                onClick={handleSearch}
+                sx={{ mb: 3 }}
+                disabled={loading} // 로딩 중 버튼 비활성화
+            >
+                {loading ? "로딩 중..." : "장소 추천 받기"}
             </Button>
+
+            {loading && (
+                <Box display="flex" justifyContent="center" sx={{ mt: 2, mb: 2 }}>
+                    <CircularProgress />
+                </Box>
+            )}
 
             {/* 추천 리스트 */}
             <Grid sx={{ height: "100%", overflow: "auto" }}>
