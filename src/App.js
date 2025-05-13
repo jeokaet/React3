@@ -8,6 +8,9 @@ import RecommendPage from "./pages/recommend/RecommendPage";
 import MyPage from "./pages/myPage/MyPage";
 import AdminPage from "./pages/admin/Adminpage";
 import Agreement from "./pages/Agreement";
+import MyInfo from "./pages/myPage/MyInfo";
+import MyRecords from "./pages/myPage/MyRecords";
+
 
 function App() {
   return (
@@ -19,7 +22,12 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register/>}/>
           <Route path="/recommendPage" element={<RecommendPage/>}/>
-          <Route Path="/myPage" element={<MyPage/>}/>
+
+          <Route path="/myPage" element={<MyPage/>}>
+          <Route index element={<MyInfo/>}/>
+          <Route path="records" element={<MyRecords/>}/>
+          </Route>
+
           <Route path="/admin/*" element={<AdminPage />}/>
           <Route path="/agreement" element={<Agreement/>}/>
         </Routes>
