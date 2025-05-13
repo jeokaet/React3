@@ -38,21 +38,21 @@ function AdminSidebar() {
         {/* 대시보드 */}
         <Link to="/admin/dashboard" style={{ textDecoration: "none", color: "inherit" }}>
           <ListItem button>
-            <ListItemText primary="📊 대시보드" />
+            <ListItemText primary="대시보드" />
           </ListItem>
         </Link>
 
         {/* 회원 통계 */}
         <Link to="/admin/user-stats" style={{ textDecoration: "none", color: "inherit" }}>
           <ListItem button>
-            <ListItemText primary="👤 회원 통계" />
+            <ListItemText primary="회원 통계" />
           </ListItem>
         </Link>
 
         {/* 장소 관리 */}
         <Link to="/admin/placeManagement" style={{ textDecoration: "none", color: "inherit" }}>
           <ListItem button>
-            <ListItemText primary="🏠 여행지 관리" />
+            <ListItemText primary="여행지 관리" />
           </ListItem>
         </Link>
 
