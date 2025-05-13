@@ -1,10 +1,27 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import Styles from './MyInfo.module.css';
 import { Grid, Box, Typography, Button, Avatar } from '@mui/material';
+import caxios from '../../api/caxios';
+import useAuthStore from '../../store/useAuthStore';
+
 
 function MyInfo() {
+  const [userInfo, setUserInfo] = useState(null);
+  const loginId = useAuthStore((state)=> state.loginId);
   
+  console.log(loginId);
 
+  const fetchUserInfo = async () => {
+
+  const response = await caxios.get("/mypage/getMembers");
+  console.log(response.data);
+  setUserInfo(response.data);
+  }
+
+  useEffect(()=>{
+    fetchUserInfo();
+  },[]);
+  
 
 
 
@@ -70,6 +87,11 @@ function MyInfo() {
       </Grid>
     </Box>
 
+); 
+}
+
+export default MyInfo;
+
   // <div className={Styles.container}>
   //   <div className={Styles.profile}>
   //       <div className={Styles.img}></div>
@@ -95,7 +117,3 @@ function MyInfo() {
   //       </div>
   //   </div>
   // </div>
-); 
-}
-
-export default MyInfo;

@@ -16,6 +16,9 @@ function MyPage () {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+    
+
+
     return (
         <Box sx={{display:'flex',mt:'64px'}}>
             <Drawer variant={isMobile ? "temporary" : "permanent"}
