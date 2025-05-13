@@ -44,7 +44,8 @@ const mockPlaces = [
 
 const Step2Place = () => {
     const [query, setQuery] = useState("");
-    const [filteredResults, setFilteredResults] = useState([]);
+    const [filteredResults, setFilteredResults] = useState(mockPlaces);
+
 
     // ✅ 사용자 입력 기반 서버 요청 (LLM 호출 포함)
     const handleSearch = async () => {
