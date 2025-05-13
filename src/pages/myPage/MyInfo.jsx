@@ -9,11 +9,12 @@ function MyInfo() {
   const [userInfo, setUserInfo] = useState(null);
   const loginId = useAuthStore((state)=> state.loginId);
   
-  console.log(loginId);
 
   const fetchUserInfo = async () => {
 
-  const response = await caxios.get("/mypage/getMembers");
+  const response = await caxios.get("/mypage/getMembers",{
+    params:{loginId}
+  });
   console.log(response.data);
   setUserInfo(response.data);
   }
@@ -61,25 +62,25 @@ function MyInfo() {
             }}
           >
             <Typography variant="h6">아이디</Typography>
-            <Typography>abc123</Typography>
+            <Typography>{userInfo?.loginId}</Typography>
 
-            <Typography variant="h6">비밀번호</Typography>
-            <Typography>asdsa1234</Typography>
+            <Typography variant="h6">생년월일</Typography>
+            <Typography>{userInfo?.birth}</Typography>
 
             <Typography variant="h6">이메일</Typography>
-            <Typography>abc123@naver.com</Typography>
+            <Typography>{userInfo?.email}</Typography>
 
             <Typography variant="h6">주소</Typography>
-            <Typography>강남구 메밀동 모밀로123-12</Typography>
+            <Typography>{userInfo?.address1}</Typography>
 
             <Typography variant="h6">닉네임</Typography>
-            <Typography>닉네임뭐로하지</Typography>
+            <Typography>{userInfo?.userName}</Typography>
 
-            <Typography variant="h6">전화번호</Typography>
-            <Typography>01012345678</Typography>
+            <Typography variant="h6">위치 동의 여부</Typography>
+            <Typography>{userInfo?.agreement}</Typography>
           </Box>
 
-          <Box display="flex" justifyContent="flex-end" gap={2}>
+          <Box display="flex" justifyContent="flex-end" gap={2} sx={{marginLeft:23}}>
             <Button variant="contained" color="primary">정보 수정하기</Button>
             <Button variant="outlined" color="error">회원 탈퇴</Button>
           </Box>
