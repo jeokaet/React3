@@ -2,12 +2,12 @@ import React, { useEffect, useRef } from "react";
 import styles from "./Map.module.css";
 import useLocationStore from "../../store/useLocationStore";
 
-const Map = () => {
+const Map = ({ setLocation }) => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markerInstance = useRef(null);
 
-  const {latitude,longitude} = useLocationStore();
+  const { latitude , longitude, setStartingPoint } = useLocationStore();
 
   useEffect(() => {
     const kakao = window.kakao;
@@ -54,7 +54,7 @@ const Map = () => {
 
         const request = {
           location: location,
-          radius: 30,
+          radius: 50,
           type: 'point_of_interest',
           rankBy: google.maps.places.RankBy.PROMINENCE,
         };
@@ -69,6 +69,7 @@ const Map = () => {
                 if (detailStatus === google.maps.places.PlacesServiceStatus.OK) {
                   console.log("상호명:", detailResult.name);
                   console.log("주소:", detailResult.formatted_address);
+                  setStartingPoint(detailResult.formatted_address);
                   console.log("전화번호:", detailResult.formatted_phone_number);
                   console.log("웹사이트:", detailResult.website);
                 } else {

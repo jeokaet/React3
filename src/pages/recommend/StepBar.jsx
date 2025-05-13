@@ -1,10 +1,9 @@
 import React from "react";
 import { Box, Typography, Divider, Button } from "@mui/material";
 import usePlaceStore from "../../store/usePlaceStore";
-import Step1Date from "./Strp1Date";
-import Step2Place from "./Step2Place";
-import Step3Confirm from "./Step3Confirm";
+
 import caxios from "../../api/caxios";
+import MainContent from "./MainContent";
 
 const StepBar = () => {
   const {
@@ -47,6 +46,12 @@ const StepBar = () => {
     }
   };
 
+  const handleBefore = async () => {
+    if (step <= 3) {
+      setStep(step - 1);
+    } 
+  };
+
   // STEP 설명문
   const stepLabels = {
     1: "날짜 및 위치 확인",
@@ -55,7 +60,7 @@ const StepBar = () => {
   };
 
   return (
-    <Box sx={{ p: 2, height: "100%", display: "flex", flexDirection: "column" }}>
+    <Box sx={{ p: 2 , height: "100%", display: "flex", flexDirection: "column" }}>
       <Box sx={{ mb: 3 }}>
         {[1, 2, 3].map((n) => (
           <Box
@@ -85,6 +90,8 @@ const StepBar = () => {
       </Box>
 
       {/* 하단 버튼 */}
+      {step === 1 ? <></> : <Button onClick={handleBefore} fullWidth variant="contained" sx={{ mt: 2 }}>이전</Button>
+}
       <Button
         onClick={handleNext}
         fullWidth

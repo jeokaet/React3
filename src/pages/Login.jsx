@@ -15,26 +15,28 @@ import useAuthStore from "../store/useAuthStore";
 
 function Login() {
   const navigate = useNavigate();
-  const { setToken } = useAuthStore();
+  const { setAuth } = useAuthStore();
   const [loginId, setLoginId] = useState("");
   const [ pw, setPw ] = useState("");
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const randomImageUrl = `https://picsum.photos/1280/1080?random=${Math.floor(
-    Math.random() * 1000
-  )}`;
+  // const randomImageUrl = `https://picsum.photos/1280/1080?random=${Math.floor(
+  //   Math.random() * 1000
+  // )}`;
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    sessionStorage.clear();
+
     try {
       const response = await caxios.post("/auth/login", {
         loginId,
         pw,
       });
       const token = response.data;
-      setToken(token);
+      setAuth(token, loginId);
       alert("로그인 성공!");
       navigate("/");
     } catch (error) {
@@ -49,7 +51,7 @@ function Login() {
       alignItems="center"
       sx={{
         minHeight: "100vh",
-        backgroundImage: `url(${randomImageUrl})`,
+        // backgroundImage: `url(${randomImageUrl})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
