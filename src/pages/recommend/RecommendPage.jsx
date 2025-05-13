@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import StepBar from "./StepBar";
 import Map from "./Map";
 import { Grid, Box } from "@mui/material";
@@ -10,6 +10,7 @@ import usePlaceStore from "../../store/usePlaceStore";
 function RecommendPage() {
 
   const step = usePlaceStore((s) => s.step);
+  const [ getLocation, setLocation ] = useState({});
   
   return (
     <Box
@@ -21,8 +22,6 @@ function RecommendPage() {
         paddingTop: "64px"
       }}
     >
-      
-      {/* <Grid container sx={{ flex: 1, height: "100%" }}> */}
       <Box
         sx={{
           position: "relative",
@@ -40,24 +39,13 @@ function RecommendPage() {
             <MainContent />
           </Grid>
         </Grid>
-
-
-        {/* <Grid item xs={12} md={7.5} sx={{ width:"10%", height: "100%", overflow: "hidden", }}>
-          <Panel />
-        </Grid> */}
-
-        
-<Grid sx={{ flex: 1, height: "100%", display: "flex", flexDirection: "row" }}>
-  {step ===2 && <Panel />}
-  <Box sx={{ flex: 1 }}>
-    <Map />
-  </Box>
-</Grid>
-
-
-
-        </Box>
-      {/* </Grid> */}
+        <Grid sx={{ flex: 1, height: "100%", display: "flex", flexDirection: "row" }}>
+          {step ===2 && <Panel />}
+          <Box sx={{ flex: 1 }}>
+            <Map setLocation={{setLocation}} />
+          </Box>
+        </Grid>
+      </Box>
     </Box>
   );
 }

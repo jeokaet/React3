@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { Box, Button, Grid, AppBar, Typography, useMediaQuery, useTheme, Toolbar, IconButton, Menu, MenuItem } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import useAuthStore from "../store/useAuthStore";
 
 
 function Header() {
 
+  const { token } = useAuthStore();
 
 const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -38,8 +40,10 @@ const theme = useTheme();
             <Box sx={{ display: "flex", gap: 2 }}>
               <Button color="inherit">여행지</Button>
               <Button color="inherit">이용방법</Button>
-              <Button component={Link} to="/login" color="inherit">로그인</Button>
-              <IconButton onClick={handleSelectBox}><AccountCircleIcon/></IconButton>
+              {
+                sessionStorage.getItem("token") ? <Button component={Link} to="/login" color="inherit">로그인</Button> : <IconButton onClick={handleSelectBox}><AccountCircleIcon/></IconButton>
+              }
+              
               <Menu
                   anchorEl={anchorEl}
                   open={open}
