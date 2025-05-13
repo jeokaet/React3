@@ -8,9 +8,8 @@ import mapboxgl from 'mapbox-gl';
 import { create } from 'zustand';
 
 const Step1Date = () => {
-  const [date, setDate] = useState("");
   const setLocation = useLocationStore((state) => state.setLocation);
-  const { latitude, longitude, startingPoint } = useLocationStore();
+  const { latitude, longitude, startingPoint, setTripDate, tripDate, setInputLocation } = useLocationStore();
   const [ inputLoca, setInputLoca ] = useState("");
   const [ locaName, setLocaName ] = useState("");
 
@@ -72,6 +71,7 @@ const Step1Date = () => {
 
   const handleLocation = (e) => {
     setInputLoca(e.target.value);
+    setInputLocation(e.target.value);
   }
 
   return (
@@ -83,11 +83,12 @@ const Step1Date = () => {
           label="날짜 선택"
           type="date"
           fullWidth
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
+          value={tripDate}
+          onChange={(e) => setTripDate(e.target.value)}
           InputLabelProps={{
             shrink: true,
           }}
+          
         />
       </Grid>
 

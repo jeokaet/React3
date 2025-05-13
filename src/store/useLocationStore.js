@@ -10,7 +10,6 @@ const useLocationStore = create((set) => ({
   location: null,
   setLocation: (lat, lng) => set({ latitude: lat, longitude: lng }),
 
-  
   // 시작 위치 정보
   startingPoint : null,
   setStartingPoint: (location) => set({startingPoint:location}),
@@ -18,6 +17,10 @@ const useLocationStore = create((set) => ({
   // 날짜 정보
   tripDate : null,
   setTripDate: (selectedDate) => set({tripDate:selectedDate}),
+
+  inputLocation : null,
+  setInputLocation: (inputLoca) => set({setInputLocation:inputLoca}),
+
 
 }));
 

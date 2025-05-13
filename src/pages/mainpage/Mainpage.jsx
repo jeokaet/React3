@@ -73,11 +73,14 @@ function Mainpage() {
 
                 {/* 첫번째 영역 */}
                 <Grid
+                // container  // ✅ 이게 꼭 필요해요!
+                // spacing={20}
                     item
                     xs={12}
                     lg={6}
                     sx={{
                         display: "flex",
+                        height: "100vh",
                         justifyContent: "center",
                         alignItems: "center",
                         bgcolor: "#f5f5f5",
@@ -91,6 +94,7 @@ function Mainpage() {
                         lg={6}
                         sx={{
                             display: "flex",
+                            width: "50%",
                             flexDirection: "column",
                             justifyContent: "center",
                             alignItems: "center",
@@ -112,7 +116,7 @@ function Mainpage() {
                         <Link to="/recommendPage"><Button variant="contained">놀러가기</Button></Link>
                     </Grid>
 
-                    <Grid item xs={12} lg={6} sx={{ display: { xs: "none", lg: "flex" }, justifyContent: "center", alignItems: "center", bgcolor: "#ffffff", py: 8, px: 2, }}>
+                    <Grid item xs={12} lg={6} sx={{ display: { xs: "none", lg: "flex" }, width: "50%", justifyContent: "center", alignItems: "center", bgcolor: "#ffffff", py: 8, px: 2, }}>
                         <Box sx={{ width: 400, height: 300, bgcolor: "grey.300" }} />
                     </Grid>
                 </Grid>
@@ -131,7 +135,7 @@ function Mainpage() {
                     }}/>
                 </Grid>
                 <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", padding: 15, gap: 10 }}>
-                    <Grid container spacing={3} sx={{ display: "flex", justifyContent: "center" }}>
+                    <Grid container spacing={8} sx={{ display: "flex", justifyContent: "center" }}>
                         {
                             searchResult ? 
                             regionList.map((region, i) => (
