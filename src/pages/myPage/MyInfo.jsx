@@ -61,6 +61,24 @@ if (!userInfo.email || !userInfo.address1 || !userInfo.userName) {
   }
 };
 
+const handleDeleteClick = async () => {
+  const confirm = window.confirm("정말로 회원을 탈퇴하시겠습니까?");
+  if(!confirm) return;
+
+  try{
+    await caxios.delete("/mypage/deleteMember",{
+      params:{loginId: userInfo.loginId},
+    });
+    alert("회원 탈퇴가 완료 되었습니다.");
+    useAuthStore.getState().logout();
+    window.location.href = "http://localhost:3000";
+
+  }catch (error) {
+    console.error("회원 탈퇴 실패:" , error);
+    alert("회원 탈퇴 중 오류가 발생했습니다.");
+  }
+};
+
 
   return(
 <Box sx={{ flexGrow: 1, p: 2 ,width:'100vw',boxSizing:'border-box'}}>
@@ -155,7 +173,7 @@ if (!userInfo.email || !userInfo.address1 || !userInfo.userName) {
            ) : (
             <>
             <Button variant="contained" color="primary" onClick={()=>setEditMode(true)}>정보 수정하기</Button>
-            <Button variant="outlined" color="error">회원 탈퇴</Button>
+            <Button variant="outlined" color="error" onClick={handleDeleteClick}>회원 탈퇴</Button>
            </>
            )}
             
@@ -168,29 +186,3 @@ if (!userInfo.email || !userInfo.address1 || !userInfo.userName) {
 }
 
 export default MyInfo;
-
-  // <div className={Styles.container}>
-  //   <div className={Styles.profile}>
-  //       <div className={Styles.img}></div>
-  //   </div>
-  //   <div className={Styles.info}>
-  //       <div className={Styles.contents}>
-  //           <div>아이디</div>
-  //           <p>abc123</p>
-  //           <div>비밀번호</div>
-  //           <p>asdsa1234</p>
-  //           <div>이메일</div>
-  //           <p>abc123@naver.com</p>
-  //           <div>주소</div>
-  //           <p>강남구 메밀동 모밀로123-12</p>
-  //           <div>닉네임</div>
-  //           <p>닉네임뭐로하지</p>
-  //           <div>전화번호</div>
-  //           <p>01012345678</p>
-  //       </div>
-  //       <div className={Styles.btnbox}>
-  //       <button className={Styles.update}>정보 수정하기</button>
-  //       <button className={Styles.delete}>회원 탈퇴</button>
-  //       </div>
-  //   </div>
-  // </div>
