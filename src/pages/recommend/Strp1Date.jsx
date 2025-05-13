@@ -4,14 +4,18 @@ import {
   InputLabel
 } from '@mui/material';
 import useLocationStore from '../../store/useLocationStore'; // 🆕 위치 Store
-import mapboxgl from 'mapbox-gl';
-import { create } from 'zustand';
+
+
 
 const Step1Date = () => {
-  const setLocation = useLocationStore((state) => state.setLocation);
-  const { latitude, longitude, startingPoint, setTripDate, tripDate, setInputLocation } = useLocationStore();
-  const [ inputLoca, setInputLoca ] = useState("");
+  const { latitude, longitude, setLocation, setTripDate, tripDate, setInputLocation, inputLocation } = useLocationStore();
   const [ locaName, setLocaName ] = useState("");
+  useEffect(() => {
+        // 처음 위치 받아왔을 때만 초기 입력값 설정
+        if (!inputLocation && locaName) {
+          setInputLocation(locaName);
+        }
+      }, [locaName]);
 
   const handleFindMyLocation = () => {
     if (navigator.geolocation) {
@@ -53,7 +57,7 @@ const Step1Date = () => {
       rankBy: google.maps.places.RankBy.PROMINENCE,
     };
 
-    service.nearbySearch(request, function (results, status) {
+    service.nearbySearch(request, (results, status) =>{
       if (status === google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
         const poi = results.find(r => r.name) || results[0]; // 이름 있는 장소 d
         if (poi && poi.name) {
@@ -69,10 +73,8 @@ const Step1Date = () => {
     });
   }, [latitude, longitude]);
 
-  const handleLocation = (e) => {
-    setInputLoca(e.target.value);
-    setInputLocation(e.target.value);
-  }
+
+
 
   return (
     <Box>
@@ -99,8 +101,12 @@ const Step1Date = () => {
           placeholder="검색어를 입력해주세요."
           name="searchPlace"
           variant="outlined"
-          value={ inputLoca ? inputLoca : locaName || startingPoint }
-          onChange={handleLocation}
+          value={inputLocation ? inputLocation : ""}
+          onChange={(e) => {
+            setInputLocation(e.target.value);
+            console.log("✅ 현재 입력값:", e.target.value);
+          }}
+
         />
         
         <Button sx={{ mt: 1, marginRight:1 }} variant="outlined" onClick={handleFindMyLocation}>

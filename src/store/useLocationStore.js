@@ -19,7 +19,7 @@ const useLocationStore = create((set) => ({
   setTripDate: (selectedDate) => set({tripDate:selectedDate}),
 
   inputLocation : null,
-  setInputLocation: (inputLoca) => set({setInputLocation:inputLoca}),
+  setInputLocation: (inputLoca) => set({ inputLocation: inputLoca }),
 
 
 }));

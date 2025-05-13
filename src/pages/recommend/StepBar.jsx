@@ -7,16 +7,18 @@ import MainContent from "./MainContent";
 
 const StepBar = () => {
   const { step, setStep, startLocation, selectedPlaces, region, category } = usePlaceStore();
-  const { tripLocation, tripDate} = useLocationStore();
+  const { inputLocation, tripDate} = useLocationStore();
 
   const handleNext = async () => {
     if (step === 1) {
-      if( tripLocation != null){ 
+      console.log("현재 inputLocation:", inputLocation);
+      console.log("현재 tripDate:", tripDate);
+      if( inputLocation != null){ 
           try {
             const res = await caxios.get("/api/getList", {
               params: {
                 date: tripDate,
-                startingLocation: tripLocation
+                startingLocation: inputLocation
               }
             });
 
@@ -25,7 +27,7 @@ const StepBar = () => {
               return;
             }
 
-            // ✅ 결과 데이터 활용
+            
             const getList = res.data.results;
             console.log("추천 결과:", getList);
           
