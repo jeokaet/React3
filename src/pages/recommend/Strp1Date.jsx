@@ -10,7 +10,7 @@ import { create } from 'zustand';
 const Step1Date = () => {
   const [date, setDate] = useState("");
   const setLocation = useLocationStore((state) => state.setLocation);
-  const { latitude, longitude } = useLocationStore();
+  const { latitude, longitude, startingPoint } = useLocationStore();
   const [ inputLoca, setInputLoca ] = useState("");
   const [ locaName, setLocaName ] = useState("");
 
@@ -98,7 +98,7 @@ const Step1Date = () => {
           placeholder="검색어를 입력해주세요."
           name="searchPlace"
           variant="outlined"
-          value={inputLoca || locaName }
+          value={ inputLoca ? inputLoca : locaName || startingPoint }
           onChange={handleLocation}
         />
         

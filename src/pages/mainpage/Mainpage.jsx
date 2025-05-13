@@ -137,13 +137,20 @@ function Mainpage() {
                             regionList.map((region, i) => (
                                 <Grid key={i} onClick={() => handleRegionClick(region.regionName)} sx={{ cursor: "pointer" }}>
                                     <div className={styles.regionItem}>
-                                        <div className={styles.regionCard}></div>
+                                        <div className={styles.regionCard}><img src={region.filePath} alt="지역이미지" width="100"></img></div>
                                         <Typography sx={{ mt: 1 }}>{region.regionName}</Typography>
                                     </div>
                                 </Grid>
                             ))
                             :
-                            <Typography>검색결과가 없습니다.</Typography>
+                            regionList.map((region, i) => (
+                                <Grid key={i} onClick={() => handleRegionClick(region.regionName)} sx={{ cursor: "pointer" }}>
+                                    <div className={styles.regionItem}>
+                                        <div className={styles.regionCard}><img className={styles.regionImages} src={region.filePath} alt="지역이미지" width="100"></img></div>
+                                        <Typography sx={{ mt: 1 }}>{region.regionName}</Typography>
+                                    </div>
+                                </Grid>
+                            ))
                         }
                     </Grid>
                 </Grid>
