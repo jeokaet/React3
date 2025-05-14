@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import StepBar from "./StepBar";
 import Map from "./Map";
 import { Grid, Box } from "@mui/material";
 import MainContent from "./MainContent";
 import Panel from "./Panel";
 import usePlaceStore from "../../store/usePlaceStore";
+import RouteMap from './RouteMap.jsx';
 
 
 function RecommendPage() {
@@ -12,6 +13,8 @@ function RecommendPage() {
   const step = usePlaceStore((s) => s.step);
   const [ getLocation, setLocation ] = useState({});
   
+
+
   return (
     <Box
       sx={{
@@ -42,7 +45,7 @@ function RecommendPage() {
         <Grid sx={{ flex: 1, height: "100%", display: "flex", flexDirection: "row" }}>
           {step ===2 && <Panel />}
           <Box sx={{ flex: 1 }}>
-            <Map setLocation={{setLocation}} />
+            {step === 3 ? <RouteMap /> : <Map setLocation={setLocation} />}
           </Box>
         </Grid>
       </Box>
