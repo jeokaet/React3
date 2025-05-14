@@ -1,41 +1,16 @@
-import React from "react";
+import { useEffect } from "react";
 import { Box, Typography, Divider, Button } from "@mui/material";
 import usePlaceStore from "../../store/usePlaceStore";
 import useLocationStore from "../../store/useLocationStore";
 import caxios from "../../api/caxios";
-import MainContent from "./MainContent";
 
 const StepBar = () => {
-  const { step, setStep, startLocation, selectedPlaces, region, category } = usePlaceStore();
-  const { inputLocation, tripDate} = useLocationStore();
+  const { step, setStep, startLocation, selectedPlaces, region, category, } = usePlaceStore();
+  const { tripDate} = useLocationStore();
+
 
   const handleNext = async () => {
-    if (step === 1) {
-      console.log("현재 inputLocation:", inputLocation);
-      console.log("현재 tripDate:", tripDate);
-      if( inputLocation != null){ 
-          try {
-            const res = await caxios.get("/api/getList", {
-              params: {
-                date: tripDate,
-                startingLocation: inputLocation
-              }
-            });
 
-            if (res.data.error) {
-              alert(res.data.error);
-              return;
-            }
-
-            
-            const getList = res.data.results;
-            console.log("추천 결과:", getList);
-          
-        } catch (err) {
-          console.error("LLM 요청 실패:", err);
-        }
-      }
-    }
 
     if (step < 3) {
       setStep(step + 1);

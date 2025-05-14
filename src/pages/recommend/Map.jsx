@@ -2,12 +2,13 @@ import React, { useEffect, useRef } from "react";
 import styles from "./Map.module.css";
 import useLocationStore from "../../store/useLocationStore";
 
-const Map = ({ setLocation }) => {
+const Map = () => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markerInstance = useRef(null);
 
-  const { latitude , longitude, setStartingPoint } = useLocationStore();
+  const { latitude , longitude, setStartingPoint, location, setStartingLocation } = useLocationStore();
+
 
   useEffect(() => {
     const kakao = window.kakao;
@@ -19,7 +20,7 @@ const Map = ({ setLocation }) => {
     }
     console.log("내위치:",latitude,longitude)
     kakao.maps.load(() => {
-      const center = new kakao.maps.LatLng(latitude||37.5665,longitude||126.9780); // 나중에 여기 lating d을 선택한 지역 경도위도로 넣도록 수정 필요.
+      const center = new kakao.maps.LatLng(latitude||37.5665,longitude||126.9780);
 
       const map = new kakao.maps.Map(mapRef.current, {
         center,
@@ -84,8 +85,8 @@ const Map = ({ setLocation }) => {
                    console.log("🧭 경도:", lng);
                    console.log("📷 대표 사진:", photoUrl);
 
-                  
-                  setStartingPoint(address);
+                  setStartingPoint(name);
+                  setStartingLocation(address);
                 } else {
                   console.log("상세정보 실패:", detailStatus);
                 }
@@ -97,7 +98,9 @@ const Map = ({ setLocation }) => {
         });
       });
     });
-  }, []);
+
+    
+  }, [location, latitude, longitude]);
 
    useEffect(() => {
     if (
