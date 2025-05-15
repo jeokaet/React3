@@ -83,21 +83,6 @@ const handleDeleteClick = async () => {
   return(
 <Box sx={{ flexGrow: 1, p: 2 ,width:'100vw',boxSizing:'border-box'}}>
       <Grid container spacing={2}>
-        {/* 왼쪽 프로필 이미지 */}
-        <Grid item xs={12} md={3}>
-          <Box display="flex" justifyContent="center">
-            <Avatar
-              sx={{
-                marginLeft:20,
-                width: 250,
-                height: 250,
-                mt: 5,
-                bgcolor: 'grey.400',
-              }}
-            />
-          </Box>
-        </Grid>
-
         {/* 오른쪽 정보 영역 */}
         <Grid item xs={12} md={9}>
           <Box
@@ -107,8 +92,6 @@ const handleDeleteClick = async () => {
               p: 3,
               mb: 2,
               boxSizing: 'border-box',
-            
-              marginLeft:20,
               display: 'flex',
               flexDirection: 'column',
               gap: 1.5,

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Box, Grid, TextField, Typography, Button,
-  InputLabel
+  Box, Grid, TextField, Typography, Button, CircularProgress, InputLabel, 
 } from '@mui/material';
 import useLocationStore from '../../store/useLocationStore'; 
 
@@ -11,35 +10,31 @@ const Step1Date = () => {
   const { latitude, setLatitude, setLongitude, longitude, setLocation, setTripDate, tripDate, setInputLocation, inputLocation, startingPoint, setStartingPoint, setStartingLocation } = useLocationStore();
 
   const handleFindMyLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          console.log("step1 내 위치:", lat, lng);
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        console.log("정확한 위치:", lat, lng);
 
-          // 상태 변경
-          setLatitude(lat);
-          setLongitude(lng);
-          setLocation(lat, lng);
-
-          // 강제로 장소 검색도 여기서 직접 호출
-          fetchPlaceNameFromGoogle(lat, lng); // 👈 아래에 함수로 분리해서 만들자
-        },
-        (error) => {
-          console.error("위치 정보 가져오기 실패:", error);
-          alert("위치 정보를 가져오는 데 실패했습니다.");
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 0
-        }
-      );
-    } else {
-      alert("브라우저가 위치 정보를 지원하지 않습니다.");
-    }
-  };
+        setLatitude(lat);
+        setLongitude(lng);
+        setLocation(lat, lng);
+        fetchPlaceNameFromGoogle(lat, lng); 
+      },
+      (error) => {
+        console.warn("위치 정보 가져오기 실패, IP 기반 위치로 대체:", error);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  } else {
+    alert("브라우저가 위치 정보를 지원하지 않습니다.");
+  }
+};
 
   
 
@@ -70,7 +65,7 @@ const Step1Date = () => {
           setInputLocation("알 수 없는 장소");
         }
       } else {
-        setInputLocation("장소를 찾을 수 없습니다");
+        setInputLocation("내 위치를 찾을 수 없습니다");
       }
     });
   };
@@ -106,7 +101,7 @@ const Step1Date = () => {
         <InputLabel>출발지 선택</InputLabel>
         <TextField
           fullWidth
-          placeholder="검색어를 입력해주세요."
+          placeholder="출발지를 설정해주세요."
           name="searchPlace"
           variant="outlined"
           value={startingPoint ? startingPoint : inputLocation}
