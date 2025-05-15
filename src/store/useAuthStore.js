@@ -26,7 +26,7 @@ const useAuthStore = create((set) => ({
         //sessionStorage에서 기존 로그인 정보를 가져옴
         const token = sessionStorage.getItem("token");
         const loginId = sessionStorage.getItem("loginId");
-        const isAuth = sessionStorage.getItem("isAuth");
+        const isAuth = sessionStorage.getItem("isAuth") === "true"; 
 
         //로그인 상태가 유지되도록 zustand 상태 업데이트
         if(token && loginId){

@@ -1,4 +1,5 @@
 import "./App.css";
+import {useEffect} from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // ✅ 추가
 import Header from './pages/Header';
 import Register from "./pages/Register"; // ✅ 회원가입 페이지 import
@@ -10,9 +11,15 @@ import AdminPage from "./pages/admin/Adminpage";
 import Agreement from "./pages/Agreement";
 import MyInfo from "./pages/myPage/MyInfo";
 import MyRecords from "./pages/myPage/MyRecords";
+import useAuthStore from "./store/useAuthStore";
 
 
 function App() {
+  const initialize = useAuthStore((state) => state.initialize);
+
+  useEffect(() => {
+    initialize(); // ✅ 새로고침 시 sessionStorage에서 상태 복원
+  }, []);
   return (
     <div className="app-wrapper">
       <Router>

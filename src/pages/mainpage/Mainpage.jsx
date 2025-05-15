@@ -14,25 +14,27 @@ import SearchIcon from '@mui/icons-material/Search';
 
 function Mainpage() {
     const [regionList, setRegionList] = useState([]);
+    const [originalList, setOriginalList] = useState([]);
     const [ searchWord, setSearchWord ] = useState("");
     const navigate = useNavigate();
     const { setStep, setRegion } = usePlaceStore();
-    const [ searchResult, setSearchResult ] = useState("true");
-    const [ isSearching, setIsSearching ] = useState(false);
+    // const [ searchResult, setSearchResult ] = useState("true");
+    // const [ isSearching, setIsSearching ] = useState(false);
 
     useEffect(() => {
-        if (!isSearching) {
+//        if (!isSearching) {
             caxios.get("/region")
                 .then((resp) => {
                     setRegionList(resp.data);
+                    setOriginalList(resp.data);
                     setStep(1);
                 })
                 .catch((error) => {
                     console.error("에러 발생:", error);
                     alert("지역 목록을 불러오는데 실패했습니다.");
                 });
-        }
-    }, [isSearching])
+//        }
+    }, [])
 
     const handleRegionClick = (regionName) => {
         setRegion(regionName); // Zustand에 지역 저장
@@ -40,26 +42,35 @@ function Mainpage() {
     };
 
     const handleSearch = () => {
-        caxios.get("/region/searchByRegionName", { params : {searchWord : searchWord }})
+        if(!searchWord || searchWord.trim() === ""){
+            alert("검색어를 입력해주세요.");
+            return;
+        }
+        caxios.get("/region/searchByRegionName", { params : { searchWord }})
         .then((resp) => {
             console.log("검색 결과 : " + resp.data);
-                if (resp.data && Array.isArray(resp.data)) {
-                    setRegionList(resp.data);
-                    setSearchResult("true");
-                    setIsSearching(true);
-                } else {
-                    setRegionList([]);
-                    setSearchResult("false");
-                    setIsSearching(true);
-                }
+
+            let data = resp.data;
+
+            // resp.data가 배열이 아니면 배열로 변환
+            if (data && !Array.isArray(data)) {
+                data = [data];
+            }
+            setRegionList(data);
         })
         .catch((error) => {
             console.log("검색 중 에러 : " + error);
             return;
         })
     }
+
     const handleSerchWord = (e) => {
-        setSearchWord(e.target.value);
+        const value = e.target.value;
+        setSearchWord(value);
+
+        if (value.trim() === "") {
+            setRegionList(originalList); // 전체 리스트 복원
+        }
     }
 
     return (
@@ -132,12 +143,16 @@ function Mainpage() {
                         </IconButton>
                         </InputAdornment>
                     ),
-                    }}/>
+                    }}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') handleSearch();
+                    }}
+                    />
                 </Grid>
                 <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", padding: 15, gap: 10 }}>
                     <Grid container spacing={8} sx={{ display: "flex", justifyContent: "center" }}>
                         {
-                            searchResult ? 
+                            regionList.length > 0 ? ( 
                             regionList.map((region, i) => (
                                 <Grid key={i} onClick={() => handleRegionClick(region.regionName)} sx={{ cursor: "pointer" }}>
                                     <div className={styles.regionItem}>
@@ -145,16 +160,11 @@ function Mainpage() {
                                         <Typography sx={{ mt: 1 }}>{region.regionName}</Typography>
                                     </div>
                                 </Grid>
-                            ))
-                            :
-                            regionList.map((region, i) => (
-                                <Grid key={i} onClick={() => handleRegionClick(region.regionName)} sx={{ cursor: "pointer" }}>
-                                    <div className={styles.regionItem}>
-                                        <div className={styles.regionCard}><img className={styles.regionImages} src={region.filePath} alt="지역이미지" width="100"></img></div>
-                                        <Typography sx={{ mt: 1 }}>{region.regionName}</Typography>
-                                    </div>
-                                </Grid>
-                            ))
+                            )) )
+                            :  (
+                                    <Typography sx={{ mt: 2 }}>지역을 찾을 수 없습니다.</Typography>
+                                )
+                        
                         }
                     </Grid>
                 </Grid>

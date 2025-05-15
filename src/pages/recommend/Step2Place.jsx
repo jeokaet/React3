@@ -6,11 +6,15 @@ import {
     TextField,
     Button,
     CircularProgress,
+    InputAdornment,
+    IconButton,
+
 } from "@mui/material";
 import { Virtuoso } from "react-virtuoso";
 import textFilter from "../../utils/textFilter";
 import useLocationStore from "../../store/useLocationStore";
 import usePlaceStore from "../../store/usePlaceStore";
+import SearchIcon from '@mui/icons-material/Search';
 
 
 const Step2Place = () => {
@@ -24,6 +28,7 @@ const Step2Place = () => {
     useEffect(() => {
         if (!tripDate || !startingLocation) return;
         const fetchData = async () => {
+            setLoading(true);
             console.log("step2 값 확인 : 날짜 - " + tripDate + " / 지역 - " + startingLocation);
             try {
             const res = await caxios.post("/api/getList", {
@@ -38,12 +43,18 @@ const Step2Place = () => {
 
             const getList = res.data.results;
             console.log("추천 결과 :", getList);
+
+            // 위도 경도값 가져다가 구글 api로 장소이미지url 가져오기
+
             setPlaceList(getList); // ⬅️ 상태에 저장해야 map 돌릴 수 있음
             setFilteredResults(getList);
 
             } catch (err) {
             console.error("LLM 요청 실패:", err);
+            } finally {
+            setLoading(false); // ✅ 로딩 끝
             }
+            
         };
 
         fetchData(); // ⬅️ useEffect 안에서 async 함수 실행
@@ -82,7 +93,7 @@ const Step2Place = () => {
     };
 
     return (
-        <Box>
+        <Box sx={{height: "100vh"}}>
             <Typography variant="h6" gutterBottom>
                 추천 장소 검색
             </Typography>
@@ -92,10 +103,18 @@ const Step2Place = () => {
                 placeholder="자연어로 장소를 입력해보세요 (예: 조용한 실내 박물관)"
                 name="searchPlace"
                 multiline
-                rows={3}
+                rows={1}
                 variant="outlined"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                InputProps={{ endAdornment: (
+                                        <InputAdornment position="end">
+                                        <IconButton onClick={handleSearch}>
+                                            <SearchIcon />
+                                        </IconButton>
+                                        </InputAdornment>
+                                    ),
+                                    }}
                 onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault(); // 줄바꿈 막음
@@ -103,24 +122,17 @@ const Step2Place = () => {
                     }
                 }}
                 sx={{ mb: 2 }}
+
             />
 
-            <Button
-                variant="contained"
-                onClick={handleSearch}
-                sx={{ mb: 3 }}
-                disabled={loading}
-            >
-                {loading ? "로딩 중..." : "장소 추천 받기"}
-            </Button>
 
-            {loading && (
+            {loading ? (
                 <Box display="flex" justifyContent="center" sx={{ mt: 2, mb: 2 }}>
                     <CircularProgress />
                 </Box>
-            )}
+            ) :
 
-            <Box sx={{ height: 500 }}>
+            <Box sx={{ height: 700 }}>
                 <Virtuoso
                     data={filteredResults ? filteredResults : placeList}
                     itemContent={(index, place) => {
@@ -146,7 +158,7 @@ const Step2Place = () => {
                                 {/* 이미지 영역 */}
                                 <Box mr={2}>
                                     <img
-                                        src={imageSrc}
+                                        src={place.imageUrl && place.imageUrl !== "null" ? place.imageUrl : "/images/NoImage.png"}
                                         alt={place.name}
                                         style={{
                                             width: 64,
@@ -184,6 +196,7 @@ const Step2Place = () => {
                 />
 
             </Box>
+            }
         </Box>
     );
 };

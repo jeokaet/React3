@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import styles from "./Map.module.css";
 import useLocationStore from "../../store/useLocationStore";
+    import { Box } from "@mui/material";
 
 
 const Map = () => {
@@ -122,10 +123,24 @@ const Map = () => {
   }, [latitude, longitude]);
 
   return (
-    <div className={styles.mapWrapper}>
-      <div ref={mapRef} className={styles.map}></div>
-    </div>
-  );
-};
+  <Box
+    sx={{
+      height: "100%",
+      display: "flex",
+      flexDirection: "column",
+    }}
+  >
+    <Box
+      ref={mapRef}
+      sx={{
+        flex: 1,
+        width: "100%",
+        minHeight: "300px",
+      }}
+    />
+  </Box>
+
+    );
+  };
 
 export default Map;

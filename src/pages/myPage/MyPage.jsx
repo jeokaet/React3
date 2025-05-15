@@ -36,17 +36,17 @@ function MyPage () {
         }}
       >
          <Typography variant="h6" sx={{ p: 2 }}>
-          마이페이지
+         마이페이지
         </Typography>
         <List>
           <Link to="/myPage" style={{ textDecoration: "none", color: "inherit" }}>
             <ListItem button>
-              <ListItemText primary="👤 내 정보" />
+              <ListItemText primary="내 정보" />
             </ListItem>
           </Link>
           <Link to="/myPage/records" style={{ textDecoration: "none", color: "inherit" }}>
             <ListItem button>
-              <ListItemText primary="📝 나의 여행기록" />
+              <ListItemText primary="나의 여행기록" />
             </ListItem>
           </Link>
         </List>
