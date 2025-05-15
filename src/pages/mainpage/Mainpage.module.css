@@ -11,7 +11,7 @@
   }
   
   .regionCard {
-  width: 400px;        /* 또는 원하는 고정 크기 */
+  width: 350px;        /* 또는 원하는 고정 크기 */
   height: 400px;
   overflow: hidden;
   border-radius: 8px;  /* 선택사항: 둥글게 */
