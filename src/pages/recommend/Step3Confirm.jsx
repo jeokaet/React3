@@ -1,168 +1,80 @@
-import styles from "./Step3.module.css";
-import {Grid, Typography, Box, Button} from "@mui/material";
-import React,{useState} from "react";
-import RouteMap from "./RouteMap.jsx";
-import axios from 'axios';
-
+import React, { useState } from "react";
+import { Grid, Typography, Box, Button } from "@mui/material";
 
 const places = ["장소1", "장소2", "장소3", "장소4", "장소5"];
 
-const Step3Confirm = ({addLocation, locations, resetLocations})=>{
-    const [keyword, setKeyword] = useState("");
+const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
+  const [keyword, setKeyword] = useState("");
+  const [mode, setMode] = useState(null);
 
-   const handleSearch = () => {
-    if (!keyword || !window.kakao) return;
+  const handleSearch = () => {
+    if (!keyword || !window.kakao || !window.kakao.maps) {
+      alert("지도 준비가 안됐습니다.");
+      return;
+    }
 
     const ps = new window.kakao.maps.services.Places();
     ps.keywordSearch(keyword, (data, status) => {
       if (status === window.kakao.maps.services.Status.OK) {
         const place = data[0];
-        const position = new window.kakao.maps.LatLng(place.y, place.x);
+        const position = new window.kakao.maps.LatLng(parseFloat(place.y), parseFloat(place.x));
         const name = place.place_name;
-        console.log("검색된 장소:" ,place);
-        console.log("새로운장소추가",{position,name});
 
-        if(addLocation){
-          addLocation({position,name});
-          console.log("새로운장소추가",{position,name});
-        }
-        setKeyword('');
+        addLocation({ position, name });
+        setKeyword("");
       } else {
-        alert('장소를 찾을 수 없습니다.');
+        alert("장소를 찾을 수 없습니다.");
       }
     });
   };
 
-   const handleReset = () => {
-    if(resetLocations){
-      resetLocations([]);
-    }
-  };
+  return (
+    <Box sx={{ p: 2 }}>
+      <Typography variant="h6" gutterBottom>나의 나들이 동선</Typography>
 
-
-
-  //  const handleGetRoute = async() => {
-  //   if (locations.length < 2) {
-  //     alert("출발지와 목적지를 최소 2개 이상 선택하세요.");
-  //     return;
-  //   }
-
-  //     for (let i = 0; i < locations.length - 1; i++) {
-  //       const start = locations[i];
-  //       const end = locations[i + 1];
-
-  //       const response = await axios.get("http://localhost/api/getNaverRoute", {
-  //         params: {
-  //           startX: start.getLng(),
-  //           startY: start.getLat(),
-  //           goals: encodeURIComponent(JSON.stringify([
-  //             { x: end.getLng(), y: end.getLat() }
-  //           ])),
-  //         }
-  //       });
-
-  //       console.log("데이터: ", response.data)
-
-
-  //       const duration =  Math.floor(response.data.route.traoptimal[0].summary.duration / 1000 / 60);
-  //       console.log("자동차 소요시간: ",duration,"분 소요");
-  //       const pathCoordinates = response.data.routes[0].sections[0].path.map((point) =>
-  //     new window.kakao.maps.LatLng(point[1], point[0])
-  //   );
-  //     setRoutePath(pathCoordinates);
-    
-  // };
-   
-  
-
-
-
-
-    
-    return(
-        <Box sx={{p:2}}>
-            <Typography variant="h6" gutterBottom
-             sx={{fontSize:{
-                xs:"1rem",
-                sm:"1rem",
-                md:"1.3rem",
-                lg:"1.5rem",
-            }}}>나의 나들이 동선</Typography>
-             <Box
-        sx={{
-          display: "flex", // flexbox로 설정
-          overflowX: "auto", // 가로 스크롤 허용
-          paddingBottom: "16px",
-        }}
-      >
-            <Grid
-            container
-            spacing={2}
-            justifyContent="flex-start"
-            alignItems="center"
-            sx={{ display:"flex", flexWrap:"nowrap", gap:"16px",}}
-            >
-                {places.map((place, index) => (
-          <React.Fragment key={index}>
-            <Grid item sx={{width:"90px",flexShrink:0,}} >
+      <Box sx={{ display: "flex", overflowX: "auto", paddingBottom: "16px" }}>
+        <Grid container spacing={2} justifyContent="flex-start" alignItems="center" sx={{ display: "flex", flexWrap: "nowrap", gap: "16px" }}>
+          {places.map((place, index) => (
+            <Grid key={index} item sx={{ width: "90px", flexShrink: 0 }}>
               <Box display="flex" flexDirection="column" alignItems="center">
-                <div className={styles.pic1}></div>
+                <div style={{ width: 60, height: 60, backgroundColor: '#ddd', borderRadius: 4, marginBottom: 8 }} />
                 <Typography>{place}</Typography>
               </Box>
             </Grid>
-        
-          </React.Fragment>
-        ))}
-            </Grid>
-        </Box>
+          ))}
+        </Grid>
+      </Box>
 
-        <Box sx={{p:2}}>
-            <Typography variant="h6" gutterBottom
-             sx={{fontSize:{
-                xs:"1rem",
-                sm:"1rem",
-                md:"1.3rem",
-                lg:"1.5rem",
-            }}}>추천 동선</Typography>
-            <Grid 
-            container
-            spacing={2}>
-                <Grid item xs={6} sm={3}>
-                    <Button fullWidth variant="contained">자가용</Button>
-                </Grid>
-                 <Grid item xs={6} sm={3}>
-                    <Button fullWidth variant="outlined">대중교통</Button>
-                </Grid>
-            </Grid>
-        </Box>
-        <Box sx={{p:2}}>
-            {/* <RouteMap/> */}
+      <Box sx={{ p: 2 }}>
+        <Typography variant="h6" gutterBottom>추천 동선</Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={6} sm={3}>
+            <Button fullWidth variant={mode === 'car' ? 'contained' : 'outlineed'} onClick={()=>setMode('car')}>자가용</Button>
+          </Grid>
+          <Grid item xs={6} sm={3}>
+            <Button fullWidth variant={mode === 'transit' ? 'contained' : 'outliend'} onClick={()=>setMode('transit')}>대중교통</Button>
+          </Grid>
+        </Grid>
+      </Box>
 
-             <div>
-      <input
-        type="text"
-        value={keyword}
-        onChange={(e) => setKeyword(e.target.value)}
-        placeholder="장소를 입력하세요"
-      />
-      <button onClick={handleSearch} >장소 추가</button>
-      <button onClick={handleReset} >초기화</button>
-      {/* <button onClick={handleGetRoute} disabled={!map || locations.length<2}>경로 찾기</button> */}
-      <div style={{ width: '100%', height: '500px' }}>
-        <RouteMap locations={locations} />
-      </div>
- 
-    </div>
+      <Box sx={{ p: 2 }}>
+        <input
+          type="text"
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          placeholder="장소를 입력하세요"
+          style={{ padding: "8px", width: "60%", marginRight: "8px" }}
+        />
+        <button onClick={handleSearch}>장소 추가</button>
+        <button onClick={resetLocations} style={{ marginLeft: "8px" }}>초기화</button>
+      </Box>
+           <Box sx={{ mt: 2, height: "300px", border: "1px solid #ccc" }}>
+        {/* {mode === "car" && <DrivingPathMap locations={locations} />}
+        {mode === "transit" && <TransitMap locations={locations} />} */}
+      </Box>
 
-
-        </Box>    
-
-        </Box>
-
-        
-       
-    );
-
+    </Box>
+  );
 };
 
 export default Step3Confirm;

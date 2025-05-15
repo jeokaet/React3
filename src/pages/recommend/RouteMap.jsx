@@ -1,95 +1,69 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styles from './Map.module.css';
+import React, { useState, useEffect, useRef } from "react";
 
+const RouteMap = ({ locations }) => {
+  const mapRef = useRef(null);
+  const [map, setMap] = useState(null);
+  const markersRef = useRef([]);
+  const polylineRef = useRef(null);
 
-const RouteMap = ({locations}) => {
- const mapRef = useRef(null);
-  const [map, setMap] = useState(null)
-
-
+  // 지도 초기화
   useEffect(() => {
-    const loadKakaoMapScript = () => {
-      if (window.kakao && !window.kakao.maps) {
-        initializeMap();
-      } else {
-        // Kakao Maps API 로드 대기
-        const script = document.createElement('script');
-        script.src = 'https://dapi.kakao.com/v2/maps/sdk.js?appkey=37885c5d1e4edc0bd7f3a41a8c23872b&autoload=false';
-        script.onload = () => {
-          window.kakao.maps.load(()=>{
-            initializeMap();
-            console.log('Kakao SDK loaded:', !!window.kakao?.maps?.LatLng);
+    if (!window.kakao || !window.kakao.maps || !mapRef.current) return;
 
-          });
-        };
-        document.body.appendChild(script);
-      }
+    const options = {
+      center: new window.kakao.maps.LatLng(37.5665, 126.9780),
+      level: 3,
     };
-
-    const initializeMap = () => {
-      if (window.kakao && mapRef.current && window.kakao.maps) {
-        const container = mapRef.current;
-        const options = {
-          center: new window.kakao.maps.LatLng(37.5665, 126.9780),
-          level: 3,
-        };
-        const kakaoMap = new window.kakao.maps.Map(container, options);
-        setMap(kakaoMap);
-      }
-    };
-
-    loadKakaoMapScript();
+    const kakaoMap = new window.kakao.maps.Map(mapRef.current, options);
+    setMap(kakaoMap);
   }, []);
 
-     // 장소 마커 표시
+  // 마커 및 폴리라인 업데이트
   useEffect(() => {
-    if (!locations || !map || locations.length === 0 ) return;
+    if (!map) return;
 
-    locations.forEach((loc) => {
-      new window.kakao.maps.Marker({
-        map,
-        position:loc.position,
-      });
+    // 기존 마커 모두 제거
+    markersRef.current.forEach((marker) => marker.setMap(null));
+    markersRef.current = [];
+
+    if (!locations || locations.length === 0) return;
+
+    // 새 마커 생성
+    locations.forEach(({ position, name }) => {
+      const marker = new window.kakao.maps.Marker({ map, position, title: name });
+      markersRef.current.push(marker);
     });
+
+    // 기존 폴리라인 제거
+    if (polylineRef.current) {
+      polylineRef.current.setMap(null);
+      polylineRef.current = null;
+    }
+
+    // polyline 그리기 (2개 이상 위치일 때)
+    if (locations.length >= 2) {
+      const path = locations.map((loc) => loc.position);
+      const polyline = new window.kakao.maps.Polyline({
+        map,
+        path,
+        strokeWeight: 4,
+        strokeColor: "#007bff",
+        strokeOpacity: 0.8,
+        strokeStyle: "shortdash",
+      });
+      polylineRef.current = polyline;
+
+      // 지도 범위 조정
+      const bounds = new window.kakao.maps.LatLngBounds();
+      path.forEach((latlng) => bounds.extend(latlng));
+      map.setBounds(bounds);
+    } else {
+      // 위치가 1개면 센터만 이동
+      map.setCenter(locations[0].position);
+    }
   }, [locations, map]);
-  
-     
-  //polyline
-useEffect(() => {
-  if (!locations || !map || locations.length < 2 || !window.kakao || !window.kakao.maps) return;
 
-  // Polyline 생성
-  const linePath = locations.map(
-    (loc) => new window.kakao.maps.LatLng(loc.position.lat, loc.position.lng)
-  );
-
-  const polyline = new window.kakao.maps.Polyline({
-    path: linePath,
-    strokeWeight: 4,
-    strokeColor: '#007bff',
-    strokeOpacity: 0.8,
-    strokeStyle: 'solid',
-  });
-
-  polyline.setMap(map);
-
-  // 지도 중심 자동 조정
-  const bounds = new window.kakao.maps.LatLngBounds();
-  linePath.forEach((latlng) => bounds.extend(latlng));
-  map.setBounds(bounds);
-
-
-  // 컴포넌트 unmount 시 제거
-  return () => polyline.setMap(null);
-}, [locations, map]);
-    
-  
-
-  return (
-    <div className={styles.mapWrapper}>
-      <div ref={mapRef}  style={{width:"100%",height:'100%'}}></div>
-      </div>
-  );
+  return <div ref={mapRef} style={{ width: "100%", height: "100%" }} />;
 };
 
 export default RouteMap;
