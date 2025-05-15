@@ -3,31 +3,35 @@ import {
   Box, Grid, TextField, Typography, Button,
   InputLabel
 } from '@mui/material';
-import useLocationStore from '../../store/useLocationStore'; // 🆕 위치 Store
-import mapboxgl from 'mapbox-gl';
-import { create } from 'zustand';
+import useLocationStore from '../../store/useLocationStore'; 
+
+
 
 const Step1Date = () => {
-  const [date, setDate] = useState("");
-  const setLocation = useLocationStore((state) => state.setLocation);
-  const { latitude, longitude, startingPoint } = useLocationStore();
-  const [ inputLoca, setInputLoca ] = useState("");
-  const [ locaName, setLocaName ] = useState("");
+  const { latitude, setLatitude, setLongitude, longitude, setLocation, setTripDate, tripDate, setInputLocation, inputLocation, startingPoint, setStartingPoint, setStartingLocation } = useLocationStore();
 
   const handleFindMyLocation = () => {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
+      navigator.geolocation.getCurrentPosition(
         (position) => {
-          const { latitude, longitude } = position.coords;
-        console.log("Mapbox 기준 위치:", latitude, longitude);
-          setLocation(latitude, longitude);
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          console.log("step1 내 위치:", lat, lng);
+
+          // 상태 변경
+          setLatitude(lat);
+          setLongitude(lng);
+          setLocation(lat, lng);
+
+          // 강제로 장소 검색도 여기서 직접 호출
+          fetchPlaceNameFromGoogle(lat, lng); // 👈 아래에 함수로 분리해서 만들자
         },
         (error) => {
           console.error("위치 정보 가져오기 실패:", error);
           alert("위치 정보를 가져오는 데 실패했습니다.");
         },
         {
-          enableHighAccuracy: true, 
+          enableHighAccuracy: true,
           timeout: 10000,
           maximumAge: 0
         }
@@ -39,15 +43,14 @@ const Step1Date = () => {
 
   
 
-  useEffect(() => {
-    const google = window.google;
-    if (!google || !google.maps || !google.maps.places || !latitude || !longitude) return;
 
+  const fetchPlaceNameFromGoogle = (latitude, longitude) => {
+    const google = window.google;
+    if (!google || !google.maps || !google.maps.places) return;
 
     const location = new google.maps.LatLng(latitude, longitude);
     const dummyMap = new google.maps.Map(document.createElement("div"));
     const service = new google.maps.places.PlacesService(dummyMap);
-
 
     const request = {
       location: location,
@@ -56,25 +59,25 @@ const Step1Date = () => {
       rankBy: google.maps.places.RankBy.PROMINENCE,
     };
 
-    service.nearbySearch(request, function (results, status) {
+    service.nearbySearch(request, (results, status) => {
       if (status === google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
-        const poi = results.find(r => r.name) || results[0]; // 이름 있는 장소 d
+        const poi = results.find(r => r.name) || results[0];
         if (poi && poi.name) {
-          setLocaName(poi.name); // 바로 이름 할당
+          setStartingLocation(poi.name);
+          setStartingPoint(poi.name);
+          
         } else {
-          console.warn("결과는 있으나 장소명이 없습니다.");
-          setLocaName("알 수 없는 장소");
+          setInputLocation("알 수 없는 장소");
         }
       } else {
-        console.warn("장소 검색 실패 또는 결과 없음:", status);
-        setLocaName("장소를 찾을 수 없습니다");
+        setInputLocation("장소를 찾을 수 없습니다");
       }
     });
-  }, [latitude, longitude]);
+  };
 
-  const handleLocation = (e) => {
-    setInputLoca(e.target.value);
-  }
+
+
+
 
   return (
     <Box>
@@ -85,11 +88,17 @@ const Step1Date = () => {
           label="날짜 선택"
           type="date"
           fullWidth
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
+          value={tripDate}
+          onFocus={() => {
+            if (inputLocation === "장소를 찾을 수 없습니다" || inputLocation === "알 수 없는 장소") {
+              setInputLocation("");
+            }
+          }}
+          onChange={(e) => setTripDate(e.target.value)}
           InputLabelProps={{
             shrink: true,
           }}
+          
         />
       </Grid>
 
@@ -100,8 +109,17 @@ const Step1Date = () => {
           placeholder="검색어를 입력해주세요."
           name="searchPlace"
           variant="outlined"
-          value={ inputLoca ? inputLoca : locaName || startingPoint }
-          onChange={handleLocation}
+          value={startingPoint ? startingPoint : inputLocation}
+          onChange={(e) => {
+            const value = e.target.value;
+              console.log("✅ 현재 입력값 :", value);
+              setInputLocation(value);
+              setStartingPoint("");
+              setStartingLocation(value);
+              
+              
+          }}
+
         />
         
         <Button sx={{ mt: 1, marginRight:1 }} variant="outlined" onClick={handleFindMyLocation}>

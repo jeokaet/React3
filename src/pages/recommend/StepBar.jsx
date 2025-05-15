@@ -1,22 +1,17 @@
-import React from "react";
+import { useEffect } from "react";
 import { Box, Typography, Divider, Button } from "@mui/material";
 import usePlaceStore from "../../store/usePlaceStore";
-
+import useLocationStore from "../../store/useLocationStore";
 import caxios from "../../api/caxios";
-import MainContent from "./MainContent";
 
 const StepBar = () => {
-  const {
-    step,
-    setStep,
-    tripDate,
-    startLocation,
-    selectedPlaces,
-    region,
-    category
-  } = usePlaceStore();
+  const { step, setStep, startLocation, selectedPlaces, region, category, } = usePlaceStore();
+  const { tripDate} = useLocationStore();
+
 
   const handleNext = async () => {
+
+
     if (step < 3) {
       setStep(step + 1);
     } else {
