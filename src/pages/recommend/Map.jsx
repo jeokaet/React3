@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import styles from "./Map.module.css";
 import useLocationStore from "../../store/useLocationStore";
 
-const Map = ({ setLocation }) => {
+const Map = () => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markerInstance = useRef(null);
@@ -67,11 +67,25 @@ const Map = ({ setLocation }) => {
 
                 service.getDetails({ placeId: poi.place_id }, (detailResult, detailStatus) => {
                 if (detailStatus === google.maps.places.PlacesServiceStatus.OK) {
-                  console.log("상호명:", detailResult.name);
-                  console.log("주소:", detailResult.formatted_address);
-                  setStartingPoint(detailResult.formatted_address);
-                  console.log("전화번호:", detailResult.formatted_phone_number);
-                  console.log("웹사이트:", detailResult.website);
+                  const name = detailResult.name;
+                  const address = detailResult.formatted_address;
+                  const phone = detailResult.formatted_phone_number;
+                  const website = detailResult.website;
+                  const lat = detailResult.geometry?.location?.lat();
+                  const lng = detailResult.geometry?.location?.lng();
+
+                  // 첫 번째 사진이 있을 경우 URL 추출
+                  const photoUrl = detailResult.photos?.[0]?.getUrl({ maxWidth: 400 });
+                   console.log("📍 상호명:", name);
+                   console.log("📬 주소:", address);
+                   console.log("📞 전화번호:", phone);
+                   console.log("🌐 웹사이트:", website);
+                   console.log("🧭 위도:", lat);
+                   console.log("🧭 경도:", lng);
+                   console.log("📷 대표 사진:", photoUrl);
+
+                  
+                  setStartingPoint(name);
                 } else {
                   console.log("상세정보 실패:", detailStatus);
                 }

@@ -5,13 +5,26 @@ import { Grid, Box } from "@mui/material";
 import MainContent from "./MainContent";
 import Panel from "./Panel";
 import usePlaceStore from "../../store/usePlaceStore";
+import RouteMap from './RouteMap.jsx';
+import Step3Confirm from './Step3Confirm';
 
 
 function RecommendPage() {
 
   const step = usePlaceStore((s) => s.step);
   const [ getLocation, setLocation ] = useState({});
+  const [locations, setLocations] = useState([]); //step3용
   
+
+  const addLocation = ({position, name}) => {
+    setLocations((prev)=> [...prev,{position,name}]);
+  };
+
+  const resetLocations = () => {
+    setLocations([]);
+  }
+
+
   return (
     <Box
       sx={{
@@ -42,10 +55,13 @@ function RecommendPage() {
         <Grid sx={{ flex: 1, height: "100%", display: "flex", flexDirection: "row" }}>
           {step ===2 && <Panel />}
           <Box sx={{ flex: 1 }}>
-            <Map setLocation={{setLocation}} />
+            {step === 3 ? <RouteMap locations = {locations}/> : <Map setLocation={setLocation} />}
           </Box>
         </Grid>
       </Box>
+      {step === 3 && (
+        <Step3Confirm addLocation={addLocation} locations={locations} resetLocations={resetLocations} />
+      )}
     </Box>
   );
 }
