@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import styles from "./Map.module.css";
 import useLocationStore from "../../store/useLocationStore";
 
+
 const Map = () => {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);

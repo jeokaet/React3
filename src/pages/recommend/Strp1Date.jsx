@@ -41,6 +41,8 @@ const Step1Date = () => {
     }
   };
 
+  
+
 
   const fetchPlaceNameFromGoogle = (latitude, longitude) => {
     const google = window.google;
