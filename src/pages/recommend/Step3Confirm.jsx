@@ -3,6 +3,7 @@ import { Grid, Typography, Box, Button } from "@mui/material";
 import DrivingPathMap from "./DrivingPathMap";
 import caxios from "../../api/caxios";
 import useLocationStore from "../../store/useLocationStore";
+import usePlaceStore from "../../store/usePlaceStore";
 
 const places = [
   {
@@ -61,35 +62,39 @@ const places = [
 
 
 
-const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
-  const { longitude, latitude } = useLocationStore();
+const Step3Confirm = ({setRouteLocations}) => {
   const [keyword, setKeyword] = useState("");
   const [mode, setMode] = useState(null);
+  const { selectedPlaces } = usePlaceStore(); // ✅ 실제 선택된 장소들
+  const {startingPoint, latitude, longitude} = useLocationStore();
 
-  const handleSearch = () => {
-    if (!keyword || !window.kakao || !window.kakao.maps) {
-      alert("지도 준비가 안됐습니다.");
-      return;
-    }
+  const fullLocations = [
+    {
+      position: new window.kakao.maps.LatLng(latitude, longitude),
+      name: "출발지",
+    },
+    ...selectedPlaces.map(place => ({
+      name:place.name,
+      position: new window.kakao.maps.LatLng(place.latitude, place.longitude),
+    }))
+  ];
 
-    const ps = new window.kakao.maps.services.Places();
-    ps.keywordSearch(keyword, (data, status) => {
-      if (status === window.kakao.maps.services.Status.OK) {
-        const place = data[0];
-        const position = new window.kakao.maps.LatLng(parseFloat(place.y), parseFloat(place.x));
-        const name = place.place_name;
+  useEffect(() => {
+  if (fullLocations.length > 0) {
+    setRouteLocations(fullLocations);
+  }
+}, [fullLocations, setRouteLocations]);
 
-        addLocation({ position, name });
-        setKeyword("");
-      } else {
-        alert("장소를 찾을 수 없습니다.");
-      }
-    });
-  };
+  const destination = fullLocations[fullLocations.length -1];
+  const waypoints = fullLocations.slice(1,fullLocations.length -1);
+
+
+ 
+  console.log(latitude + "위도" +longitude + "경도");
 
 
      useEffect(() => {
-        caxios.post("/api/route/optimize", places)
+        caxios.post("/api/route/optimize", places, longitude, latitude)
           .then((resp) => {
             console.log("저장이 완료되었습니다.");
           })
@@ -125,10 +130,10 @@ const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
         <Typography variant="h6" gutterBottom>추천 동선</Typography>
         <Grid container spacing={2}>
           <Grid item xs={6} sm={3}>
-            <Button fullWidth variant={mode === 'car' ? 'contained' : 'outlineed'} onClick={()=>setMode('car')}>자가용</Button>
+            <Button fullWidth variant={mode === 'car' ? 'contained' : 'outlined'} onClick={()=>setMode('car')}>자가용</Button>
           </Grid>
           <Grid item xs={6} sm={3}>
-            <Button fullWidth variant={mode === 'transit' ? 'contained' : 'outliend'} onClick={()=>setMode('transit')}>대중교통</Button>
+            <Button fullWidth variant={mode === 'transit' ? 'contained' : 'outlined'} onClick={()=>setMode('transit')}>대중교통</Button>
           </Grid>
         </Grid>
       </Box>
@@ -141,11 +146,10 @@ const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
           placeholder="장소를 입력하세요"
           style={{ padding: "8px", width: "60%", marginRight: "8px" }}
         />
-        <button onClick={handleSearch}>장소 추가</button>
-        <button onClick={resetLocations} style={{ marginLeft: "8px" }}>초기화</button>
+  
       </Box>
            <Box sx={{ mt: 2, height: "300px", border: "1px solid #ccc" }}>
-        {mode === "car" && <DrivingPathMap locations={locations} />}
+        {mode === "car" && <DrivingPathMap locations={fullLocations} />}
         {/* {mode === "transit" && <TransitMap locations={locations} />}  */}
       </Box>
       <Button
