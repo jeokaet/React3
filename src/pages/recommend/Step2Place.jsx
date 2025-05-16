@@ -172,7 +172,7 @@ const Step2Place = () => {
         sx={{ mb: 2 }}
       />
 
-      {/* 📋 리스트 출력 */}
+      {/* 📋 리스트 출력s */}
       {loading ? (
         <Box display="flex" justifyContent="center" sx={{ mt: 2, mb: 2 }}>
           <CircularProgress />
