@@ -67,7 +67,7 @@ const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
   const [mode, setMode] = useState(null);
   const { selectedPlaces } = usePlaceStore(); // ✅ 실제 선택된 장소들
   const {startingPoint, latitude, longitude} = useLocationStore();
-  console.log(latitude+longitude+"여기");
+  console.log(latitude + "위도" +longitude + "경도");
   const handleSearch = () => {
     if (!keyword || !window.kakao || !window.kakao.maps) {
       alert("지도 준비가 안됐습니다.");
@@ -92,7 +92,7 @@ const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
 
 
      useEffect(() => {
-        caxios.post("/api/route/optimize", places)
+        caxios.post("/api/route/optimize", places, longitude, latitude)
           .then((resp) => {
             console.log("저장이 완료되었습니다.");
           })
