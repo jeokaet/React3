@@ -9,7 +9,7 @@ const Map = () => {
   const mapInstance = useRef(null);
   const markerInstance = useRef(null);
 
-  const { latitude , longitude, setStartingPoint, location, setStartingLocation } = useLocationStore();
+  const { latitude , longitude, setStartingPoint, location, setStartingLocation, setLongitude, setLatitude } = useLocationStore();
 
 
   useEffect(() => {
@@ -46,6 +46,8 @@ const Map = () => {
         const lat = latlng.getLat();
         const lng = latlng.getLng();
         console.log("클릭 위치:", lat, lng);
+        setLongitude(lng);
+        setLatitude(lat);
 
         if (markerInstance.current) {
           markerInstance.current.setPosition(latlng);
