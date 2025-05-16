@@ -21,7 +21,7 @@ const Step2Place = () => {
     const [query, setQuery] = useState("");
     const [filteredResults, setFilteredResults] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { tripDate, startingLocation } = useLocationStore();
+    const { tripDate, startingPoint, startingLocation } = useLocationStore();
     const [ placeList, setPlaceList ] = useState([]);
 
 
@@ -94,6 +94,8 @@ const Step2Place = () => {
 
     return (
         <Box sx={{height: "100vh"}}>
+            <Typography>{tripDate}</Typography>
+            <Typography>{startingPoint}</Typography>
             <Typography variant="h6" gutterBottom>
                 추천 장소 검색
             </Typography>
