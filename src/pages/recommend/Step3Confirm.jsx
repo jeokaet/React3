@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Grid, Typography, Box, Button } from "@mui/material";
+import usePlaceStore from "../../store/usePlaceStore";
 import DrivingPathMap from "./DrivingPathMap";
 import caxios from "../../api/caxios";
 import useLocationStore from "../../store/useLocationStore";
@@ -62,10 +63,11 @@ const places = [
 
 
 const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
-  const { longitude, latitude } = useLocationStore();
   const [keyword, setKeyword] = useState("");
   const [mode, setMode] = useState(null);
-
+  const { selectedPlaces } = usePlaceStore(); // ✅ 실제 선택된 장소들
+  const {startingPoint, latitude, longitude} = useLocationStore();
+  console.log(latitude+longitude+"여기");
   const handleSearch = () => {
     if (!keyword || !window.kakao || !window.kakao.maps) {
       alert("지도 준비가 안됐습니다.");
@@ -88,6 +90,7 @@ const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
   };
 
 
+
      useEffect(() => {
         caxios.post("/api/route/optimize", places)
           .then((resp) => {
@@ -103,18 +106,38 @@ const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
     
     
   }
-
   return (
     <Box sx={{ p: 2 }}>
       <Typography variant="h6" gutterBottom>나의 나들이 동선</Typography>
 
       <Box sx={{ display: "flex", overflowX: "auto", paddingBottom: "16px" }}>
         <Grid container spacing={2} justifyContent="flex-start" alignItems="center" sx={{ display: "flex", flexWrap: "nowrap", gap: "16px" }}>
-          {places.map((place, index) => (
-            <Grid key={index} item sx={{ width: "90px", flexShrink: 0 }}>
+          {selectedPlaces.map((place, index) => (
+            <Grid key={index} item sx={{ width: "100px", flexShrink: 0 }}>
               <Box display="flex" flexDirection="column" alignItems="center">
-                <div style={{ width: 60, height: 60, backgroundColor: '#ddd', borderRadius: 4, marginBottom: 8 }} />
-                <Typography>{place.name}</Typography>
+                <img
+                  src={place.imageUrl && place.imageUrl !== "null" ? place.imageUrl : "/images/NoImage.png"}
+                  alt={place.name}
+                  style={{
+                    width: 60,
+                    height: 60,
+                    objectFit: "cover",
+                    borderRadius: 4,
+                    marginBottom: 4,
+                  }}
+                />
+                <Typography variant="body2" fontWeight="bold">
+                  {place.name}
+                </Typography>
+                <Typography variant="body3">
+                 시작위치 : {startingPoint}<br/>
+                 위도1 : {longitude}<br/>
+                 경도1 : {latitude}
+                </Typography>
+                <Typography variant="caption" color="text.secondary" align="center">
+                  위도: {place.latitude ? Number(place.latitude).toFixed(4) : "N/A"}<br />
+                  경도: {place.longitude ? Number(place.longitude).toFixed(4) : "N/A"}
+                </Typography>
               </Box>
             </Grid>
           ))}
@@ -125,10 +148,14 @@ const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
         <Typography variant="h6" gutterBottom>추천 동선</Typography>
         <Grid container spacing={2}>
           <Grid item xs={6} sm={3}>
-            <Button fullWidth variant={mode === 'car' ? 'contained' : 'outlineed'} onClick={()=>setMode('car')}>자가용</Button>
+            <Button fullWidth variant={mode === 'car' ? 'contained' : 'outlined'} onClick={() => setMode('car')}>
+              자가용
+            </Button>
           </Grid>
           <Grid item xs={6} sm={3}>
-            <Button fullWidth variant={mode === 'transit' ? 'contained' : 'outliend'} onClick={()=>setMode('transit')}>대중교통</Button>
+            <Button fullWidth variant={mode === 'transit' ? 'contained' : 'outlined'} onClick={() => setMode('transit')}>
+              대중교통
+            </Button>
           </Grid>
         </Grid>
       </Box>
@@ -144,6 +171,7 @@ const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
         <button onClick={handleSearch}>장소 추가</button>
         <button onClick={resetLocations} style={{ marginLeft: "8px" }}>초기화</button>
       </Box>
+
            <Box sx={{ mt: 2, height: "300px", border: "1px solid #ccc" }}>
         {mode === "car" && <DrivingPathMap locations={locations} />}
         {/* {mode === "transit" && <TransitMap locations={locations} />}  */}
@@ -154,7 +182,7 @@ const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
         variant="contained"
         sx={{ mt: 2 }} >
         일정 저장
-      </Button>  
+      </Button> 
     </Box>
   );
 };
