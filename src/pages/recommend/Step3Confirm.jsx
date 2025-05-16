@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Grid, Typography, Box, Button } from "@mui/material";
-
-const places = ["장소1", "장소2", "장소3", "장소4", "장소5"];
+import usePlaceStore from "../../store/usePlaceStore";
 
 const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
   const [keyword, setKeyword] = useState("");
   const [mode, setMode] = useState(null);
+  const { selectedPlaces } = usePlaceStore(); // ✅ 실제 선택된 장소들
 
   const handleSearch = () => {
     if (!keyword || !window.kakao || !window.kakao.maps) {
@@ -34,11 +34,27 @@ const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
 
       <Box sx={{ display: "flex", overflowX: "auto", paddingBottom: "16px" }}>
         <Grid container spacing={2} justifyContent="flex-start" alignItems="center" sx={{ display: "flex", flexWrap: "nowrap", gap: "16px" }}>
-          {places.map((place, index) => (
-            <Grid key={index} item sx={{ width: "90px", flexShrink: 0 }}>
+          {selectedPlaces.map((place, index) => (
+            <Grid key={index} item sx={{ width: "100px", flexShrink: 0 }}>
               <Box display="flex" flexDirection="column" alignItems="center">
-                <div style={{ width: 60, height: 60, backgroundColor: '#ddd', borderRadius: 4, marginBottom: 8 }} />
-                <Typography>{place}</Typography>
+                <img
+                  src={place.imageUrl && place.imageUrl !== "null" ? place.imageUrl : "/images/NoImage.png"}
+                  alt={place.name}
+                  style={{
+                    width: 60,
+                    height: 60,
+                    objectFit: "cover",
+                    borderRadius: 4,
+                    marginBottom: 4,
+                  }}
+                />
+                <Typography variant="body2" fontWeight="bold">
+                  {place.name}
+                </Typography>
+                <Typography variant="caption" color="text.secondary" align="center">
+                  위도: {place.latitude?.toFixed(4)}<br />
+                  경도: {place.longitude?.toFixed(4)}
+                </Typography>
               </Box>
             </Grid>
           ))}
@@ -49,10 +65,14 @@ const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
         <Typography variant="h6" gutterBottom>추천 동선</Typography>
         <Grid container spacing={2}>
           <Grid item xs={6} sm={3}>
-            <Button fullWidth variant={mode === 'car' ? 'contained' : 'outlineed'} onClick={()=>setMode('car')}>자가용</Button>
+            <Button fullWidth variant={mode === 'car' ? 'contained' : 'outlined'} onClick={() => setMode('car')}>
+              자가용
+            </Button>
           </Grid>
           <Grid item xs={6} sm={3}>
-            <Button fullWidth variant={mode === 'transit' ? 'contained' : 'outliend'} onClick={()=>setMode('transit')}>대중교통</Button>
+            <Button fullWidth variant={mode === 'transit' ? 'contained' : 'outlined'} onClick={() => setMode('transit')}>
+              대중교통
+            </Button>
           </Grid>
         </Grid>
       </Box>
@@ -68,11 +88,11 @@ const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
         <button onClick={handleSearch}>장소 추가</button>
         <button onClick={resetLocations} style={{ marginLeft: "8px" }}>초기화</button>
       </Box>
-           <Box sx={{ mt: 2, height: "300px", border: "1px solid #ccc" }}>
-        {/* {mode === "car" && <DrivingPathMap locations={locations} />}
-        {mode === "transit" && <TransitMap locations={locations} />} */}
-      </Box>
 
+      <Box sx={{ mt: 2, height: "300px", border: "1px solid #ccc" }}>
+        {/* {mode === "car" && <DrivingPathMap locations={locations} />}
+            {mode === "transit" && <TransitMap locations={locations} />} */}
+      </Box>
     </Box>
   );
 };
