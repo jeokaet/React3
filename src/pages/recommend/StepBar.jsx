@@ -87,14 +87,15 @@ const StepBar = () => {
       {/* 하단 버튼 */}
       {step === 1 ? <></> : <Button onClick={handleBefore} fullWidth variant="contained" sx={{ mt: 2 }}>이전</Button>
 }
-      <Button
+      {step === 3 ? <></> : <Button
         onClick={handleNext}
         fullWidth
         variant="contained"
         sx={{ mt: 2 }}
       >
-        {step === 3 ? "저장" : "다음"}
-      </Button>
+        다음
+      </Button>} 
+      
     </Box>
   );
 };

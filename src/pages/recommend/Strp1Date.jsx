@@ -7,7 +7,7 @@ import useLocationStore from '../../store/useLocationStore';
 
 
 const Step1Date = () => {
-  const { latitude, setLatitude, setLongitude, longitude, setLocation, setTripDate, tripDate, setInputLocation, inputLocation, startingPoint, setStartingPoint, setStartingLocation } = useLocationStore();
+  const {  setLatitude, setLongitude, setLocation, setTripDate, tripDate, setInputLocation, inputLocation, startingPoint, setStartingPoint, setStartingLocation } = useLocationStore();
 
   const handleFindMyLocation = () => {
   if (navigator.geolocation) {
@@ -76,7 +76,7 @@ const Step1Date = () => {
 
   return (
     <Box>
-      <Typography variant="h6" gutterBottom>스탭1</Typography>
+      <Typography variant="h6" gutterBottom>시작하기</Typography>
 
       <Grid item xs={12} sx={{ mb: 2 }}>
         <TextField
