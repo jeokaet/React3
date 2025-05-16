@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Grid, Typography, Box, Button } from "@mui/material";
 import usePlaceStore from "../../store/usePlaceStore";
-
+import useLocationStore from "../../store/useLocationStore";
 const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
   const [keyword, setKeyword] = useState("");
   const [mode, setMode] = useState(null);
   const { selectedPlaces } = usePlaceStore(); // ✅ 실제 선택된 장소들
-
+  const {startingPoint, latitude, longitude} = useLocationStore();
+  console.log(latitude+longitude+"여기");
   const handleSearch = () => {
     if (!keyword || !window.kakao || !window.kakao.maps) {
       alert("지도 준비가 안됐습니다.");
@@ -27,7 +28,6 @@ const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
       }
     });
   };
-
   return (
     <Box sx={{ p: 2 }}>
       <Typography variant="h6" gutterBottom>나의 나들이 동선</Typography>
@@ -51,10 +51,16 @@ const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
                 <Typography variant="body2" fontWeight="bold">
                   {place.name}
                 </Typography>
-                <Typography variant="caption" color="text.secondary" align="center">
-                  위도: {place.latitude?.toFixed(4)}<br />
-                  경도: {place.longitude?.toFixed(4)}
+                <Typography variant="body3">
+                 시작위치 : {startingPoint}<br/>
+                 위도1 : {longitude}<br/>
+                 경도1 : {latitude}
                 </Typography>
+                <Typography variant="caption" color="text.secondary" align="center">
+                  위도: {place.latitude ? Number(place.latitude).toFixed(4) : "N/A"}<br />
+                  경도: {place.longitude ? Number(place.longitude).toFixed(4) : "N/A"}
+                </Typography>
+
               </Box>
             </Grid>
           ))}
