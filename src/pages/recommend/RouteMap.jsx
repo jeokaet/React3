@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
-const RouteMap = ({ locations }) => {
+const RouteMap = ({ locations, origin, destination }) => {
   const mapRef = useRef(null);
   const [map, setMap] = useState(null);
   const markersRef = useRef([]);

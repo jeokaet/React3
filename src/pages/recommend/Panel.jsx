@@ -22,7 +22,7 @@ const Panel = () => {
         boxSizing: "border-box",
       }}
     >
-      {/* 패널 토글 버튼 */}
+      {/* 패널 토글 버튼ㄴ */}
       <IconButton
         onClick={toggleSlide}
         sx={{

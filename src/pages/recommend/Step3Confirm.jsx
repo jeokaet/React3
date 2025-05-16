@@ -3,7 +3,6 @@ import { Grid, Typography, Box, Button } from "@mui/material";
 import DrivingPathMap from "./DrivingPathMap";
 import caxios from "../../api/caxios";
 import useLocationStore from "../../store/useLocationStore";
-import TransitMap from "./TransitMap";
 
 const places = [
   {
@@ -66,7 +65,6 @@ const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
   const { longitude, latitude } = useLocationStore();
   const [keyword, setKeyword] = useState("");
   const [mode, setMode] = useState(null);
-  
 
   const handleSearch = () => {
     if (!keyword || !window.kakao || !window.kakao.maps) {
@@ -148,7 +146,7 @@ const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
       </Box>
            <Box sx={{ mt: 2, height: "300px", border: "1px solid #ccc" }}>
         {mode === "car" && <DrivingPathMap locations={locations} />}
-        {mode === "transit" && <TransitMap locations={locations} />} 
+        {/* {mode === "transit" && <TransitMap locations={locations} />}  */}
       </Box>
       <Button
         onClick={handleSave}
