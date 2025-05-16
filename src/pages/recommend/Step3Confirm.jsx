@@ -1,44 +1,45 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Grid, Typography, Box, Button } from "@mui/material";
-import usePlaceStore from "../../store/usePlaceStore";
 import DrivingPathMap from "./DrivingPathMap";
 import caxios from "../../api/caxios";
 import useLocationStore from "../../store/useLocationStore";
+import usePlaceStore from "../../store/usePlaceStore";
 
 
 // 출발지 정해서 보내줘야 함. 그리고 도착지도 출발지에서 제일 먼 곳 찾아서 넣어줘야함. 
-
-
-
-const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
+const Step3Confirm = ({setRouteLocations}) => {
   const [keyword, setKeyword] = useState("");
   const [mode, setMode] = useState(null);
   const { selectedPlaces } = usePlaceStore(); // ✅ 실제 선택된 장소들
   const {startingPoint, latitude, longitude} = useLocationStore();
-  const [ result, setResult ] = useState([]);
+   const [ result, setResult ] = useState([]);
 
+
+  console.log("목적지:",selectedPlaces);
+  
+  const routeLocations = useMemo(() => {
+    if (!result || result.length === 0) return [];
+
+    return result.map(place => ({
+      name: place.name,
+      position: new window.kakao.maps.LatLng(place.latitude, place.longitude)
+    }));
+  }, [result]);
+
+  useEffect(() => {
+    if (routeLocations.length > 0) {
+      setRouteLocations(routeLocations);
+    }
+  }, [routeLocations]);
+  
+
+  console.log("selectedPlaces:", selectedPlaces);
+
+
+ 
   console.log(latitude + "위도" +longitude + "경도");
 
-  const handleSearch = () => {
-    if (!keyword || !window.kakao || !window.kakao.maps) {
-      alert("지도 준비가 안됐습니다.");
-      return;
-    }
 
-    const ps = new window.kakao.maps.services.Places();
-    ps.keywordSearch(keyword, (data, status) => {
-      if (status === window.kakao.maps.services.Status.OK) {
-        const place = data[0];
-        const position = new window.kakao.maps.LatLng(parseFloat(place.y), parseFloat(place.x));
-        const name = place.place_name;
-
-        addLocation({ position, name });
-        setKeyword("");
-      } else {
-        alert("장소를 찾을 수 없습니다.");
-      }
-    });
-  };
 
 const payload = {
           places: selectedPlaces,
@@ -58,12 +59,13 @@ const payload = {
             console.error("저장 실패 :", error);
             alert("동선 실패.");
           });
-      }, []);
+      }, [selectedPlaces, latitude, longitude]);
 
   const handleSave = () => {
     
     
   }
+
   return (
     <Box sx={{ p: 2 }}>
       <Typography variant="h6" gutterBottom>나의 나들이 동선</Typography>
@@ -91,6 +93,7 @@ const payload = {
                   위도: {place.latitude ? Number(place.latitude).toFixed(4) : "N/A"}<br />
                   경도: {place.longitude ? Number(place.longitude).toFixed(4) : "N/A"}
                 </Typography>
+
               </Box>
             </Grid>
           ))}
@@ -101,14 +104,10 @@ const payload = {
         <Typography variant="h6" gutterBottom>추천 동선</Typography>
         <Grid container spacing={2}>
           <Grid item xs={6} sm={3}>
-            <Button fullWidth variant={mode === 'car' ? 'contained' : 'outlined'} onClick={() => setMode('car')}>
-              자가용
-            </Button>
+            <Button fullWidth variant={mode === 'car' ? 'contained' : 'outlined'} onClick={()=>setMode('car')}>자가용</Button>
           </Grid>
           <Grid item xs={6} sm={3}>
-            <Button fullWidth variant={mode === 'transit' ? 'contained' : 'outlined'} onClick={() => setMode('transit')}>
-              대중교통
-            </Button>
+            <Button fullWidth variant={mode === 'transit' ? 'contained' : 'outlined'} onClick={()=>setMode('transit')}>대중교통</Button>
           </Grid>
         </Grid>
       </Box>
@@ -121,12 +120,10 @@ const payload = {
           placeholder="장소를 입력하세요"
           style={{ padding: "8px", width: "60%", marginRight: "8px" }}
         />
-        <button onClick={handleSearch}>장소 추가</button>
-        <button onClick={resetLocations} style={{ marginLeft: "8px" }}>초기화</button>
+  
       </Box>
-
            <Box sx={{ mt: 2, height: "300px", border: "1px solid #ccc" }}>
-        {mode === "car" && <DrivingPathMap locations={locations} />}
+        {mode === "car" && <DrivingPathMap locations={routeLocations} />}
         {/* {mode === "transit" && <TransitMap locations={locations} />}  */}
       </Box>
       <Button
@@ -135,7 +132,7 @@ const payload = {
         variant="contained"
         sx={{ mt: 2 }} >
         일정 저장
-      </Button> 
+      </Button>  
     </Box>
   );
 };

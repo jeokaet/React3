@@ -12,13 +12,17 @@ function RecommendPage() {
   const step = usePlaceStore((s) => s.step);
   const [locations, setLocations] = useState([]);
   const [kakaoReady, setKakaoReady] = useState(false);
+  const [routeLocations, setRouteLocations] = useState([]);
 
+  console.log("recommand",routeLocations);
   // 카카오 SDK 딱 한번만 로딩
   useEffect(() => {
     if (window.kakao && window.kakao.maps) {
       setKakaoReady(true);
       return;
     }
+
+
 
     const script = document.createElement("script");
     script.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=37885c5d1e4edc0bd7f3a41a8c23872b&libraries=services&autoload=false";
@@ -31,13 +35,11 @@ function RecommendPage() {
     document.head.appendChild(script);
   }, []);
 
-  // 장소 추가 함수
-  const addLocation = ({ position, name }) => {
-    setLocations(prev => [...prev, { position, name }]);
-  };
+      useEffect(() => {
+  console.log("routeLocations changed:", routeLocations);
+}, [routeLocations]);
 
-  // 초기화 함수
-  const resetLocations = () => setLocations([]);
+ 
 
   return (
     <Box sx={{ width: "120vw", height: "100vh", overflow: "hidden", position: "relative", paddingTop: "64px" }}>
@@ -47,7 +49,7 @@ function RecommendPage() {
             <StepBar />
           </Grid>
           <Grid sx={{ width: "70%", height: "100%", borderRight: "1px solid #ccc" }}>
-            <MainContent addLocation={addLocation} locations={locations} resetLocations={resetLocations} />
+            <MainContent locations={locations} setRouteLocations={setRouteLocations} />
           </Grid>
         </Grid>
 
@@ -58,7 +60,7 @@ function RecommendPage() {
             {step === 3 ? (
               kakaoReady ? (
                 <>
-                  <RouteMap locations={locations} />
+                  <RouteMap locations={routeLocations} />
                 </>
               ) : (
                 <div>지도 로딩중...</div>
