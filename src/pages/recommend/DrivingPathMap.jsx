@@ -2,9 +2,12 @@ import React, { useEffect } from "react";
 import caxios from "../../api/caxios";
 
 const DrivingPathMap = ({ locations }) => {
+
+    console.log("locations",locations);
   useEffect(() => {
     if (!window.kakao || !window.kakao.maps || locations.length < 2) return;
 
+    
     if (locations.length > 5) {
       alert("카카오 길찾기는 경유지를 최대 3개까지 지원합니다.\n추가된 경유지는 제외됩니다.");
     }
@@ -37,13 +40,20 @@ const DrivingPathMap = ({ locations }) => {
 
     // 경유지 (waypoints) - 출발지, 도착지 제외한 중간 위치들
      let waypointLocations = locations.slice(1, locations.length - 1);
-    if (waypointLocations.length > 3) {
-      waypointLocations = waypointLocations.slice(0, 3);
-    }
+     if (waypointLocations.length > 3) {
+         waypointLocations = waypointLocations.slice(0, 3);
+        }
+     
+        console.log("경유지 좌표들:");
+waypointLocations.forEach((loc, idx) => {
+  console.log(`경유지${idx + 1}:`, loc.position.getLng(), loc.position.getLat());
+});
+
 
     const waypoints = waypointLocations
       .map((loc) => `${loc.position.getLng()},${loc.position.getLat()}`)
       .join("|"); // waypoints 구분자는 '|' 입니다
+
 
     // GET 요청 쿼리 파라미터 구성
     const params = {
@@ -54,7 +64,7 @@ const DrivingPathMap = ({ locations }) => {
       summary: false,
     };
     if (waypoints) params.waypoints = waypoints;
-
+    console.log("보내는 경로 정보:", params);
     caxios
       .get("/api/kakaoRoute", { params })
       .then((response) => {
@@ -92,10 +102,10 @@ const DrivingPathMap = ({ locations }) => {
         polyline.setMap(map);
 
         const bounds = new window.kakao.maps.LatLngBounds();
-linePath.forEach((latlng) => bounds.extend(latlng));
+        linePath.forEach((latlng) => bounds.extend(latlng));
 
-// 계산된 영역에 맞게 지도 화면 조정
-map.setBounds(bounds);
+        // 계산된 영역에 맞게 지도 화면 조정
+        map.setBounds(bounds);
 
       })
       .catch((err) => {
