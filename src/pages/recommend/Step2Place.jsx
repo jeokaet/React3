@@ -21,7 +21,7 @@ const Step2Place = () => {
     const [query, setQuery] = useState("");
     const [filteredResults, setFilteredResults] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { tripDate, startingPoint, startingLocation } = useLocationStore();
+    const { tripDate, startingPoint, startingLocation, latitude, longitude } = useLocationStore();
     const [ placeList, setPlaceList ] = useState([]);
 
 
@@ -30,10 +30,19 @@ const Step2Place = () => {
         const fetchData = async () => {
             setLoading(true);
             console.log("step2 값 확인 : 날짜 - " + tripDate + " / 지역 - " + startingLocation);
+            // try {
+            // const res = await caxios.post("/llm/getList", {
+            //     date: tripDate,
+            //     startingLocation: startingLocation,
+            //     latitude: latitude,
+            //     longitude: longitude
+            // });
             try {
-            const res = await caxios.post("/api/getList", {
+            const res = await caxios.post("/opti/getList", {
                 date: tripDate,
-                startingLocation: startingLocation
+                startingLocation: startingLocation,
+                latitude: latitude,
+                longitude: longitude
             });
 
             if (res.data.error) {
@@ -44,7 +53,7 @@ const Step2Place = () => {
             const getList = res.data.results;
             console.log("추천 결과 :", getList);
 
-            // 위도 경도값 가져다가 구글 api로 장소이미지url 가져오기
+            
 
             setPlaceList(getList); // ⬅️ 상태에 저장해야 map 돌릴 수 있음
             setFilteredResults(getList);
@@ -72,7 +81,7 @@ const Step2Place = () => {
 
         setLoading(true);
         try {
-            const res = await caxios.post("/api/llm-recommend", {
+            const res = await caxios.post("/llm/llm-recommend", {
                 userInput: query,
                 examplePlaces: placeList,
             });

@@ -48,7 +48,7 @@ const payload = {
 
      useEffect(() => {
         
-        caxios.post("/api/route/optimize", payload)
+        caxios.post("/opti/optimize", payload)
           .then((resp) => {
             console.log("동선 생성 완료.");
             console.log (resp.data);
