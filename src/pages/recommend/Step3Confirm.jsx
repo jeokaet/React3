@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Grid, Typography, Box, Button } from "@mui/material";
+import DrivingPathMap from "./DrivingPathMap";
 
 const places = ["장소1", "장소2", "장소3", "장소4", "장소5"];
 
@@ -69,8 +70,8 @@ const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
         <button onClick={resetLocations} style={{ marginLeft: "8px" }}>초기화</button>
       </Box>
            <Box sx={{ mt: 2, height: "300px", border: "1px solid #ccc" }}>
-        {/* {mode === "car" && <DrivingPathMap locations={locations} />}
-        {mode === "transit" && <TransitMap locations={locations} />} */}
+        {mode === "car" && <DrivingPathMap locations={locations} />}
+        {/* {mode === "transit" && <TransitMap locations={locations} />}  */}
       </Box>
 
     </Box>
