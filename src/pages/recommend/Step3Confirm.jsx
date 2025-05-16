@@ -66,6 +66,7 @@ const Step3Confirm = ({ addLocation, locations, resetLocations }) => {
   const { longitude, latitude } = useLocationStore();
   const [keyword, setKeyword] = useState("");
   const [mode, setMode] = useState(null);
+  
 
   const handleSearch = () => {
     if (!keyword || !window.kakao || !window.kakao.maps) {

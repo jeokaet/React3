@@ -5,6 +5,10 @@ const DrivingPathMap = ({ locations }) => {
   useEffect(() => {
     if (!window.kakao || !window.kakao.maps || locations.length < 2) return;
 
+    if (locations.length > 5) {
+      alert("카카오 길찾기는 경유지를 최대 3개까지 지원합니다.\n추가된 경유지는 제외됩니다.");
+    }
+
     const mapContainer = document.getElementById("car-map");
     const map = new window.kakao.maps.Map(mapContainer, {
       center: locations[0].position,
@@ -32,8 +36,12 @@ const DrivingPathMap = ({ locations }) => {
     const destination = `${locations[locations.length - 1].position.getLng()},${locations[locations.length - 1].position.getLat()}`;
 
     // 경유지 (waypoints) - 출발지, 도착지 제외한 중간 위치들
-    const waypoints = locations
-      .slice(1, locations.length - 1)
+     let waypointLocations = locations.slice(1, locations.length - 1);
+    if (waypointLocations.length > 3) {
+      waypointLocations = waypointLocations.slice(0, 3);
+    }
+
+    const waypoints = waypointLocations
       .map((loc) => `${loc.position.getLng()},${loc.position.getLat()}`)
       .join("|"); // waypoints 구분자는 '|' 입니다
 
