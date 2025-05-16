@@ -8,7 +8,8 @@ import Step1Date from "./Strp1Date";
 
 const MainContent = ({ locations, setRouteLocations}) => {
   const step = usePlaceStore((s) => s.step);
-
+  
+   console.log("main",setRouteLocations);
  
   return (
       <Box

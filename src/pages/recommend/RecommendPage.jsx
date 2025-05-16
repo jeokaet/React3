@@ -14,12 +14,15 @@ function RecommendPage() {
   const [kakaoReady, setKakaoReady] = useState(false);
   const [routeLocations, setRouteLocations] = useState([]);
 
+  console.log("recommand",routeLocations);
   // 카카오 SDK 딱 한번만 로딩
   useEffect(() => {
     if (window.kakao && window.kakao.maps) {
       setKakaoReady(true);
       return;
     }
+
+
 
     const script = document.createElement("script");
     script.src = "https://dapi.kakao.com/v2/maps/sdk.js?appkey=37885c5d1e4edc0bd7f3a41a8c23872b&libraries=services&autoload=false";
@@ -31,6 +34,10 @@ function RecommendPage() {
     };
     document.head.appendChild(script);
   }, []);
+
+      useEffect(() => {
+  console.log("routeLocations changed:", routeLocations);
+}, [routeLocations]);
 
  
 
@@ -53,7 +60,7 @@ function RecommendPage() {
             {step === 3 ? (
               kakaoReady ? (
                 <>
-                  <RouteMap routeLocations={routeLocations} />
+                  <RouteMap locations={routeLocations} />
                 </>
               ) : (
                 <div>지도 로딩중...</div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Grid, Typography, Box, Button } from "@mui/material";
 import DrivingPathMap from "./DrivingPathMap";
 import caxios from "../../api/caxios";
@@ -68,7 +68,9 @@ const Step3Confirm = ({setRouteLocations}) => {
   const { selectedPlaces } = usePlaceStore(); // ✅ 실제 선택된 장소들
   const {startingPoint, latitude, longitude} = useLocationStore();
 
-  const fullLocations = [
+  console.log("목적지:",selectedPlaces);
+
+  const fullLocations = useMemo(()=> [
     {
       position: new window.kakao.maps.LatLng(latitude, longitude),
       name: "출발지",
@@ -77,16 +79,18 @@ const Step3Confirm = ({setRouteLocations}) => {
       name:place.name,
       position: new window.kakao.maps.LatLng(place.latitude, place.longitude),
     }))
-  ];
+  ],[latitude, longitude, selectedPlaces])
 
   useEffect(() => {
   if (fullLocations.length > 0) {
     setRouteLocations(fullLocations);
   }
-}, [fullLocations, setRouteLocations]);
+}, [fullLocations]);
 
   const destination = fullLocations[fullLocations.length -1];
   const waypoints = fullLocations.slice(1,fullLocations.length -1);
+
+  console.log("selectedPlaces:", selectedPlaces);
 
 
  
