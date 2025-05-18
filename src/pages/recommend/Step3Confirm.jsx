@@ -4,6 +4,7 @@ import DrivingPathMap from "./DrivingPathMap";
 import caxios from "../../api/caxios";
 import useLocationStore from "../../store/useLocationStore";
 import usePlaceStore from "../../store/usePlaceStore";
+import TransitMap from "./TransitMap";
 
 
 // 출발지 정해서 보내줘야 함. 그리고 도착지도 출발지에서 제일 먼 곳 찾아서 넣어줘야함. 
@@ -25,6 +26,8 @@ const Step3Confirm = ({setRouteLocations}) => {
       position: new window.kakao.maps.LatLng(place.latitude, place.longitude)
     }));
   }, [result]);
+
+  console.log("✅ routeLocations:", routeLocations);
 
   useEffect(() => {
     if (routeLocations.length > 0) {
@@ -112,7 +115,7 @@ const payload = {
         </Grid>
       </Box>
 
-      <Box sx={{ p: 2 }}>
+      {/* <Box sx={{ p: 2 }}>
         <input
           type="text"
           value={keyword}
@@ -121,10 +124,10 @@ const payload = {
           style={{ padding: "8px", width: "60%", marginRight: "8px" }}
         />
   
-      </Box>
+      </Box> */}
            <Box sx={{ mt: 2, height: "300px", border: "1px solid #ccc" }}>
         {mode === "car" && <DrivingPathMap locations={routeLocations} />}
-        {/* {mode === "transit" && <TransitMap locations={locations} />}  */}
+        {mode === "transit" && <TransitMap locations={routeLocations} />} 
       </Box>
       <Button
         onClick={handleSave}
