@@ -39,13 +39,6 @@ function AdminSidebar() {
             <ListItemText primary="대시보드" />
           </ListItem>
         </Link>
-
-        <Link to="/admin/user-stats" style={{ textDecoration: "none", color: "inherit" }}>
-          <ListItem button sx={{ "&:hover": { backgroundColor: "#19a1ad" , color:"#fff" } }}>
-            <ListItemText primary="회원 통계" />
-          </ListItem>
-        </Link>
-
         <Link to="/admin/placeManagement" style={{ textDecoration: "none", color: "inherit" }}>
           <ListItem button sx={{ "&:hover": { backgroundColor: "#19a1ad", color:"#fff"  } }}>
             <ListItemText primary="여행지 관리" />

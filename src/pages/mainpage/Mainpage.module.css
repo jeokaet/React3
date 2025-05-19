@@ -202,3 +202,26 @@
     transform: scale(1);
   }
 }
+/* 조휘영 */
+
+.scrollTop {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 999;
+  background-color: #19a1ad;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.scrollTop:hover {
+  background-color: #f89f5e;
+}
