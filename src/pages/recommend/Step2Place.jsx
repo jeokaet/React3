@@ -21,22 +21,37 @@ const Step2Place = () => {
   const [loading, setLoading] = useState(false);
   const [placeList, setPlaceList] = useState([]);
   const [filter, setFilter] = useState(null);
-
-  const { tripDate, startingPoint, startingLocation } = useLocationStore();
+  const [weather] = useState(null);
+  const { tripDate, startingPoint, startingLocation,location } = useLocationStore();
   const { selectedPlaces, addPlace, removePlace } = usePlaceStore();
+
+  const getWeatherIcon = (desc) => {
+    if (!desc) return "❓";
+    const lower = desc.toLowerCase();
+    if (lower.includes("맑음")) return "☀️";
+    if (lower.includes("구름")) return "⛅";
+    if (lower.includes("비")) return "🌧️";
+    if (lower.includes("눈")) return "❄️";
+    if (lower.includes("흐림")) return "🌥️";
+    return "🌈";
+  };
 
   useEffect(() => {
     console.log("📦 tripDate:", tripDate);
     console.log("📦 startingLocation:", startingLocation);
-
+    console.log("latitude : ", location.latitude);
+    console.log("longitude : ", location.longitude);
     if (!startingLocation) return;
 
     const fetchData = async () => {
       setLoading(true);
+      
       try {
         const res = await caxios.post("/api/getList", {
           date: tripDate, // null/빈 값도 백엔드에서 처리
           startingLocation,
+        //   latitude:location.latitude,
+        //   longitude:location.longitude,
         });
 
         if (res.data.error) {
@@ -96,10 +111,15 @@ const Step2Place = () => {
     <Box sx={{ height: "100vh" }}>
       <Typography>{tripDate}</Typography>
       <Typography>{startingPoint}</Typography>
-
+      {/* {weather && (
+        <Typography variant="body2" sx={{ mb: 1, color: "gray", display: "flex", alignItems: "center", gap: 1 }}>
+            {getWeatherIcon(weather)} {tripDate} 날씨는 "{weather}"입니다. 이에 기반한 추천 결과입니다.
+        </Typography>
+        )} */}
       <Typography variant="h6" gutterBottom>
         추천 장소 검색
       </Typography>
+      
 
       {/* 🔘 필터 버튼 */}
       <Box sx={{ mb: 2, display: "flex", flexWrap: "wrap", gap: 1 }}>
