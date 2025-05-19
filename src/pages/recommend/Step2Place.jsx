@@ -21,8 +21,8 @@ const Step2Place = () => {
   const [loading, setLoading] = useState(false);
   const [placeList, setPlaceList] = useState([]);
   const [filter, setFilter] = useState(null);
-  const [weather] = useState(null);
-  const { tripDate, startingPoint, startingLocation,location } = useLocationStore();
+  const [weather, setWeather] = useState(null);
+  const { tripDate, startingPoint, startingLocation,latitude,longitude } = useLocationStore();
   const { selectedPlaces, addPlace, removePlace } = usePlaceStore();
 
   const getWeatherIcon = (desc) => {
@@ -39,9 +39,10 @@ const Step2Place = () => {
   useEffect(() => {
     console.log("📦 tripDate:", tripDate);
     console.log("📦 startingLocation:", startingLocation);
-    console.log("latitude : ", location.latitude);
-    console.log("longitude : ", location.longitude);
-    if (!startingLocation) return;
+    console.log("latitude : ",latitude);
+    console.log("longitude : ",longitude);
+
+    if (!startingLocation || !latitude || !longitude) return;
 
     const fetchData = async () => {
       setLoading(true);
@@ -50,8 +51,9 @@ const Step2Place = () => {
         const res = await caxios.post("/api/getList", {
           date: tripDate, // null/빈 값도 백엔드에서 처리
           startingLocation,
-        //   latitude:location.latitude,
-        //   longitude:location.longitude,
+          latitude,
+          longitude,
+
         });
 
         if (res.data.error) {
@@ -60,6 +62,8 @@ const Step2Place = () => {
         }
 
         const getList = res.data.results || [];
+        const weatherFromServer = res.data.weather || null;
+        setWeather(weatherFromServer);
         setPlaceList(getList);
         setFilteredResults(getList);
       } catch (err) {
@@ -70,7 +74,7 @@ const Step2Place = () => {
     };
 
     fetchData();
-  }, [tripDate, startingLocation]);
+  }, [tripDate, startingLocation,  latitude,longitude]);
 
   const handleSearch = async () => {
     setFilteredResults("");
@@ -111,11 +115,20 @@ const Step2Place = () => {
     <Box sx={{ height: "100vh" }}>
       <Typography>{tripDate}</Typography>
       <Typography>{startingPoint}</Typography>
-      {/* {weather && (
-        <Typography variant="body2" sx={{ mb: 1, color: "gray", display: "flex", alignItems: "center", gap: 1 }}>
+      {weather && (
+        <Typography
+            variant="body2"
+            sx={{
+            mb: 1,
+            color: "gray",
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+        }} >
             {getWeatherIcon(weather)} {tripDate} 날씨는 "{weather}"입니다. 이에 기반한 추천 결과입니다.
         </Typography>
-        )} */}
+)}
+
       <Typography variant="h6" gutterBottom>
         추천 장소 검색
       </Typography>

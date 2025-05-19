@@ -23,6 +23,7 @@ function App() {
   return (
     <div className="app-wrapper">
       <Router>
+        
         <Header />
         <Routes>
           <Route path="/" element={<Mainpage />} />
