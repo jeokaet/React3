@@ -66,8 +66,9 @@ const StepBar = () => {
         {[1, 2, 3].map((n) => (
           <Box
             key={n}
-            sx={{ mb: 4 }}
-            onClick={() => setStep(n)}
+            // sx={{ mb: 4 }}
+            // onClick={() => setStep(n)}
+            sx={{ mb: 4, pointerEvents: 'none' }}
           >
             <Typography
               variant="subtitle1"
