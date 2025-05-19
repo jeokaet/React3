@@ -14,6 +14,7 @@ import textFilter from "../../utils/textFilter";
 import useLocationStore from "../../store/useLocationStore";
 import usePlaceStore from "../../store/usePlaceStore";
 import SearchIcon from "@mui/icons-material/Search";
+import step2Styles from './Step2Place.module.css';
 
 const Step2Place = () => {
   const [query, setQuery] = useState("");
@@ -22,8 +23,9 @@ const Step2Place = () => {
   const [placeList, setPlaceList] = useState([]);
   const [filter, setFilter] = useState(null);
 
-  const { tripDate, startingPoint, startingLocation } = useLocationStore();
+  const { tripDate, startingPoint, startingLocation, latitude, longitude } = useLocationStore();
   const { selectedPlaces, addPlace, removePlace } = usePlaceStore();
+
 
   useEffect(() => {
     console.log("📦 tripDate:", tripDate);
@@ -34,9 +36,11 @@ const Step2Place = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const res = await caxios.post("/api/getList", {
-          date: tripDate, // null/빈 값도 백엔드에서 처리
+        const res = await caxios.post("/opti/getList", {
+          date: tripDate,
           startingLocation,
+          latitude: latitude,
+          longitude: longitude
         });
 
         if (res.data.error) {
@@ -67,7 +71,7 @@ const Step2Place = () => {
 
     setLoading(true);
     try {
-      const res = await caxios.post("/api/llm-recommend", {
+      const res = await caxios.post("/llm/llm-recommend", {
         userInput: query,
         examplePlaces: placeList,
       });
@@ -92,11 +96,29 @@ const Step2Place = () => {
 
   const keywordList = ["맛집", "관광지", "쇼핑"];
 
+  const typeToKorean = {
+    restaurant: "음식점",
+    cafe: "카페",
+    bar: "바",
+    bakery: "빵집",
+    tourist_attraction: "관광명소",
+    museum: "박물관",
+    zoo: "동물원",
+    amusement_park: "놀이공원",
+    aquarium: "아쿠아리움",
+    shopping_mall: "쇼핑몰",
+    clothing_store: "의류매장",
+    park: "공원",
+    natural_feature: "자연경관",
+  };
+
+
   return (
     <Box sx={{ height: "100vh" }}>
-      <Typography>{tripDate}</Typography>
-      <Typography>{startingPoint}</Typography>
-
+      <Box sx={{ width: "100%", mb: 1.5 }}>
+        <Typography variant="h6">{startingPoint}</Typography>
+        <Typography variant="h8">{tripDate}</Typography>
+      </Box>
       <Typography variant="h6" gutterBottom>
         추천 장소 검색
       </Typography>
@@ -120,6 +142,16 @@ const Step2Place = () => {
                 setFilteredResults(filtered);
               }
             }}
+            sx={{
+              color: filter === kw ? "#fff" : "#19a1ad",
+              backgroundColor: filter === kw ? "#19a1ad" : "transparent",
+              borderColor: "#19a1ad",
+              "&:hover": {
+                backgroundColor: "#19a1ad",
+                color: "#fff",
+                borderColor: "#19a1ad",
+              },
+            }}
           >
             {kw}
           </Button>
@@ -127,7 +159,6 @@ const Step2Place = () => {
 
         <Button
           variant={filter === "오늘" ? "contained" : "outlined"}
-          color="secondary"
           size="small"
           onClick={() => {
             if (filter === "오늘") {
@@ -139,18 +170,27 @@ const Step2Place = () => {
               setFilteredResults(recommended);
             }
           }}
+          sx={{
+            color: filter === "오늘" ? "#fff" : "#f89f5e",
+            backgroundColor: filter === "오늘" ? "#f89f5e" : "transparent",
+            borderColor: "#f89f5e",
+            "&:hover": {
+              backgroundColor: "#f89f5e",
+              color: "#fff",
+              borderColor: "#f89f5e",
+            },
+          }}
         >
           오늘의 추천
         </Button>
       </Box>
 
+
       {/* 🔍 검색창 */}
       <TextField
         fullWidth
-        placeholder="자연어로 장소를 입력해보세요 (예: 조용한 실내 박물관)"
+        placeholder="원하는 테마를 입력해주세요 (예: 조용한 실내)"
         name="searchPlace"
-        multiline
-        rows={1}
         variant="outlined"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
@@ -174,17 +214,55 @@ const Step2Place = () => {
 
       {/* 📋 리스트 출력s */}
       {loading ? (
-        <Box display="flex" justifyContent="center" sx={{ mt: 2, mb: 2 }}>
-          <CircularProgress />
-        </Box>
+        // <Box display="flex" justifyContent="center" sx={{ mt: 2, mb: 2 }}>
+        //   <CircularProgress />
+        // </Box>
+        <>
+          <div className={step2Styles.box}>
+            <div className={step2Styles.l1}>L</div>
+            <div className={step2Styles.l2}>O</div>
+            <div className={step2Styles.l3}>A</div>
+            <div className={step2Styles.l4}>D</div>
+            <div className={step2Styles.l5}>I</div>
+            <div className={step2Styles.l6}>N</div>
+            <div className={step2Styles.l7}>G</div>
+          </div>
+          <div className={step2Styles.centerBody}>
+            <div className={step2Styles.loaderShape} />
+          </div>
+        </>
       ) : (
         <Box sx={{ height: 700 }}>
           <Virtuoso
             data={filteredResults}
+            style={{
+              height: "100%",
+              overflowY: "auto",
+              scrollbarWidth: "thin", // Firefox
+            }}
+            components={{
+              Scroller: React.forwardRef((props, ref) => (
+                <div
+                  {...props}
+                  ref={ref}
+                  style={{
+                    ...props.style,
+                    scrollbarWidth: "thin", // Firefox
+                  }}
+                  className="custom-scroll"
+                />
+              )),
+            }}
             itemContent={(index, place) => {
               const isAdded = selectedPlaces.some((p) => p.name === place.name);
-              const togglePlace = () =>
+              const togglePlace = () => {
+                if (!isAdded && selectedPlaces.length >= 5) {
+                  alert("최대 5개까지만 선택할 수 있습니다.");
+                  return;
+                }
+
                 isAdded ? removePlace(place.name) : addPlace(place);
+              };
 
               const combinedText = `${place.description} ${place.reason}`;
               const imageSrc =
@@ -222,7 +300,7 @@ const Step2Place = () => {
                       {place.name}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {place.type} · {place.region}
+                      {typeToKorean[place.type] || "기타"} {/*  · {place.region}  */}
                     </Typography>
                     <Typography variant="body2" mt={0.5}>
                       {combinedText}
@@ -233,9 +311,22 @@ const Step2Place = () => {
                     variant={isAdded ? "contained" : "outlined"}
                     size="small"
                     onClick={togglePlace}
+                    disabled={!isAdded && selectedPlaces.length >= 5}
+                    sx={{
+                      ml: 2,
+                      backgroundColor: isAdded ? "#19a1ad" : "transparent",
+                      color: isAdded ? "#fff" : "#19a1ad",
+                      borderColor: "#19a1ad",
+                      "&:hover": {
+                        backgroundColor: "#19a1ad",
+                        color: "#fff",
+                        borderColor: "#19a1ad",
+                      },
+                    }}
                   >
-                    {isAdded ? "✓ 선택됨" : "+"}
+                    {isAdded ? "✓" : "+"}
                   </Button>
+
                 </Box>
               );
             }}

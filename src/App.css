@@ -1,9 +1,12 @@
 .app-wrapper {
+  width:100vw;
   height: 100%; /* 기존 min-height 제거 */
   display: flex;
   flex-direction: column;
-  background: #f0f4f8;
+  align-items: center; 
+  background: #ffffff;
 }
+
 html, body, #root {
   margin: 0;
   padding: 0;

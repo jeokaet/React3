@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import styles from "./Map.module.css";
 import useLocationStore from "../../store/useLocationStore";
-    import { Box } from "@mui/material";
+import { Box } from "@mui/material";
 
 
 const Map = () => {
@@ -9,7 +9,7 @@ const Map = () => {
   const mapInstance = useRef(null);
   const markerInstance = useRef(null);
 
-  const { latitude , longitude, setStartingPoint, location, setStartingLocation, setLongitude, setLatitude } = useLocationStore();
+  const { latitude, longitude, setStartingPoint, location, setStartingLocation, setLongitude, setLatitude } = useLocationStore();
 
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const Map = () => {
       console.warn("Kakao or Google Maps not ready");
       return;
     }
-    console.log("내위치:",latitude,longitude)
+    console.log("내위치:", latitude, longitude)
     kakao.maps.load(() => {
       const center = new kakao.maps.LatLng(latitude||37.5665,longitude||126.9780);
 
@@ -59,54 +59,34 @@ const Map = () => {
 
         const request = {
           location: location,
-          radius: 50,
           type: 'point_of_interest',
-          rankBy: google.maps.places.RankBy.PROMINENCE,
+          rankBy: google.maps.places.RankBy.DISTANCE
         };
 
         service.nearbySearch(request, function (results, status) {
-            if (status === google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
-               
-                const poi = results.find(r => r.types.includes('point_of_interest') || r.types.includes('establishment')) || results[0];
-                console.log("Google 장소명:", poi.name);
+          if (status === google.maps.places.PlacesServiceStatus.OK && results.length > 0) {
+            const poi = results.find(r => r.types.includes('point_of_interest') || r.types.includes('establishment')) || results[0];
 
-                service.getDetails({ placeId: poi.place_id }, (detailResult, detailStatus) => {
-                if (detailStatus === google.maps.places.PlacesServiceStatus.OK) {
-                  const name = detailResult.name;
-                  const address = detailResult.formatted_address;
-                  const phone = detailResult.formatted_phone_number;
-                  const website = detailResult.website;
-                  const lat = detailResult.geometry?.location?.lat();
-                  const lng = detailResult.geometry?.location?.lng();
+            const name = poi.name;
+            const address = poi.vicinity; // 상세 주소는 아님
+            const lat = poi.geometry.location.lat();
+            const lng = poi.geometry.location.lng();
+            
 
-                  // 첫 번째 사진이 있을 경우 URL 추출
-                  const photoUrl = detailResult.photos?.[0]?.getUrl({ maxWidth: 400 });
-                   console.log("📍 상호명:", name);
-                   console.log("📬 주소:", address);
-                   console.log("📞 전화번호:", phone);
-                   console.log("🌐 웹사이트:", website);
-                   console.log("🧭 위도:", lat);
-                   console.log("🧭 경도:", lng);
-                   console.log("📷 대표 사진:", photoUrl);
-
-                  setStartingPoint(name);
-                  setStartingLocation(address);
-                } else {
-                  console.log("상세정보 실패:", detailStatus);
-                }
-              });
-              } else {
-                console.log("Google 장소 없음 또는 오류:", status);
-              }
-              
+            // 상태 저장
+            setStartingPoint(name);
+            setStartingLocation(address);
+          } else {
+            console.log("Google 장소 없음 또는 오류:", status);
+          }
         });
       });
     });
 
-    
+
   }, [location, latitude, longitude]);
 
-   useEffect(() => {
+  useEffect(() => {
     if (
       latitude !== null &&
       longitude !== null &&
@@ -125,24 +105,24 @@ const Map = () => {
   }, [latitude, longitude]);
 
   return (
-  <Box
-    sx={{
-      height: "100%",
-      display: "flex",
-      flexDirection: "column",
-    }}
-  >
     <Box
-      ref={mapRef}
       sx={{
-        flex: 1,
-        width: "100%",
-        minHeight: "300px",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
       }}
-    />
-  </Box>
+    >
+      <Box
+        ref={mapRef}
+        sx={{
+          flex: 1,
+          width: "100%",
+          minHeight: "300px",
+        }}
+      />
+    </Box>
 
-    );
-  };
+  );
+};
 
 export default Map;
