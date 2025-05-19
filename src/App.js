@@ -16,10 +16,12 @@ import useAuthStore from "./store/useAuthStore";
 
 function App() {
   const initialize = useAuthStore((state) => state.initialize);
+  
 
   useEffect(() => {
     initialize(); // ✅ 새로고침 시 sessionStorage에서 상태 복원
   }, []);
+
   return (
     <div className="app-wrapper">
       <Router>

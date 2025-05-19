@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {
   Box, Grid, TextField, Typography, Button, CircularProgress, InputLabel, 
 } from '@mui/material';
@@ -9,6 +9,12 @@ import useLocationStore from '../../store/useLocationStore';
 const Step1Date = () => {
   const {  setLatitude, setLongitude, setLocation, setTripDate, tripDate, setInputLocation, inputLocation, startingPoint, setStartingPoint, setStartingLocation } = useLocationStore();
 
+  useEffect(() => {
+    if (!tripDate) {
+      const today = new Date().toISOString().slice(0, 10); // "YYYY-MM-DD"
+      setTripDate(today);
+    }
+  }, []);
   const handleFindMyLocation = () => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -75,7 +81,7 @@ const Step1Date = () => {
 
 
   return (
-    <Box>
+    <Box sx={{mt: 8}}>
       <Typography variant="h6" gutterBottom>시작하기</Typography>
 
       <Grid item xs={12} sx={{ mb: 2 }}>
@@ -117,10 +123,24 @@ const Step1Date = () => {
 
         />
         
-        <Button sx={{ mt: 1, marginRight:1 }} variant="outlined" onClick={handleFindMyLocation}>
+        <Button
+          sx={{
+            mt: 1,
+            marginRight: 1,
+            color: "#19a1ad",
+            borderColor: "#19a1ad",
+            "&:hover": {
+              backgroundColor: "#f89f5e",
+              borderColor: "#f89f5e",
+              color: "#fff",
+            },
+          }}
+          variant="outlined"
+          onClick={handleFindMyLocation}
+        >
           현재 위치 사용
         </Button>
-        <Button sx={{ mt: 1, mr: 2 }} variant="contained">장소 검색</Button>
+        {/* <Button sx={{ mt: 1, mr: 2 }} variant="contained">장소 검색</Button> */}
       </Grid>
     </Box>
   );

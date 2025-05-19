@@ -28,58 +28,56 @@ const theme = useTheme();
   };
 
     return(
-    <AppBar>
-      <Toolbar sx={{ width: "100%"}}>
-      <Grid container alignItems="center">
-        <Grid item xs={6}>
-          <Typography component={Link} to="/" color="inherit" variant="h6">MyLogo</Typography>
-        </Grid>
+    <AppBar position="static" elevation={0} sx={{ backgroundColor: 'transparent', boxShadow: 'none', height: '80px', padding: '10px', width:'85vw' }}>
+      <Toolbar sx={{ width: "100%" }}>
+        <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
+          {/* 왼쪽 로고 */}
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <img src="/images/Logo.png" alt="로고" style={{ height: 60 }} />
+          </Link>
 
-        <Grid item xs={6} container  justifyContent="flex-end" alignItems="center" sx={{ textAlign: "right" }}>
-          {isMobile ? (
-            <IconButton color="inherit">
-              <MenuIcon />
-            </IconButton>
-          ) : (
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <Link to="/recommendPage"><Button color="inherit">여행지</Button></Link>
-              <Button color="inherit">이용방법</Button>
-              {
-                token ? <IconButton onClick={handleSelectBox}><AccountCircleIcon/></IconButton> : <Button component={Link} to="/login" color="inherit">로그인</Button> 
-              }
-  
-              <Menu
-                  anchorEl={anchorEl}
-                  open={open}
-                  onClose={handleClose}
-                  anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "right",
-                  }}
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                  }}
-                >
-                  <MenuItem onClick={handleLogout} component={Link} to="/">
-                    로그아웃
-                  </MenuItem>
-                  <MenuItem onClick={handleClose} component={Link} to="/myPage">
-                    마이페이지
-                  </MenuItem>
-                  {
-                    loginId=="Admin" ? <MenuItem onClick={handleClose} component={Link} to="/admin">관리자페이지</MenuItem> : <></>
-                  }
-                  
-                </Menu>
-            </Box>
+          {/* 오른쪽 메뉴 영역 */}
+          <Box sx={{ display: "flex", gap: 2, alignItems: "center", ml: "auto", mr: "30px" }}>
+            {isMobile ? (
+              <IconButton sx={{ color: "black" }}>
+                <MenuIcon />
+              </IconButton>
+            ) : (
+              <>
+                <Link to="/recommendPage" style={{ textDecoration: "none" }}>
+                  <Button sx={{ color: "black" }}>여행지</Button>
+                </Link>
+
+                <Button sx={{ color: "black" }}>이용방법</Button>
+
+                {token ? (
+                  <IconButton onClick={handleSelectBox} sx={{ color: "black" }}>
+                    <AccountCircleIcon />
+                  </IconButton>
+                ) : (
+                  <Button component={Link} to="/login" sx={{ color: "black" }}>로그인</Button>
+                )}
+              </>
+            )}
+          </Box>
+        </Box>
+
+        {/* 메뉴 (공통) */}
+        <Menu
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          transformOrigin={{ vertical: "top", horizontal: "right" }}
+        >
+          <MenuItem onClick={handleLogout} component={Link} to="/">로그아웃</MenuItem>
+          <MenuItem onClick={handleClose} component={Link} to="/myPage">마이페이지</MenuItem>
+          {loginId === "Admin" && (
+            <MenuItem onClick={handleClose} component={Link} to="/admin">관리자페이지</MenuItem>
           )}
-        </Grid>
-      </Grid>
-
-
-
+        </Menu>
       </Toolbar>
+
     </AppBar>
     );
 }

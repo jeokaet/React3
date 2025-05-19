@@ -22,7 +22,7 @@ const Map = () => {
     }
     console.log("내위치:",latitude,longitude)
     kakao.maps.load(() => {
-      const center = new kakao.maps.LatLng(latitude||37.5665,longitude||126.9780);
+      const center = new kakao.maps.LatLng(latitude, longitude);
 
       const map = new kakao.maps.Map(mapRef.current, {
         center,

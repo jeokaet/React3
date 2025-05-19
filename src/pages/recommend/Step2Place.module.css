@@ -1,0 +1,121 @@
+/* Step2Place.module.css */
+
+.centerBody {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 120px; /* 또는 원하는 크기 */
+}
+
+.loaderShape {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+}
+
+.loaderShape::after {
+  content: "";
+  width: 50px;
+  height: 20px;
+  border-radius: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin-top: 15px;
+}
+
+.loaderShape::before {
+  content: "";
+  width: 50px;
+  height: 50px;
+  border-radius: 100% 100% 100% 0;
+  box-shadow: 0px 0px 0px 2px #19a1ad;
+background-color: #19a1adb6;
+  animation: bounce 1s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-46deg);
+  margin-top: 20px;
+}
+
+@keyframes bounce {
+  0% {
+    top: 0;
+  }
+  50% {
+    top: -5px;
+  }
+  100% {
+    top: 0;
+  }
+}
+
+
+.box {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box div {
+  display: inline-block;
+  margin: 5px;
+  font-size: 25px;
+  animation: 2s obrot linear infinite;
+}
+
+@keyframes obrot {
+  0% {
+    transform: rotateX(0);
+  }
+  12.5% {
+    transform: rotateX(90deg);
+  }
+  25% {
+    transform: rotateX(180deg);
+  }
+  37.5% {
+    transform: rotateX(270deg);
+  }
+  50% {
+    transform: rotateX(360deg);
+  }
+  100% {
+    transform: rotateX(360deg);
+  }
+}
+
+/* 각 글자에 대한 애니메이션 딜레이 */
+.l1 { animation-delay: 0s; }
+.l2 { animation-delay: 0.1s; }
+.l3 { animation-delay: 0.2s; }
+.l4 { animation-delay: 0.3s; }
+.l5 { animation-delay: 0.4s; }
+.l6 { animation-delay: 0.5s; }
+.l7 { animation-delay: 0.6s; }
+
+/* App.css 또는 global.css */
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+
+.custom-scroll::-webkit-scrollbar-button {
+  display: none; /* 🔥 위아래 화살표 제거 */
+}
+
+

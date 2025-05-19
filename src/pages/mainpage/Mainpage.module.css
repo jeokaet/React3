@@ -1,35 +1,204 @@
-.regionItem {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
-  }
-  
-  .regionItem:hover {
-    transform: scale(1.07);
-  }
-  
-  .regionCard {
-  width: 350px;        /* 또는 원하는 고정 크기 */
-  height: 400px;
-  overflow: hidden;
-  border-radius: 8px;  /* 선택사항: 둥글게 */
+
+
+.btn {
+  width: 180px;
+  height: 50px;
+  border-radius: 5px;
+  border: none;
+  transition: all 0.5s ease-in-out;
+  font-size: 20px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  background: #19a1ad;
+  color: #f5f5f5;
+  position: relative;
 }
 
-.regionCard img {
+.btn:hover {
+  box-shadow: 0 0 20px 0px #2e2e2e3a;
+}
+
+.btn .icon {
+  position: absolute;
+  height: 40px;
+  width: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.5s;
+}
+
+.btn .text {
+  transform: translateX(55px);
+}
+
+.btn:hover .icon {
+  width: 175px;
+}
+
+.btn:hover .text {
+  transition: all 0.5s;
+  opacity: 0;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btn:active .icon {
+  transform: scale(0.85);
+}
+
+.partnerItem{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.partnerCard{
+  width: 350px; 
+  height: 200px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.partnerCard:hover {
+  transform: scale(1.05);
+}
+
+
+.card {
+  position: relative;
+  width: 350px;
+  height: 400px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card svg {
+  width: 48px;
+  fill: #333;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card:hover svg {
+  scale: 0;
+}
+
+.card__content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 100%;
   height: 100%;
-  object-fit: cover; /* 핵심! 영역에 꽉 차게 비율 유지 */
-  display: block;
+  padding: 30px;
+  box-sizing: border-box;
+  background-color: #fff;
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
 }
-  
-  .regionText {
-    margin-top: 8px;
-    font-weight: bold;
-    transition: color 0.3s ease;
+
+.card:hover .card__content {
+  transform: translate(-50%, -50%) rotate(0deg);
+  opacity: 1;
+}
+
+.card__title {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+  font-weight: 700;
+}
+
+.card__description {
+  margin: 10px 0 0;
+  font-size: 14px;
+  color: #777;
+  line-height: 1.4;
+}
+
+/* From Uiverse.io by abrahamcalsin */ 
+.makeRoute {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background: #19a1ad;
+  font-family: "Montserrat", sans-serif;
+  box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  cursor: pointer;
+  border: none;
+  margin-top: 10px;
+}
+
+.makeRoute:after {
+  content: " ";
+  width: 0%;
+  height: 100%;
+  background: #f89f5e;
+  position: absolute;
+  transition: all 0.4s ease-in-out;
+  right: 0;
+}
+
+.makeRoute:hover::after {
+  right: auto;
+  left: 0;
+  width: 100%;
+}
+
+.makeRoute span {
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+  padding: 10px 15px;
+  color: #fff;
+  font-size: 1.125em;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  z-index: 20;
+  transition: all 0.3s ease-in-out;
+}
+
+.makeRoute:hover span {
+  color: #fff;
+  animation: scaleUp 0.3s ease-in-out;
+}
+
+.textArea{
+  height: 85%;
+}
+
+.btnArea{
+  display: flex;
+  justify-content: flex-end;
+}
+
+@keyframes scaleUp {
+  0% {
+    transform: scale(1);
   }
-  
-  .regionItem:hover .regionText {
-    color: #1976d2; /* 예: hover 시 글자 색 바뀌게 */
+
+  50% {
+    transform: scale(0.95);
   }
+
+  100% {
+    transform: scale(1);
+  }
+}
