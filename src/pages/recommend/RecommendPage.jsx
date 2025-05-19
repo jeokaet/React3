@@ -56,7 +56,7 @@ function RecommendPage() {
         <Grid sx={{ flex: 1, height: "100%", display: "flex", flexDirection: "row" }}>
           {step === 2 && <Panel />}
 
-          <Box sx={{ flex: 1 }}>
+          <Box sx={{ flex: 1, width: "100%", height: "100%", minHeight: "400px" }}>
             {step === 3 ? (
               kakaoReady ? (
                 <>

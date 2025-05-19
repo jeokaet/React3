@@ -4,6 +4,7 @@ import DrivingPathMap from "./DrivingPathMap";
 import caxios from "../../api/caxios";
 import useLocationStore from "../../store/useLocationStore";
 import usePlaceStore from "../../store/usePlaceStore";
+import TransitMap from "./TransitMap";
 import step3Styles from "./Step3.module.css";
 
 
@@ -26,6 +27,8 @@ const Step3Confirm = ({ setRouteLocations }) => {
       position: new window.kakao.maps.LatLng(place.latitude, place.longitude)
     }));
   }, [result]);
+
+  console.log("✅ routeLocations:", routeLocations);
 
   useEffect(() => {
     if (routeLocations.length > 0) {
@@ -158,7 +161,7 @@ const Step3Confirm = ({ setRouteLocations }) => {
       </Box> */}
       <Box sx={{ mt: 2, height: "500px", border: "1px solid #ccc" }}>
         {mode === "car" && <DrivingPathMap locations={routeLocations} />}
-        {/* {mode === "transit" && <TransitMap locations={locations} />}  */}
+        {mode === "transit" && <TransitMap locations={routeLocations} />} 
       </Box>
       <button className={step3Styles.btn} onClick={handleSave} disabled={saved}>
         <span className={step3Styles.icon}>
