@@ -17,18 +17,21 @@ function Mainpage() {
     const [originalList, setOriginalList] = useState([]);
     const [ searchWord, setSearchWord ] = useState("");
     const navigate = useNavigate();
-    const { setStep, setRegion } = usePlaceStore();
-    const { setLatitude, setLongitude } = useLocationStore();
+    const { setStep, setRegion, setSelectedPlaces } = usePlaceStore();
+    const { setLatitude, setLongitude, setStartingPoint } = useLocationStore();
     // const [ searchResult, setSearchResult ] = useState("true");
     // const [ isSearching, setIsSearching ] = useState(false);
 
     useEffect(() => {
 //        if (!isSearching) {
+            setStep(1);
+            setStartingPoint("");
+            setSelectedPlaces([]);
+    //   setStartingLocation("");
             caxios.get("/region")
                 .then((resp) => {
                     setRegionList(resp.data);
                     setOriginalList(resp.data);
-                    setStep(1);
                 })
                 .catch((error) => {
                     console.error("에러 발생:", error);
