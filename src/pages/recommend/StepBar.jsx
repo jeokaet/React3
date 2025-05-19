@@ -3,10 +3,11 @@ import { Box, Typography, Divider, Button } from "@mui/material";
 import usePlaceStore from "../../store/usePlaceStore";
 import useLocationStore from "../../store/useLocationStore";
 import caxios from "../../api/caxios";
+import { Link } from "react-router-dom";
 
 const StepBar = () => {
   const { step, setStep, startLocation, selectedPlaces, region, category, } = usePlaceStore();
-  const { tripDate} = useLocationStore();
+  const { tripDate } = useLocationStore();
 
 
   const handleNext = async () => {
@@ -44,7 +45,7 @@ const StepBar = () => {
   const handleBefore = async () => {
     if (step <= 3) {
       setStep(step - 1);
-    } 
+    }
   };
 
   // STEP 설명문
@@ -55,19 +56,25 @@ const StepBar = () => {
   };
 
   return (
-    <Box sx={{ p: 2 , height: "100%", display: "flex", flexDirection: "column" }}>
+    <Box sx={{ p: 2, height: "100%", display: "flex", flexDirection: "column" }}>
       <Box sx={{ mb: 3 }}>
+        <Box sx={{ display: "flex", alignItems: "center", width: "100%", mb:3 }}>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <img src="/images/Logo.png" alt="로고" style={{ height: 40 }} />
+          </Link>
+        </Box>
         {[1, 2, 3].map((n) => (
           <Box
             key={n}
-            sx={{ mb: 1, cursor: "pointer" }}
-            onClick={() => setStep(n)}
+            // sx={{ mb: 4 }}
+            // onClick={() => setStep(n)}
+            sx={{ mb: 4, pointerEvents: 'none' }}
           >
             <Typography
               variant="subtitle1"
               sx={{
                 fontWeight: step === n ? "bold" : "normal",
-                color: step === n ? "#1976d2" : "#999",
+                color: step === n ? "#19a1ad" : "#999",
               }}
             >
               STEP {n}
@@ -75,27 +82,52 @@ const StepBar = () => {
 
             <Typography
               variant="caption"
-              sx={{ color: "#777", ml: 1 }}
+              sx={{ color: step === n ? "#19a1ad" : "#999", ml: 1 }}
             >
               {stepLabels[n]}
             </Typography>
+
           </Box>
         ))}
         <Divider sx={{ mt: 1 }} />
       </Box>
 
       {/* 하단 버튼 */}
-      {step === 1 ? <></> : <Button onClick={handleBefore} fullWidth variant="contained" sx={{ mt: 2 }}>이전</Button>
-}
-      {step === 3 ? <></> : <Button
-        onClick={handleNext}
-        fullWidth
-        variant="contained"
-        sx={{ mt: 2 }}
-      >
-        다음
-      </Button>} 
-      
+      {step === 1 ? <></> : (
+        <Button
+          onClick={handleBefore}
+          fullWidth
+          variant="contained"
+          sx={{
+            mt: 2,
+            backgroundColor: "#19a1ad",
+            "&:hover": {
+              backgroundColor: "#f89f5e",
+            },
+          }}
+        >
+          이전
+        </Button>
+      )}
+
+      {step === 3 ? <></> : (
+        <Button
+          onClick={handleNext}
+          fullWidth
+          variant="contained"
+          sx={{
+            mt: 2,
+            backgroundColor: "#19a1ad",
+            "&:hover": {
+              backgroundColor: "#f89f5e",
+            },
+          }}
+        >
+          다음
+        </Button>
+      )}
+
+
     </Box>
   );
 };

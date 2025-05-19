@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import Styles from './MyInfo.module.css';
-import { Grid, Box, Typography, Button, Avatar } from '@mui/material';
+import MyInfoStyles from './MyInfo.module.css';
+import { Grid, Box, Typography, Button, Avatar, Checkbox,FormControlLabel, Paper } from '@mui/material';
 import { TextField } from '@mui/material';
-import {Checkbox,FormControlLabel} from '@mui/material';
 import caxios from '../../api/caxios';
 import useAuthStore from '../../store/useAuthStore';
+import React from 'react';
+
 
 
 
@@ -81,89 +82,223 @@ const handleDeleteClick = async () => {
 
 
   return(
-<Box sx={{ flexGrow: 1, p: 2 ,width:'100vw',boxSizing:'border-box'}}>
-      <Grid container spacing={2}>
-        {/* 오른쪽 정보 영역 */}
+    <Box sx={MyInfoStyles.container}>
+      <Grid container spacing={3} justifyContent="center">
         <Grid item xs={12} md={9}>
-          <Box
-            sx={{
-             
-              borderRadius: 2,
-              p: 3,
-              mb: 2,
-              boxSizing: 'border-box',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 1.5,
-              backgroundColor:'#f0f0f0'
-            }}
-          >
-            <Typography variant="h6">아이디</Typography>
-            <Typography>{userInfo?.loginId}</Typography>
-            <Typography variant="h6">생년월일</Typography>
-            <Typography>{userInfo?.birth}</Typography>
+          <Paper elevation={0} sx={MyInfoStyles.card}>
 
-            <Typography variant="h6">이메일</Typography>
-            {editMode ? ( 
-              <TextField name='email' value={userInfo?.email || ''} onChange={handleChange} />
-            ) : (
-              <Typography>{userInfo?.email}</Typography>
-            )}
-            <Typography variant="h6">주소</Typography>
-             {editMode ? ( 
-              <TextField name='address1' value={userInfo?.address1 || ''} onChange={handleChange} />
-            ) : (
-              <Typography>{userInfo?.address1}</Typography>
-            )}
-      
+            <Box sx={MyInfoStyles.fieldContainer}>
+              <Typography sx={MyInfoStyles.fieldLabel}>아이디</Typography>
+              <Typography sx={MyInfoStyles.fieldValue}>{userInfo?.loginId}</Typography>
+            </Box>
 
-            <Typography variant="h6">닉네임</Typography>
-             {editMode ? ( 
-              <TextField name='userName' value={userInfo?.userName || ''} onChange={handleChange} />
-            ) : (
-             <Typography>{userInfo?.userName}</Typography>
-            )}
+            <Box sx={MyInfoStyles.fieldContainer}>
+              <Typography sx={MyInfoStyles.fieldLabel}>생년월일</Typography>
+              <Typography sx={MyInfoStyles.fieldValue}>{userInfo?.birth}</Typography>
+            </Box>
 
-            <Typography variant="h6">위치 동의 여부</Typography>
-            {editMode ? ( 
-              <FormControlLabel 
-              control={
-                <Checkbox
-                checked={userInfo?.agreement ==='Y'}
-                onChange={(e)=>
-                  setUserInfo((prev)=>({
-                    ...prev,
-                    agreement: e.target.checked ? 'Y' : 'N',
-                  }))
-                }
+            <Box sx={MyInfoStyles.fieldContainer}>
+              <Typography sx={MyInfoStyles.fieldLabel}>이메일</Typography>
+              {editMode ? (
+                <TextField 
+                  name='email' 
+                  value={userInfo?.email || ''} 
+                  onChange={handleChange} 
+                  fullWidth
+                  variant="outlined"
+                  sx={MyInfoStyles.inputField}
                 />
-              }
-              label="위치 정보를 수집하는데 동의합니다"
-              />
-            ) : (
-               <Typography>{userInfo?.agreement === 'Y' ? '동의함' : '동의 안 함'}</Typography>
-            )}
-              
-            
-          </Box>
+              ) : (
+                <Typography sx={MyInfoStyles.fieldValue}>{userInfo?.email}</Typography>
+              )}
+            </Box>
 
-          <Box display="flex" justifyContent="flex-end" gap={2} sx={{marginLeft:23}}>
-           {editMode ? (
-            <>
-             <Button variant="contained" color="primary" onClick={handleSaveClick}>저장</Button>
-            <Button variant="outlined" color="error" onClick={handleCancelClick}>취소</Button>
-           </>
-           ) : (
-            <>
-            <Button variant="contained" color="primary" onClick={()=>setEditMode(true)}>정보 수정하기</Button>
-            <Button variant="outlined" color="error" onClick={handleDeleteClick}>회원 탈퇴</Button>
-           </>
-           )}
-            
+            <Box sx={MyInfoStyles.fieldContainer}>
+              <Typography sx={MyInfoStyles.fieldLabel}>주소</Typography>
+              {editMode ? (
+                <TextField 
+                  name='address1' 
+                  value={userInfo?.address1 || ''} 
+                  onChange={handleChange} 
+                  fullWidth
+                  variant="outlined" 
+                  sx={MyInfoStyles.inputField}
+                />
+              ) : (
+                <Typography sx={MyInfoStyles.fieldValue}>{userInfo?.address1}</Typography>
+              )}
+            </Box>
+
+            <Box sx={MyInfoStyles.fieldContainer}>
+              <Typography sx={MyInfoStyles.fieldLabel}>닉네임</Typography>
+              {editMode ? (
+                <TextField 
+                  name='userName' 
+                  value={userInfo?.userName || ''} 
+                  onChange={handleChange} 
+                  fullWidth
+                  variant="outlined"
+                  sx={MyInfoStyles.inputField}
+                />
+              ) : (
+                <Typography sx={MyInfoStyles.fieldValue}>{userInfo?.userName}</Typography>
+              )}
+            </Box>
+
+            <Box sx={MyInfoStyles.fieldContainer}>
+              <Typography sx={MyInfoStyles.fieldLabel}>위치 동의 여부</Typography>
+              {editMode ? (
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={userInfo?.agreement === 'Y'}
+                      onChange={(e) =>
+                        setUserInfo((prev) => ({
+                          ...prev,
+                          agreement: e.target.checked ? 'Y' : 'N',
+                        }))
+                      }
+                      sx={{
+                        color: '#19a1ad',
+                        '&.Mui-checked': {
+                          color: '#19a1ad',
+                        },
+                      }}
+                    />
+                  }
+                  label="위치 정보를 수집하는데 동의합니다"
+                />
+              ) : (
+                <Typography sx={MyInfoStyles.fieldValue}>
+                  {userInfo?.agreement === 'Y' ? '동의함' : '동의 안 함'}
+                </Typography>
+              )}
+            </Box>
+          </Paper>
+
+          <Box sx={MyInfoStyles.buttonContainer}>
+            {editMode ? (
+              <>
+                <Button 
+                  variant="contained" 
+                  onClick={handleSaveClick} 
+                  sx={MyInfoStyles.primaryButton}
+                >
+                  저장
+                </Button>
+                <Button 
+                  variant="outlined" 
+                  onClick={handleCancelClick} 
+                  sx={MyInfoStyles.cancelButton}
+                >
+                  취소
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button 
+                  variant="contained" 
+                  onClick={() => setEditMode(true)} 
+                  sx={MyInfoStyles.primaryButton}
+                >
+                  정보 수정하기
+                </Button>
+                <Button 
+                  variant="outlined" 
+                  onClick={handleDeleteClick} 
+                  sx={MyInfoStyles.cancelButton}
+                >
+                  회원 탈퇴
+                </Button>
+              </>
+            )}
           </Box>
         </Grid>
       </Grid>
     </Box>
+// {/* <Box sx={{ flexGrow: 1, p: 2 ,width:'100vw',boxSizing:'border-box'}}>
+//       <Grid container spacing={2}>
+//         {/* 오른쪽 정보 영역 */}
+    //     <Grid item xs={12} md={9}>
+    //       <Box
+    //         sx={{
+             
+    //           borderRadius: 2,
+    //           p: 3,
+    //           mb: 2,
+    //           boxSizing: 'border-box',
+    //           display: 'flex',
+    //           flexDirection: 'column',
+    //           gap: 1.5,
+    //           backgroundColor:'#f0f0f0'
+    //         }}
+    //       >
+    //         <Typography variant="h6">아이디</Typography>
+    //         <Typography>{userInfo?.loginId}</Typography>
+    //         <Typography variant="h6">생년월일</Typography>
+    //         <Typography>{userInfo?.birth}</Typography>
+
+    //         <Typography variant="h6">이메일</Typography>
+    //         {editMode ? ( 
+    //           <TextField name='email' value={userInfo?.email || ''} onChange={handleChange} />
+    //         ) : (
+    //           <Typography>{userInfo?.email}</Typography>
+    //         )}
+    //         <Typography variant="h6">주소</Typography>
+    //          {editMode ? ( 
+    //           <TextField name='address1' value={userInfo?.address1 || ''} onChange={handleChange} />
+    //         ) : (
+    //           <Typography>{userInfo?.address1}</Typography>
+    //         )}
+      
+
+    //         <Typography variant="h6">닉네임</Typography>
+    //          {editMode ? ( 
+    //           <TextField name='userName' value={userInfo?.userName || ''} onChange={handleChange} />
+    //         ) : (
+    //          <Typography>{userInfo?.userName}</Typography>
+    //         )}
+
+    //         <Typography variant="h6">위치 동의 여부</Typography>
+    //         {editMode ? ( 
+    //           <FormControlLabel 
+    //           control={
+    //             <Checkbox
+    //             checked={userInfo?.agreement ==='Y'}
+    //             onChange={(e)=>
+    //               setUserInfo((prev)=>({
+    //                 ...prev,
+    //                 agreement: e.target.checked ? 'Y' : 'N',
+    //               }))
+    //             }
+    //             />
+    //           }
+    //           label="위치 정보를 수집하는데 동의합니다"
+    //           />
+    //         ) : (
+    //            <Typography>{userInfo?.agreement === 'Y' ? '동의함' : '동의 안 함'}</Typography>
+    //         )}
+              
+            
+    //       </Box>
+
+    //       <Box display="flex" justifyContent="flex-end" gap={2} sx={{marginLeft:23}}>
+    //        {editMode ? (
+    //         <>
+    //          <Button variant="contained" color="primary" onClick={handleSaveClick}>저장</Button>
+    //         <Button variant="outlined" color="error" onClick={handleCancelClick}>취소</Button>
+    //        </>
+    //        ) : (
+    //         <>
+    //         <Button variant="contained" sx={{ width: "55%",  backgroundColor: "#19a1ad", "&:hover": { backgroundColor: "#f89f5e",},}} onClick={()=>setEditMode(true)}>정보 수정하기</Button>
+    //         <Button variant="outlined" color="error" onClick={handleDeleteClick}>회원 탈퇴</Button>
+    //        </>
+    //        )}
+            
+    //       </Box>
+    //     </Grid>
+    //   </Grid>
+    // </Box> */}
 
 ); 
 }
