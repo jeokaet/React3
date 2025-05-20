@@ -1,32 +1,75 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import caxios from "../../api/caxios";
 
 const TransitMap = ({ locations }) => {
+  const [showBusStops, setShowBusStops] = useState(true);
+  const [showSubwayStops, setShowSubwayStops] = useState(true);
+
+  const mapRef = useRef(null);
+  const busMarkersRef = useRef([]);
+  const subwayMarkersRef = useRef([]);
+  const infoWindowRef = useRef(null); // 단일 InfoWindow 참조
+
   useEffect(() => {
     if (!window.kakao || !window.kakao.maps || locations.length < 2) return;
 
     const kakao = window.kakao;
     const mapContainer = document.getElementById("transit-map");
-    const map = new kakao.maps.Map(mapContainer, {
-      center: locations[0].position,
-      level: 5,
-    });
 
-    // 출발지, 도착지, 경유지 마커 찍기
+    // 맵 초기화 (한 번만)
+    if (!mapRef.current) {
+      mapRef.current = new kakao.maps.Map(mapContainer, {
+        center: locations[0].position,
+        level: 5,
+      });
+    }
+    const map = mapRef.current;
+
+    // 단일 InfoWindow 객체 생성 (최초 1회)
+    if (!infoWindowRef.current) {
+      infoWindowRef.current = new kakao.maps.InfoWindow({ removable: true });
+    }
+    const infoWindow = infoWindowRef.current;
+
+    // InfoWindow 스타일 함수
+    const createInfoWindowContent = (text) => `
+      <div style="
+        all: unset;
+        display: inline-block;
+        padding: 10px 14px;
+        background-color: white;
+        border: 2px solid #4a90e2;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+        white-space: nowrap;
+      ">
+        ${text}
+      </div>
+    `;
+
+    // 출발지, 도착지, 목적지 마커 표시
     locations.forEach((loc, index) => {
-      new kakao.maps.Marker({
+      const title =
+        index === 0
+          ? "출발지"
+          : index === locations.length - 1
+          ? "도착지"
+          : `목적지 ${index}`;
+      const locMarker = new kakao.maps.Marker({
         position: loc.position,
         map,
-        title:
-          index === 0
-            ? "출발지"
-            : index === locations.length - 1
-            ? "도착지"
-            : `경유지 ${index}`,
+        title,
       });
+       kakao.maps.event.addListener(locMarker, "click", () => {
+        infoWindow.setContent(createInfoWindowContent(title));
+        infoWindow.open(map, locMarker);
+      });
+      
     });
 
-    // linestring 문자열 → kakao.maps.LatLng 배열 변환 함수
     const parseLinestringToLatLng = (linestring) => {
       return linestring.split(" ").map((pair) => {
         const [lon, lat] = pair.split(",").map(Number);
@@ -34,8 +77,7 @@ const TransitMap = ({ locations }) => {
       });
     };
 
-    // 지도에 폴리라인 그리기
-    const drawPolylineOnMap = (map, latLngs, color) => {
+    const drawPolylineOnMap = (latLngs, color) => {
       new kakao.maps.Polyline({
         map,
         path: latLngs,
@@ -46,37 +88,52 @@ const TransitMap = ({ locations }) => {
       });
     };
 
-    // 지하철역 마커 그리기 함수
-    const drawSubwayStopMarkers = (map, passStopList) => {
-      if (!passStopList?.stationList) return;
+    // 기존 마커 삭제 함수
+    const clearMarkers = (markers) => {
+      markers.forEach((marker) => marker.setMap(null));
+      markers.length = 0;
+    };
 
-      passStopList.stationList.forEach((station, index) => {
-        const position = new kakao.maps.LatLng(
-          Number(station.lat),
-          Number(station.lon)
-        );
-        const title = `${index + 1}. ${station.stationName}`;
+    // 대중교통 정류장 마커 그리기 (버스 or 지하철)
+    const drawTransitStopMarkers = (passStopList, mode) => {
+      if (!passStopList?.stationList) return [];
+
+      return passStopList.stationList.map((station, index) => {
+        const position = new kakao.maps.LatLng(Number(station.lat), Number(station.lon));
+        const namePrefix = mode === "SUBWAY" ? "지하철역" : "버스정류장";
+        const stationName = `${index + 1}. ${station.stationName} ${namePrefix}`;
+
+        const iconPath = mode === "SUBWAY" ? "/images/transport.png" : "/images/bus.png";
 
         const marker = new kakao.maps.Marker({
           position,
-          map,
-          title,
-          image: new kakao.maps.MarkerImage(
-            "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png",
-            new kakao.maps.Size(24, 35)
-          ),
+          title: stationName,
+          image: new kakao.maps.MarkerImage(iconPath, new kakao.maps.Size(16, 16)),
         });
 
-        const infowindow = new kakao.maps.InfoWindow({
-          content: `<div style="padding:5px;">${station.stationName}</div>`,
-        });
         kakao.maps.event.addListener(marker, "click", () => {
-          infowindow.open(map, marker);
+          infoWindow.setContent(createInfoWindowContent(stationName));
+          infoWindow.open(map, marker);
         });
+
+        if (showBusStops && mode === "BUS") {
+          marker.setMap(map);
+        } else if (showSubwayStops && mode === "SUBWAY") {
+          marker.setMap(map);
+        } else {
+          marker.setMap(null);
+        }
+
+        return marker;
       });
     };
 
-    // 각 구간별 API 호출 및 경로 그리기
+    // 그리기 작업 시작 전에 기존 마커들 삭제
+    clearMarkers(busMarkersRef.current);
+    clearMarkers(subwayMarkersRef.current);
+    busMarkersRef.current = [];
+    subwayMarkersRef.current = [];
+
     const drawSegmentRoute = async (startPos, endPos) => {
       try {
         const res = await caxios.post("/api/tmapTransit", {
@@ -90,43 +147,31 @@ const TransitMap = ({ locations }) => {
         });
 
         const result = res.data;
-        console.log("API 응답 전체:", result);
-
         const itinerary = result?.metaData?.plan?.itineraries?.[0];
-        if (!itinerary) {
-          console.warn("경로 정보(itinerary)가 없습니다.");
-          return;
-        }
-        if (!Array.isArray(itinerary.legs) || itinerary.legs.length === 0) {
-          console.warn("경로 구간 정보(legs)가 없거나 비어있습니다.");
-          return;
-        }
+        if (!itinerary?.legs?.length) return;
 
         itinerary.legs.forEach((leg) => {
           if (leg.mode === "WALK") {
             leg.steps?.forEach((step) => {
               if (step.linestring) {
                 const latLngs = parseLinestringToLatLng(step.linestring);
-                drawPolylineOnMap(map, latLngs, "#FF6347"); // 빨간색: 도보
+                drawPolylineOnMap(latLngs, "#FF6347"); // 빨간 도보
               }
             });
           } else if (leg.mode === "BUS" && leg.passShape?.linestring) {
             const latLngs = parseLinestringToLatLng(leg.passShape.linestring);
-            drawPolylineOnMap(
-              map,
-              latLngs,
-              `#${leg.routeColor}` || "#0000FF"
-            ); // 파란색계열: 버스
-            // 버스 정류장 마커는 삭제 요청하셨으므로 주석 처리합니다.
-            // if (leg.passStopList) drawBusStopMarkers(map, leg.passStopList);
+            drawPolylineOnMap(latLngs, "#2ECC71"); // 초록 버스
+            if (leg.passStopList) {
+              const markers = drawTransitStopMarkers(leg.passStopList, "BUS");
+              busMarkersRef.current.push(...markers);
+            }
           } else if (leg.mode === "SUBWAY" && leg.passShape?.linestring) {
             const latLngs = parseLinestringToLatLng(leg.passShape.linestring);
-            drawPolylineOnMap(
-              map,
-              latLngs,
-              `#${leg.routeColor}` || "#008000"
-            ); // 초록색계열: 지하철
-            if (leg.passStopList) drawSubwayStopMarkers(map, leg.passStopList);
+            drawPolylineOnMap(latLngs, "#3498DB"); // 파란 지하철
+            if (leg.passStopList) {
+              const markers = drawTransitStopMarkers(leg.passStopList, "SUBWAY");
+              subwayMarkersRef.current.push(...markers);
+            }
           }
         });
       } catch (err) {
@@ -134,22 +179,57 @@ const TransitMap = ({ locations }) => {
       }
     };
 
-    // 모든 구간에 대해 순차적으로 API 호출하고 경로 그리기
     (async () => {
       for (let i = 0; i < locations.length - 1; i++) {
-        const startPos = locations[i].position;
-        const endPos = locations[i + 1].position;
-        await drawSegmentRoute(startPos, endPos);
+        await drawSegmentRoute(locations[i].position, locations[i + 1].position);
       }
 
-      // 지도 영역 자동 조절
       const bounds = new kakao.maps.LatLngBounds();
       locations.forEach((loc) => bounds.extend(loc.position));
       map.setBounds(bounds);
     })();
-  }, [locations]);
+  }, [locations, showBusStops, showSubwayStops]);
 
-  return <div id="transit-map" style={{ width: "100%", height: "500px" }} />;
+  return (
+    <>
+      <style>{`
+        .toggle-button {
+          background-color: #4a90e2;
+          border: none;
+          color: white;
+          padding: 8px 16px;
+          font-size: 14px;
+          font-weight: 600;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+        }
+        .toggle-button:hover {
+          background-color: #357ABD;
+        }
+        .toggle-button + .toggle-button {
+          margin-left: 12px;
+        }
+      `}</style>
+
+      <div style={{ marginBottom: 10 }}>
+        <button
+          className="toggle-button"
+          onClick={() => setShowBusStops(!showBusStops)}
+        >
+          {showBusStops ? "버스정류장 숨기기" : "버스정류장 보기"}
+        </button>
+        <button
+          className="toggle-button"
+          onClick={() => setShowSubwayStops(!showSubwayStops)}
+        >
+          {showSubwayStops ? "지하철역 숨기기" : "지하철역 보기"}
+        </button>
+      </div>
+      <div id="transit-map" style={{ width: "100%", height: "480px" }} />
+    </>
+  );
 };
 
 export default TransitMap;

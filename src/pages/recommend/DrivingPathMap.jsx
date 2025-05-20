@@ -8,7 +8,7 @@ const DrivingPathMap = ({ locations }) => {
 
     
     if (locations.length > 5) {
-      alert("카카오 길찾기는 경유지를 최대 3개까지 지원합니다.\n추가된 경유지는 제외됩니다.");
+      alert("카카오 길찾기는 목적지를 최대 4개까지 지원합니다.\n추가된 경유지는 제외됩니다.");
     }
 
     const mapContainer = document.getElementById("car-map");
@@ -27,20 +27,35 @@ locations.forEach((loc, index) => {
         ? "출발지"
         : index === locations.length - 1
         ? "도착지"
-        : `경유지 ${index}`,
+        : `목적지 ${index}`,
   });
   //클릭시 정보창 띄우기
-  const infoWindow = new window.kakao.maps.InfoWindow({
-    content: `<div style="padding:5px;font-size:14px;">
+const infoWindow = new window.kakao.maps.InfoWindow({
+  content: `
+    <div style="
+      padding: 10px 14px;
+      font-size: 14px;
+      background-color: #fff;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      white-space: nowrap;
+      text-align: center;
+      color: #333;
+      font-weight: bold;
+    ">
       ${
         index === 0
-          ? "출발지"
+          ? "🚗 출발지"
           : index === locations.length - 1
-          ? "도착지"
-          : `경유지 ${index}`
+          ? "🏁 도착지"
+          : `📍 경유지 ${index}`
       }
-    </div>`,
-  });
+    </div>
+  `,
+});
+
+
 
   let isOpen = false;
 
