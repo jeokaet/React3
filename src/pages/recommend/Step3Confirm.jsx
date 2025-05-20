@@ -16,10 +16,8 @@ const Step3Confirm = ({ setRouteLocations }) => {
   const [result, setResult] = useState([]);
   const [saved, setSaved] = useState(false);
 
-  console.log("목적지:", selectedPlaces);
-  // 조휘영영
   useEffect(() => {
-    setMode("car"); // ✅ 자가용을 기본으로 설정
+    setMode("car"); 
   }, []);
   
 
@@ -111,14 +109,6 @@ const Step3Confirm = ({ setRouteLocations }) => {
 
       <Box sx={{ mt: 5, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Typography variant="h6">자가용/대중교통 길찾기</Typography>
-        {/* <Grid container spacing={2}>
-          <Grid item xs={6} sm={3}>
-            <Button fullWidth variant={mode === 'car' ? 'contained' : 'outlined'} onClick={()=>setMode('car')}>자가용</Button>
-          </Grid>
-          <Grid item xs={6} sm={3}>
-            <Button fullWidth variant={mode === 'transit' ? 'contained' : 'outlined'} onClick={()=>setMode('transit')}>대중교통</Button>
-          </Grid>
-        </Grid> */}
         <div className={step3Styles.wrapper}>
           <div className={step3Styles["checkbox-wrapper-35"]}>
             <input
@@ -153,16 +143,6 @@ const Step3Confirm = ({ setRouteLocations }) => {
         </div>
       </Box>
 
-      {/* <Box sx={{ p: 2 }}>
-        <input
-          type="text"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-          placeholder="장소를 입력하세요"
-          style={{ padding: "8px", width: "60%", marginRight: "8px" }}
-        />
-  
-      </Box> */}
       <Box sx={{ mt: 2, height: "500px", border: "1px solid #ccc" }}>
         {mode === "car" && <DrivingPathMap locations={routeLocations} />}
         {mode === "transit" && <TransitMap locations={routeLocations} />} 
