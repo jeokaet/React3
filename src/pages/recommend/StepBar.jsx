@@ -7,37 +7,48 @@ import { Link } from "react-router-dom";
 
 const StepBar = () => {
   const { step, setStep, startLocation, selectedPlaces, region, category, } = usePlaceStore();
-  const { tripDate } = useLocationStore();
+  const { tripDate, startingPoint, startingLocation } = useLocationStore();
 
 
   const handleNext = async () => {
-
-
-    if (step < 3) {
-      setStep(step + 1);
+    if (step == 1) {
+      if (!startingPoint || !startingLocation) {
+        alert("출발지를 정해주세요.");
+        return;
+      }
+      setStep(2);
+    } else if (step == 2) {
+      if (!startingPoint || !startingLocation.length === 0) {
+        alert("최소 1개의 장소를 선택해주세요.")
+        return;
+      } setStep(3);
     } else {
-      if (!startLocation?.name) {
-        return alert("출발지를 선택해주세요.");
-      }
-      if (!selectedPlaces.length) {
-        return alert("장소를 선택해주세요.");
-      }
+      if (step < 3) {
+        setStep(step + 1);
+      } else {
+        if (!startLocation?.name) {
+          return alert("출발지를 선택해주세요.");
+        }
+        if (!selectedPlaces.length) {
+          return alert("장소를 선택해주세요.");
+        }
 
-      const dateToSave = tripDate || new Date().toISOString().slice(0, 10);
+        const dateToSave = tripDate || new Date().toISOString().slice(0, 10);
 
-      try {
-        await caxios.post("/api/trip/save", {
-          tripDate: dateToSave,
-          startLocation,
-          selectedPlaces,
-          category,
-          region,
-        });
+        try {
+          await caxios.post("/api/trip/save", {
+            tripDate: dateToSave,
+            startLocation,
+            selectedPlaces,
+            category,
+            region,
+          });
 
-        alert("저장 완료!");
-      } catch (err) {
-        alert("저장 실패");
-        console.error(err);
+          alert("저장 완료!");
+        } catch (err) {
+          alert("저장 실패");
+          console.error(err);
+        }
       }
     }
   };
@@ -58,7 +69,7 @@ const StepBar = () => {
   return (
     <Box sx={{ p: 2, height: "100%", display: "flex", flexDirection: "column" }}>
       <Box sx={{ mb: 3 }}>
-        <Box sx={{ display: "flex", alignItems: "center", width: "100%", mb:3 }}>
+        <Box sx={{ display: "flex", alignItems: "center", width: "100%", mb: 3 }}>
           <Link to="/" style={{ textDecoration: "none" }}>
             <img src="/images/Logo.png" alt="로고" style={{ height: 40 }} />
           </Link>

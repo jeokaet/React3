@@ -19,6 +19,7 @@ function Mainpage() {
     const navigate = useNavigate();
     const { setStep, setRegion, setSelectedPlaces } = usePlaceStore();
     const { setLatitude, setLongitude, setStartingPoint } = useLocationStore();
+
     // const [ searchResult, setSearchResult ] = useState("true");
     // const [ isSearching, setIsSearching ] = useState(false);
     const [showScrollTop, setShowScrollTop] = useState(false);
@@ -38,7 +39,6 @@ function Mainpage() {
                     console.error("에러 발생:", error);
                     alert("지역 목록을 불러오는데 실패했습니다.");
                 });
-
     }, [])
     useEffect(() => {
         const handleScroll = () => {

@@ -18,6 +18,11 @@ const Step3Confirm = ({ setRouteLocations }) => {
   const [saved, setSaved] = useState(false);
 
   console.log("목적지:", selectedPlaces);
+  // 조휘영영
+  useEffect(() => {
+    setMode("car"); // ✅ 자가용을 기본으로 설정
+  }, []);
+  
 
   const routeLocations = useMemo(() => {
     if (!result || result.length === 0) return [];
@@ -123,6 +128,7 @@ const Step3Confirm = ({ setRouteLocations }) => {
               name="switch"
               id="switch"
               type="checkbox"
+              checked={mode === "transit"} // checked 상태를 mode 에 연동함. (조휘영)
               className={step3Styles.switch}
               onChange={(e) => {
                 const isChecked = e.target.checked;
