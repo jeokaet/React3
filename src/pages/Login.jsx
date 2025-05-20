@@ -17,14 +17,14 @@ function Login() {
   const navigate = useNavigate();
   const { setAuth } = useAuthStore();
   const [loginId, setLoginId] = useState("");
-  const [ pw, setPw ] = useState("");
+  const [pw, setPw] = useState("");
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  // const randomImageUrl = `https://picsum.photos/1280/1080?random=${Math.floor(
-  //   Math.random() * 1000
-  // )}`;
+  // 테마 색상 정의
+  const mainColor = "#19a1ad"; // 청록색
+  const accentColor = "#f89f5e"; // 주황색
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -50,8 +50,7 @@ function Login() {
       justifyContent="center"
       alignItems="center"
       sx={{
-        minHeight: "100vh",
-        // backgroundImage: `url(${randomImageUrl})`,
+        minHeight: "80vh",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -64,19 +63,29 @@ function Login() {
         sm={10}
         md={6}
         sx={{
-          backgroundColor: "rgba(255, 255, 255, 0.9)",
+          backgroundColor: "rgba(255, 255, 255, 0.95)",
           borderRadius: 2,
-          boxShadow: 3,
+          boxShadow: `0 8px 24px rgba(0, 0, 0, 0.12)`,
           p: 4,
           maxWidth: 400,
+          border: `1px solid ${mainColor}15`, // 테두리 추가
         }}
       >
         <Box component="form" onSubmit={handleLogin} sx={{ textAlign: "center" }}>
-          <Typography variant="h3" sx={{ mb: 1, color: "#333" }}>
-            ROUTY ✈️
-          </Typography>
-          <Typography variant="subtitle1" sx={{ mb: 4, color: "#666" }}>
-            "지금 어디로 떠나고 싶나요?"
+          <img src="/images/Logo.png" alt="로고" style={{ height: 100 }} />
+          
+          <Typography 
+            variant="subtitle1" 
+            sx={{ 
+              mt:1,
+              mb: 4, 
+              color: "grey", 
+              fontFamily: "inherit", 
+              fontSize: "1rem",
+              fontWeight: 500
+            }}
+          >
+            "로그인하고 최적의 기능을 만나보세요"
           </Typography>
 
           <TextField
@@ -87,12 +96,24 @@ function Login() {
             onChange={(e) => setLoginId(e.target.value)}
             sx={{
               mb: 2,
+              "& .MuiOutlinedInput-root": {
+                paddingY: "6px",
+                fontSize: "16px",
+                borderRadius: "8px",
+                "&.Mui-focused fieldset": {
+                  borderColor: mainColor,
+                  borderWidth: "2px",
+                },
+                "&:hover fieldset": {
+                  borderColor: accentColor,
+                },
+              },
               "& input": {
-                padding: "0.8rem",
+                padding: "12px",
               },
             }}
           />
-
+          
           <TextField
             fullWidth
             type="password"
@@ -101,52 +122,75 @@ function Login() {
             value={pw}
             onChange={(e) => setPw(e.target.value)}
             sx={{
-              mb: 2,
+              mb: 3,
+              "& .MuiOutlinedInput-root": {
+                paddingY: "6px",
+                fontSize: "16px",
+                borderRadius: "8px",
+                "&.Mui-focused fieldset": {
+                  borderColor: mainColor,
+                  borderWidth: "2px",
+                },
+                "&:hover fieldset": {
+                  borderColor: accentColor,
+                },
+              },
               "& input": {
-                padding: "0.8rem",
+                padding: "12px",
               },
             }}
           />
-          
+
           <Button
             type="submit"
             fullWidth
             sx={{
               py: 1.5,
-              fontSize: "1.1rem",
-              fontWeight: "bold",
-              borderRadius: "0.5rem",
-              background: "linear-gradient(90deg, #4facfe 0%, #00f2fe 100%)",
-              color: "white",
-              mb: 2,
-              ":hover": {
-                background: "linear-gradient(90deg, #00f2fe 0%, #4facfe 100%)",
+              fontSize: "18px",
+              fontWeight: 600,
+              borderRadius: "8px",
+              backgroundColor: mainColor,
+              color: "#fff",
+              textTransform: "none",
+              transition: "all 0.3s ease",
+              boxShadow: "0 4px 12px rgba(25, 161, 173, 0.25)",
+              "&:hover": {
+                backgroundColor: accentColor,
+                boxShadow: "0 6px 16px rgba(248, 159, 94, 0.3)",
+                transform: "translateY(-2px)",
               },
             }}
           >
             여행 시작하기
           </Button>
-          <Link to="/agreement">
-          <Button
-            fullWidth
-            variant="outlined"
-            onClick={() => navigate("/register")}
-            sx={{
-              py: 1,
-              borderRadius: "0.5rem",
-              fontWeight: "bold",
-              color: "#4facfe",
-              borderColor: "#4facfe",
-              ":hover": {
-                backgroundColor: "#4facfe",
-                color: "white",
-                borderColor: "#4facfe",
-              },
-            }}
-          >
-            회원가입 하러가기
-          </Button>
+
+          <Link to="/agreement" style={{ textDecoration: "none" }}>
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={() => navigate("/register")}
+              sx={{
+                py: 1.5,
+                fontSize: "18px",
+                fontWeight: 600,
+                borderRadius: "8px",
+                border: `1px solid ${mainColor}`,
+                color: mainColor,
+                textTransform: "none",
+                mt: 2,
+                transition: "all 0.3s ease",
+                "&:hover": {
+                  backgroundColor: accentColor,
+                  borderColor: accentColor,
+                  color: "#fff",
+                  transform: "translateY(-2px)",
+                },
+              }}
+            >
+              회원가입 하러가기
+            </Button>
           </Link>
+
         </Box>
       </Grid>
     </Grid>
@@ -154,4 +198,3 @@ function Login() {
 }
 
 export default Login;
-
