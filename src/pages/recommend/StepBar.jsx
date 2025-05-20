@@ -18,11 +18,19 @@ const StepBar = () => {
       }
       setStep(2);
     } else if (step == 2) {
-      if (!startingPoint || !startingLocation.length === 0) {
-        alert("최소 1개의 장소를 선택해주세요.")
+      if (!startingPoint || !startingLocation) {
+        alert("출발지를 정해주세요.");
         return;
-      } setStep(3);
-    } else {
+      }
+
+      if (selectedPlaces.length === 0) {
+        alert("최소 1개의 장소를 선택해주세요.");
+        return;
+      }
+
+      setStep(3);
+    }
+    else {
       if (step < 3) {
         setStep(step + 1);
       } else {
