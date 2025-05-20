@@ -355,7 +355,7 @@ const Step2Place = () => {
                                         variant={isAdded ? "contained" : "outlined"}
                                         size="small"
                                         onClick={togglePlace}
-                                        disabled={!isAdded && selectedPlaces.length >= 5}
+                                        disabled={!isAdded && selectedPlaces.length >= 4}
                                         sx={{
                                             ml: 2,
                                             backgroundColor: isAdded ? "#19a1ad" : "transparent",
