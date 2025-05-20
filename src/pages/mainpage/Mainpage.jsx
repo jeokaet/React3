@@ -25,20 +25,20 @@ function Mainpage() {
     const [showScrollTop, setShowScrollTop] = useState(false);
 
     useEffect(() => {
-//        if (!isSearching) {
-            setStep(1);
-            setStartingPoint("");
-            setSelectedPlaces([]);
+        //        if (!isSearching) {
+        setStep(1);
+        setStartingPoint("");
+        setSelectedPlaces([]);
 
-            caxios.get("/region")
-                .then((resp) => {
-                    setRegionList(resp.data);
-                    setOriginalList(resp.data);
-                })
-                .catch((error) => {
-                    console.error("에러 발생:", error);
-                    alert("지역 목록을 불러오는데 실패했습니다.");
-                });
+        caxios.get("/region")
+            .then((resp) => {
+                setRegionList(resp.data);
+                setOriginalList(resp.data);
+            })
+            .catch((error) => {
+                console.error("에러 발생:", error);
+                alert("지역 목록을 불러오는데 실패했습니다.");
+            });
     }, [])
     useEffect(() => {
         const handleScroll = () => {
@@ -98,7 +98,7 @@ function Mainpage() {
             <Grid
                 container
                 direction="column"
-                sx={{ width: "100%", minHeight: "90vh" }}>
+                sx={{ width: "100%", minHeight: "80vh" }}>
 
                 {/* 첫번째 영역 */}
                 <Grid
@@ -123,7 +123,7 @@ function Mainpage() {
                             justifyContent: "center",
                             alignItems: "left",
                             py: 8,
-                            px: 2,
+                            px: 8,
                         }}
                     >
                         <Typography variant="h3" sx={{ fontWeight: "bold", mb: 2 }}>
@@ -149,11 +149,13 @@ function Mainpage() {
                     </Grid>
 
                     <Grid item xs={12} lg={6} sx={{ display: { xs: "none", lg: "flex" }, width: "50%", justifyContent: "center", alignItems: "center", bgcolor: "#ffffff", py: 8, px: 2, }}>
-                        <Box sx={{ width: "100%", height: 500, bgcolor: "grey.300" }} />
+                        <Box sx={{ width: "100%", height: 500, p:2, boxShadow: 3, borderRadius: 2, }}>
+                            <img src="/images/main.png" alt="제휴사2" width="100%" height="100%" />
+                        </Box>
                     </Grid>
                 </Grid>
 
-                <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", marginBottom: "200px", marginTop: "200px" }}>
+                <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", mb:30, backgroundColor: "#fafafa", pt:20, pb:20 }}>
                     <Grid container spacing={8} justifyContent="center">
                         {/* 카드 1 */}
                         <Grid item>
@@ -185,7 +187,7 @@ function Mainpage() {
                 </Grid>
 
                 {/* 두번째 영역 */}
-                <Grid item xs={12} sx={{ textAlign: "center", mb: 3 }}>
+                <Grid item xs={12} sx={{ textAlign: "center", mb: 8 }}>
                     <Typography variant="h4">어디로 여행을 떠나시나요?</Typography>
                 </Grid>
                 <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
@@ -229,7 +231,12 @@ function Mainpage() {
                                             </div>
                                         </div>
 
-                                        <Typography className={styles.regionName} sx={{ mt: 1 }}>{region.regionName}</Typography>
+                                        <Typography
+                                            className={styles.regionName}
+                                            sx={{ pl:2, mt: 1, fontSize: '1.5rem', fontFamily: '"Noto Sans KR", sans-serif' }}
+                                        >
+                                            {region.regionName}
+                                        </Typography>
                                     </Grid>
                                 )))
                                 : (
@@ -239,13 +246,14 @@ function Mainpage() {
                         }
                     </Grid>
                 </Grid>
-                <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", padding: 15, gap: 10 }}>
+                <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", padding: 15, gap: 10, mt:20, mb:5 }}>
                     <Grid container spacing={8} sx={{ display: "flex", justifyContent: "center" }}>
                         <Typography variant="h4">
                             PARTNERS
                         </Typography>
-                        <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
-                            <img src="/images/HJM.png" alt="HJM" style={{ height: 60 }} />
+                        <Box sx={{ display: "flex", alignItems: "center", width: "100%", gap:5 }}>
+                            <img src="/images/HJM.png" alt="HJM" style={{ height: 60, width:200 }} />
+                            <img src="/images/keduit.png" alt="HJM" style={{ height: 60,  width:200 }} />
                         </Box>
                     </Grid>
                 </Grid>
@@ -259,13 +267,13 @@ function Mainpage() {
                             {"\n"}(주) CodeBreaker{"\n"}
                             서울특별시 관악구 봉천로 227{"\n"}
                             CodeBreaker@gmail.com{"\n\n"}
-                            이용약관 | 개인정보처리방침 | 고객지원 | 문의{"\n"}
+                            이용약관 | 개인정보처리방침 | 고객지원 | 문의{"\n\n"}
                             CopyRight CodeBreaker.ALL RIGHTS RESERVED.
                         </Typography>
                     </Grid>
                     <Grid item xs={12} md={6} sx={{ display: "flex", gap: 2, justifyContent: { xs: "flex-start", md: "flex-end" }, alignItems: "center" }}>
-                        <InstagramIcon sx={{ fontSize: 50, color: "#E1306C" }} />
-                        <YouTubeIcon sx={{ fontSize: 50, color: "red" }} />
+                        <InstagramIcon sx={{ fontSize: 40, color: "#19a1ad" }} />
+                        <YouTubeIcon sx={{ fontSize: 40, color: "#19a1ad" }} />
                     </Grid>
                 </Grid>
             </Grid>
