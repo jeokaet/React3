@@ -109,22 +109,22 @@ const Step2Place = () => {
     const getRandomSubset = (arr, count) =>
         [...arr].sort(() => 0.5 - Math.random()).slice(0, count);
 
-    const keywordList = ["맛집", "관광지", "쇼핑"];
+    const keywordList = ["음식점", "관광지", "쇼핑","카페"];
 
     const typeToKorean = {
         restaurant: "음식점",
         cafe: "카페",
         bar: "바",
-        bakery: "빵집",
-        tourist_attraction: "관광명소",
+        bakery: "음식점",
+        tourist_attraction: "관광지",
         museum: "박물관",
-        zoo: "동물원",
-        amusement_park: "놀이공원",
-        aquarium: "아쿠아리움",
-        shopping_mall: "쇼핑몰",
-        clothing_store: "의류매장",
-        park: "공원",
-        natural_feature: "자연경관",
+        zoo: "관광지지",
+        amusement_park: "관광지",
+        aquarium: "관광지",
+        shopping_mall: "쇼핑",
+        clothing_store: "쇼핑",
+        park: "관광지",
+        natural_feature: "관광지",
     };
 
 
@@ -170,7 +170,8 @@ const Step2Place = () => {
                                 setFilteredResults(placeList);
                             } else {
                                 const filtered = placeList.filter(
-                                    (p) => p.type === kw || p.category === kw
+                                    // (p) => p.type === kw || p.category === kw
+                                    (p) => typeToKorean[p.type] === kw || typeToKorean[p.category] === kw
                                 );
                                 setFilter(kw);
                                 setFilteredResults(filtered);

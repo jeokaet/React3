@@ -18,13 +18,14 @@ function Mainpage() {
     const [searchWord, setSearchWord] = useState("");
     const navigate = useNavigate();
     const { setStep, setRegion } = usePlaceStore();
-    const { setLatitude, setLongitude } = useLocationStore();
+    const { setLatitude, setLongitude,setStartingPoint } = useLocationStore();
     // const [ searchResult, setSearchResult ] = useState("true");
     // const [ isSearching, setIsSearching ] = useState(false);
     const [showScrollTop, setShowScrollTop] = useState(false);
 
     useEffect(() => {
         setStep(1);
+        setStartingPoint("");
         //        if (!isSearching) {
         caxios.get("/region")
             .then((resp) => {
