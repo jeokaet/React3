@@ -9,7 +9,7 @@ function Dashboard() {
   const [data, setData] = useState({
     totalUsers: 736,
     todayUsers: 12,
-    totalPlaces: 1232,
+    totalPlaces: 454,
     totalRecommends: 0,
     recentPlaces: [],
     loginLogs: [],
@@ -43,7 +43,7 @@ function Dashboard() {
         </Grid>
         <Grid item xs={12} md={3} sx={{ width: "30%"}}>
           <Paper elevation={3} sx={{ p: 3 }}>
-            <Typography variant="subtitle1">등록된 장소 수</Typography>
+            <Typography variant="subtitle1">생성된 일정 수</Typography>
             <Typography variant="h6">{data.totalPlaces} 곳</Typography>
           </Paper>
         </Grid>

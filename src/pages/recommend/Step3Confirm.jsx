@@ -69,7 +69,7 @@ const Step3Confirm = ({ setRouteLocations }) => {
       <Typography variant="h6" sx={{ mt: 1, mb: 2 }}>나의 최단 동선</Typography>
 
       <Box sx={{ display: "flex", mb: 10 }}>
-        <Grid container justifyContent="flex-start" alignItems="center" sx={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
+        <Grid container justifyContent="flex-start" alignItems="center" sx={{ display: "flex", flexWrap: "wrap", gap: "30px", width:"100%" }}>
           {
             result.map((place, index) => (
               <Grid key={index} item xs={6} sm={4} md={2} lg={1.5} sx={{ width: "100px" }}>
