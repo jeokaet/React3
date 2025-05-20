@@ -96,7 +96,16 @@ const Step2Place = () => {
                 return;
             }
 
-            setFilteredResults(res.data.results || []);
+            const patchedResults = (res.data.results || []).map((place) => {
+                const matched = placeList.find(p => p.name === place.name);
+                return {
+                    ...place,
+                    imageUrl: matched?.imageUrl || "/images/NoImage.png",
+                };
+            });
+            setFilteredResults(patchedResults);
+            
+            
             setQuery("");
         } catch (err) {
             console.error("LLM 요청 실패:", err);

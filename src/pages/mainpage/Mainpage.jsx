@@ -20,7 +20,7 @@ function Mainpage() {
     const { setStep, setRegion, setSelectedPlaces } = usePlaceStore();
     const { setLatitude, setLongitude, setStartingPoint } = useLocationStore();
 
-    // const [ searchResult, setSearchResult ] = useState("true");
+    // const [ searchResult, setSearchResult ] = useState("truee");
     // const [ isSearching, setIsSearching ] = useState(false);
     const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -250,9 +250,13 @@ function Mainpage() {
                         <Typography variant="h4">
                             PARTNERS
                         </Typography>
+
                         <Box sx={{ display: "flex", alignItems: "center", width: "100%", gap:5 }}>
-                            <img src="/images/HJM.png" alt="HJM" style={{ height: 60, width:200 }} />
-                            <img src="/images/keduit.png" alt="kedit" style={{ height: 60,  width:200 }} />
+                            <img src="/images/HJM.png" alt="HJM" style={{ height: 60, width:200, margin:15 }} />
+                            <img src="/images/keduit.png" alt="kedit" style={{ height: 60, width:200, margin:15 }} />
+                            <img src="/images/CHY_logo.png" alt="chy" style={{ height: 60, width:200, margin:15 }} />
+                            <img src="/images/codebreaker.png" alt="codebreaker" style={{ height: 60, width:200, margin:15 }} />
+                            <img src="/images/woong.png" alt="woong" style={{ height: 60, width:150, margin:15 }} />
                         </Box>
                     </Grid>
                 </Grid>
