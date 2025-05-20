@@ -68,6 +68,7 @@ function MyPage() {
         </Box>
       </Grid>
     </Box>
+
   )
 }
 

@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import {
-  Box, Grid, TextField, Typography, Button, CircularProgress, InputLabel, 
+  Box, Grid, TextField, Typography, Button, CircularProgress, InputLabel,
 } from '@mui/material';
-import useLocationStore from '../../store/useLocationStore'; 
+import useLocationStore from '../../store/useLocationStore';
 
 
 
 const Step1Date = () => {
-  const {  setLatitude, setLongitude, setLocation, setTripDate, tripDate, setInputLocation, inputLocation, startingPoint, setStartingPoint, setStartingLocation } = useLocationStore();
+  const { setLatitude, setLongitude, setLocation, setTripDate, tripDate, setInputLocation, inputLocation, startingPoint, setStartingPoint, setStartingLocation } = useLocationStore();
 
   useEffect(() => {
     if (!tripDate) {
@@ -16,33 +16,33 @@ const Step1Date = () => {
     }
   }, []);
   const handleFindMyLocation = () => {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
-        console.log("정확한 위치:", lat, lng);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          console.log("정확한 위치:", lat, lng);
 
-        setLatitude(lat);
-        setLongitude(lng);
-        setLocation(lat, lng);
-        fetchPlaceNameFromGoogle(lat, lng); 
-      },
-      (error) => {
-        console.warn("위치 정보 가져오기 실패, IP 기반 위치로 대체:", error);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0
-      }
-    );
-  } else {
-    alert("브라우저가 위치 정보를 지원하지 않습니다.");
-  }
-};
+          setLatitude(lat);
+          setLongitude(lng);
+          setLocation(lat, lng);
+          fetchPlaceNameFromGoogle(lat, lng);
+        },
+        (error) => {
+          console.warn("위치 정보 가져오기 실패, IP 기반 위치로 대체:", error);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        }
+      );
+    } else {
+      alert("브라우저가 위치 정보를 지원하지 않습니다.");
+    }
+  };
 
-  
+
 
 
   const fetchPlaceNameFromGoogle = (latitude, longitude) => {
@@ -66,7 +66,7 @@ const Step1Date = () => {
         if (poi && poi.name) {
           setStartingLocation(poi.name);
           setStartingPoint(poi.name);
-          
+
         } else {
           setInputLocation("알 수 없는 장소");
         }
@@ -81,7 +81,7 @@ const Step1Date = () => {
 
 
   return (
-    <Box sx={{mt: 8}}>
+    <Box sx={{ mt: 8 }}>
       <Typography variant="h6" gutterBottom>시작하기</Typography>
 
       <Grid item xs={12} sx={{ mb: 2 }}>
@@ -99,7 +99,7 @@ const Step1Date = () => {
           InputLabelProps={{
             shrink: true,
           }}
-          
+
         />
       </Grid>
 
@@ -110,19 +110,11 @@ const Step1Date = () => {
           placeholder="출발지를 설정해주세요."
           name="searchPlace"
           variant="outlined"
-          value={startingPoint ? startingPoint : inputLocation}
-          onChange={(e) => {
-            const value = e.target.value;
-              console.log("✅ 현재 입력값 :", value);
-              setInputLocation(value);
-              setStartingPoint("");
-              setStartingLocation(value);
-              
-              
-          }}
-
+          InputProps={{ readOnly: true }} // ✅ 입력 불가
+          value={startingPoint || ""}
         />
-        
+
+
         <Button
           sx={{
             mt: 1,
