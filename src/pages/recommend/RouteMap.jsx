@@ -6,12 +6,6 @@ const RouteMap = ({ locations }) => {
   const markersRef = useRef([]);
   const polylineRef = useRef(null);
 
-  console.log("RouteMap locations:", locations);
-locations.forEach(loc => {
-  console.log(loc.name, loc.position?.getLat(), loc.position?.getLng());
-});
-
-
   // 지도 초기화
   useEffect(() => {
     if (!window.kakao || !window.kakao.maps || !mapRef.current) return;

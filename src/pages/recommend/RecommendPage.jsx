@@ -10,11 +10,9 @@ import Step3Confirm from './Step3Confirm';
 
 function RecommendPage() {
   const step = usePlaceStore((s) => s.step);
-  const [locations, setLocations] = useState([]);
   const [kakaoReady, setKakaoReady] = useState(false);
   const [routeLocations, setRouteLocations] = useState([]);
 
-  console.log("recommand", routeLocations);
   // 카카오 SDK 딱 한번만 로딩
   useEffect(() => {
     if (window.kakao && window.kakao.maps) {
@@ -29,17 +27,10 @@ function RecommendPage() {
     script.onload = () => {
       window.kakao.maps.load(() => {
         setKakaoReady(true);
-        console.log("Kakao SDK loaded in RecommendPage");
       });
     };
     document.head.appendChild(script);
   }, []);
-
-  useEffect(() => {
-    console.log("routeLocations changed:", routeLocations);
-  }, [routeLocations]);
-
-
 
   return (
     <Box sx={{ width: "100vw", height: "100vh", overflow: "hidden", position: "relative" }}>
@@ -49,7 +40,7 @@ function RecommendPage() {
             <StepBar />
           </Grid>
           <Grid sx={{ width: "80%", height: "100%", borderRight: "1px solid #ccc" }}>
-            <MainContent locations={locations} setRouteLocations={setRouteLocations} />
+            <MainContent setRouteLocations={setRouteLocations} />
           </Grid>
         </Grid>
 

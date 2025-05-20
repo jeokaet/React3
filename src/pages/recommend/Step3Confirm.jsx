@@ -10,14 +10,11 @@ import step3Styles from "./Step3.module.css";
 
 // 출발지 정해서 보내줘야 함. 그리고 도착지도 출발지에서 제일 먼 곳 찾아서 넣어줘야함. 
 const Step3Confirm = ({ setRouteLocations }) => {
-  const [keyword, setKeyword] = useState("");
   const [mode, setMode] = useState(null);
-  const { selectedPlaces } = usePlaceStore(); // ✅ 실제 선택된 장소들
-  const { startingPoint, latitude, longitude } = useLocationStore();
+  const { selectedPlaces } = usePlaceStore(); 
+  const { latitude, longitude } = useLocationStore();
   const [result, setResult] = useState([]);
   const [saved, setSaved] = useState(false);
-
-  console.log("목적지:", selectedPlaces);
 
   const routeLocations = useMemo(() => {
     if (!result || result.length === 0) return [];
@@ -28,7 +25,6 @@ const Step3Confirm = ({ setRouteLocations }) => {
     }));
   }, [result]);
 
-  console.log("✅ routeLocations:", routeLocations);
 
   useEffect(() => {
     if (routeLocations.length > 0) {
