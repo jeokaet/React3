@@ -20,7 +20,7 @@ function Mainpage() {
     const { setStep, setRegion, setSelectedPlaces } = usePlaceStore();
     const { setLatitude, setLongitude, setStartingPoint } = useLocationStore();
 
-    // const [ searchResult, setSearchResult ] = useState("true");
+    // const [ searchResult, setSearchResult ] = useState("truee");
     // const [ isSearching, setIsSearching ] = useState(false);
     const [showScrollTop, setShowScrollTop] = useState(false);
 
