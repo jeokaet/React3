@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from "./MyPage.module.css";
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import {
   Grid,
   List,
@@ -16,12 +16,16 @@ import {
 function MyPage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-
-
+  const location = useLocation();
+  const getPageTitle = () => {
+    if (location.pathname === "/myPage") return "내 정보";
+    if (location.pathname === "/myPage/records") return "나의 여행기록";
+    return ""; // 그 외의 경우
+  };
 
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", width: "80vw" }}>
+    <Box sx={{ display: "flex", minHeight: "90vh", width: "80vw" }}>
       <Grid>
         <Box
           sx={{
@@ -52,19 +56,18 @@ function MyPage() {
           </List>
         </Box>
       </Grid>
-      <Grid>
-        <Box sx={{ ml: 5, mr: 5 }}>
-          <Typography variant="h4" sx={{ mt: 2 }}>
-            내 정보
+      <Grid sx={{ width: "100%" }}>
+        <Box sx={{ ml: 5, mr: 5, width: "100%" }}>
+          <Typography variant="h4" sx={{ mt: 2, ml: 2 }}>
+            {getPageTitle()}
           </Typography>
           <Divider sx={{ mt: 1, mb: 3 }} />
-          <Box sx={{ p: 2}}>
+          <Box sx={{ p: 2, width: "100%" }}>
             <Outlet />
           </Box>
         </Box>
       </Grid>
     </Box>
-
 
   )
 }

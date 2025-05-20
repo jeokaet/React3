@@ -114,11 +114,11 @@ const Step2Place = () => {
     const typeToKorean = {
         restaurant: "음식점",
         cafe: "카페",
-        bar: "바",
+        bar: "음식점",
         bakery: "음식점",
         tourist_attraction: "관광지",
         museum: "박물관",
-        zoo: "관광지지",
+        zoo: "관광지",
         amusement_park: "관광지",
         aquarium: "관광지",
         shopping_mall: "쇼핑",
@@ -291,8 +291,8 @@ const Step2Place = () => {
                         itemContent={(index, place) => {
                             const isAdded = selectedPlaces.some((p) => p.name === place.name);
                             const togglePlace = () => {
-                                if (!isAdded && selectedPlaces.length >= 5) {
-                                    alert("최대 5개까지만 선택할 수 있습니다.");
+                                if (!isAdded && selectedPlaces.length >= 4) {
+                                    alert("최대 4개까지만 선택할 수 있습니다.");
                                     return;
                                 }
 

@@ -1,150 +1,54 @@
-.container{
-    height: 100%;
-    display: flex;
-}
-
-.profile{
-   
-    width: 30%;
-    display: flex;
-    justify-content: center;
-}
-
-.img{
-  
-    width: 250px;
-    height: 250px;
-    border-radius: 100%;
-    margin-top: 50px;
-    background-color: rgb(180, 179, 179);
-    
-}
-
-.info{
-   
-    width: 70%;
-}
-
-.contents{
-    border: 1px solid black;
-    height: 80%;
-    width: 90%;
-    margin-top: 50px;
-    margin-bottom: 50px;
-    border-radius: 10px;
-    display: flex;
-    gap:10px;
-    flex-direction: column;
-  
-    padding-top: 20px;
-    padding-left: 30px;
-}
-.contents>div{
-   font-size: 20px;
-}
-
-.contents>p{
-    margin-left: 10px;
-}
-.btnbox{
-    width: 90%;
-    display: flex;
-    justify-content: end;
-    
-}
-
-.update, .delete{
-    width: 100px;
-    height: 30px;
-    margin-top: 10px;
-    
-}
-
-.delete{
-    margin-left: 10px;
-}
-
-
-/*  */
 .container {
   height: 100%;
+  width: 100%;
   display: flex;
-  background-color: #f8f9fa;
   padding: 20px;
   box-sizing: border-box;
 }
 
-.profile {
-  width: 30%;
-  display: flex;
-  justify-content: center;
-  padding: 20px;
-}
-
-.img {
-  width: 250px;
-  height: 250px;
-  border-radius: 100%;
-  margin-top: 50px;
-  background-color: #f0f0f0;
-  border: 4px solid #19a1ad;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  object-fit: cover;
-  transition: all 0.3s ease;
-}
-
-.img:hover {
-  border-color: #f89f5e;
-  transform: scale(1.02);
-}
-
-.info {
-  width: 70%;
-  padding: 20px;
-}
-
-.contents {
+.card {
   border: none;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   background-color: #ffffff;
   height: 80%;
   width: 90%;
-  margin-top: 50px;
-  margin-bottom: 50px;
   border-radius: 15px;
   display: flex;
   gap: 20px;
   flex-direction: column;
-  padding: 40px;
-  position: relative;
 }
 
-.contents > div {
+.fieldContainer {
+  height: 50px;
+  margin-bottom: 10px;
+  display: flex;
+}
+
+.fieldLabel {
+  width: 180px;
   font-size: 20px;
   color: #19a1ad;
   font-weight: 600;
   margin-bottom: 2px;
 }
 
-.contents > p {
+.fieldValue {
   margin-left: 10px;
   font-size: 18px;
   color: #333;
   margin-top: 0;
   padding-bottom: 8px;
-  border-bottom: 1px solid #f0f0f0;
 }
 
-.btnbox {
-  width: 90%;
+.buttonContainer {
+  width: 100%;
   display: flex;
   justify-content: flex-end;
-  margin-top: 10px;
+  margin-top: 30px;
   gap: 12px;
 }
 
-.update,
-.delete {
+.primaryButton {
   width: 120px;
   height: 40px;
   margin-top: 10px;
@@ -153,62 +57,28 @@
   cursor: pointer;
   transition: all 0.2s ease;
   border: none;
-}
-
-.update {
   background-color: #19a1ad;
   color: white;
 }
 
-.update:hover {
+.primaryButton:hover {
   background-color: #f89f5e;
 }
 
-.delete {
+.cancelButton {
+  width: 120px;
+  height: 40px;
+  margin-top: 10px;
   margin-left: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
   background-color: transparent;
   border: 1px solid #f44336;
   color: #f44336;
 }
 
-.delete:hover {
+.cancelButton:hover {
   background-color: rgba(244, 67, 54, 0.08);
-}
-
-/* Additional styles for form elements */
-.contents input[type="text"],
-.contents input[type="email"],
-.contents textarea {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #19a1ad;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: all 0.3s ease;
-  box-sizing: border-box;
-}
-
-.contents input[type="text"]:focus,
-.contents input[type="email"]:focus,
-.contents textarea:focus {
-  outline: none;
-  border-color: #f89f5e;
-  box-shadow: 0 0 0 2px rgba(248, 159, 94, 0.2);
-}
-
-.contents input[type="checkbox"] {
-  accent-color: #19a1ad;
-}
-
-/* Title at top of contents */
-.contents:before {
-  content: "내 정보";
-  display: block;
-  font-size: 24px;
-  font-weight: bold;
-  color: #19a1ad;
-  border-bottom: 2px solid #19a1ad;
-  padding-bottom: 10px;
-  margin-bottom: 20px;
-  width: 100%;
 }

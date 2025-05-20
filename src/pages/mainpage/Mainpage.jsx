@@ -17,26 +17,28 @@ function Mainpage() {
     const [originalList, setOriginalList] = useState([]);
     const [searchWord, setSearchWord] = useState("");
     const navigate = useNavigate();
-    const { setStep, setRegion } = usePlaceStore();
-    const { setLatitude, setLongitude,setStartingPoint } = useLocationStore();
+    const { setStep, setRegion, setSelectedPlaces } = usePlaceStore();
+    const { setLatitude, setLongitude, setStartingPoint } = useLocationStore();
+
     // const [ searchResult, setSearchResult ] = useState("true");
     // const [ isSearching, setIsSearching ] = useState(false);
     const [showScrollTop, setShowScrollTop] = useState(false);
 
     useEffect(() => {
-        setStep(1);
-        setStartingPoint("");
-        //        if (!isSearching) {
-        caxios.get("/region")
-            .then((resp) => {
-                setRegionList(resp.data);
-                setOriginalList(resp.data);
-            })
-            .catch((error) => {
-                console.error("에러 발생:", error);
-                alert("지역 목록을 불러오는데 실패했습니다.");
-            });
-        //        }
+//        if (!isSearching) {
+            setStep(1);
+            setStartingPoint("");
+            setSelectedPlaces([]);
+
+            caxios.get("/region")
+                .then((resp) => {
+                    setRegionList(resp.data);
+                    setOriginalList(resp.data);
+                })
+                .catch((error) => {
+                    console.error("에러 발생:", error);
+                    alert("지역 목록을 불러오는데 실패했습니다.");
+                });
     }, [])
     useEffect(() => {
         const handleScroll = () => {
