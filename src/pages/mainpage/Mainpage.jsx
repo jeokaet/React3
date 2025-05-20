@@ -245,7 +245,8 @@ function Mainpage() {
                             PARTNERS
                         </Typography>
                         <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
-                            <img src="/images/HJM.png" alt="HJM" style={{ height: 60 }} />
+                            <img src="/images/HJM.png" alt="HJM" style={{ height: 60, margin:15 }} />
+                            <img src="/images/CHY_logo.png" alt="HJM" style={{ height: 60, margin:15 }} />
                         </Box>
                     </Grid>
                 </Grid>
