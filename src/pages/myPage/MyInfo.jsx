@@ -21,7 +21,6 @@ function MyInfo() {
     const response = await caxios.get("/mypage/getMembers", {
       params: { loginId }
     });
-    console.log(response.data);
     setUserInfo(response.data);
   }
 
@@ -29,7 +28,7 @@ function MyInfo() {
     fetchUserInfo();
   }, []);
 
-  const handleEditClick = () => setEditMode(true);
+ 
   const handleCancelClick = () => setEditMode(false);
 
   const handleChange = (e) => {
@@ -282,89 +281,6 @@ function MyInfo() {
         </Grid>
       </Grid>
     </Box>
-    // {/* <Box sx={{ flexGrow: 1, p: 2 ,width:'100vw',boxSizing:'border-box'}}>
-    //       <Grid container spacing={2}>
-    //         {/* 오른쪽 정보 영역 */}
-    //     <Grid item xs={12} md={9}>
-    //       <Box
-    //         sx={{
-
-    //           borderRadius: 2,
-    //           p: 3,
-    //           mb: 2,
-    //           boxSizing: 'border-box',
-    //           display: 'flex',
-    //           flexDirection: 'column',
-    //           gap: 1.5,
-    //           backgroundColor:'#f0f0f0'
-    //         }}
-    //       >
-    //         <Typography variant="h6">아이디</Typography>
-    //         <Typography>{userInfo?.loginId}</Typography>
-    //         <Typography variant="h6">생년월일</Typography>
-    //         <Typography>{userInfo?.birth}</Typography>
-
-    //         <Typography variant="h6">이메일</Typography>
-    //         {editMode ? ( 
-    //           <TextField name='email' value={userInfo?.email || ''} onChange={handleChange} />
-    //         ) : (
-    //           <Typography>{userInfo?.email}</Typography>
-    //         )}
-    //         <Typography variant="h6">주소</Typography>
-    //          {editMode ? ( 
-    //           <TextField name='address1' value={userInfo?.address1 || ''} onChange={handleChange} />
-    //         ) : (
-    //           <Typography>{userInfo?.address1}</Typography>
-    //         )}
-
-
-    //         <Typography variant="h6">닉네임</Typography>
-    //          {editMode ? ( 
-    //           <TextField name='userName' value={userInfo?.userName || ''} onChange={handleChange} />
-    //         ) : (
-    //          <Typography>{userInfo?.userName}</Typography>
-    //         )}
-
-    //         <Typography variant="h6">위치 동의 여부</Typography>
-    //         {editMode ? ( 
-    //           <FormControlLabel 
-    //           control={
-    //             <Checkbox
-    //             checked={userInfo?.agreement ==='Y'}
-    //             onChange={(e)=>
-    //               setUserInfo((prev)=>({
-    //                 ...prev,
-    //                 agreement: e.target.checked ? 'Y' : 'N',
-    //               }))
-    //             }
-    //             />
-    //           }
-    //           label="위치 정보를 수집하는데 동의합니다"
-    //           />
-    //         ) : (
-    //            <Typography>{userInfo?.agreement === 'Y' ? '동의함' : '동의 안 함'}</Typography>
-    //         )}
-
-
-    //       </Box>
-
-    //       <Box display="flex" justifyContent="flex-end" gap={2} sx={{marginLeft:23}}>
-    //        {editMode ? (
-    //         <>
-    //          <Button variant="contained" color="primary" onClick={handleSaveClick}>저장</Button>
-    //         <Button variant="outlined" color="error" onClick={handleCancelClick}>취소</Button>
-    //        </>
-    //        ) : (
-    //         <>
-    //         <Button variant="contained" sx={{ width: "55%",  backgroundColor: "#19a1ad", "&:hover": { backgroundColor: "#f89f5e",},}} onClick={()=>setEditMode(true)}>정보 수정하기</Button>
-    //         <Button variant="outlined" color="error" onClick={handleDeleteClick}>회원 탈퇴</Button>
-    //        </>
-    //        )}
-
-    //       </Box>
-    //     </Grid>
-    //   </Grid>
-    // </Box> */}
 
   );
 }

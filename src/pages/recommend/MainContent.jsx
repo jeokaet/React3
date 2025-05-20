@@ -6,7 +6,7 @@ import { Box, IconButton, Badge } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import Step1Date from "./Strp1Date";
 
-const MainContent = ({ locations, setRouteLocations}) => {
+const MainContent = ({ setRouteLocations}) => {
   const step = usePlaceStore((s) => s.step);
  
   return (
@@ -25,7 +25,7 @@ const MainContent = ({ locations, setRouteLocations}) => {
         <Box sx={{ padding: 2 }}>
           {step === 1 && <Step1Date />}
           {step === 2 && <Step2Place />}
-          {step === 3 && <Step3Confirm locations={locations} setRouteLocations={setRouteLocations} />}
+          {step === 3 && <Step3Confirm setRouteLocations={setRouteLocations} />}
         </Box>
       </Box>
   );

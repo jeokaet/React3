@@ -3,13 +3,12 @@ import caxios from "../../api/caxios";
 
 const DrivingPathMap = ({ locations }) => {
 
-    console.log("locations",locations);
   useEffect(() => {
     if (!window.kakao || !window.kakao.maps || locations.length < 2) return;
 
     
     if (locations.length > 5) {
-      alert("카카오 길찾기는 경유지를 최대 3개까지 지원합니다.\n추가된 경유지는 제외됩니다.");
+      alert("카카오 길찾기는 목적지를 최대 4개까지 지원합니다.\n추가된 경유지는 제외됩니다.");
     }
 
     const mapContainer = document.getElementById("car-map");
@@ -19,40 +18,76 @@ const DrivingPathMap = ({ locations }) => {
     });
 
     // 마커 찍기 (출발지, 경유지, 도착지 모두)
-    locations.forEach((loc, index) => {
-      const marker = new window.kakao.maps.Marker({
-        position: loc.position,
-        map: map,
-        // 마커를 클릭했을 때 나오는 텍스트 설정 (출발지, 경유지, 도착지)
-        title:
-          index === 0
-            ? "출발지"
-            : index === locations.length - 1
-            ? "도착지"
-            : `경유지 ${index}`,
-      });
-    });
+locations.forEach((loc, index) => {
+  const marker = new window.kakao.maps.Marker({
+    position: loc.position,
+    map: map,
+    title:
+      index === 0
+        ? "출발지"
+        : index === locations.length - 1
+        ? "도착지"
+        : `목적지 ${index}`,
+  });
+  //클릭시 정보창 띄우기
+const infoWindow = new window.kakao.maps.InfoWindow({
+  content: `
+    <div style="
+      padding: 10px 14px;
+      font-size: 14px;
+      background-color: #fff;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      white-space: nowrap;
+      text-align: center;
+      color: #333;
+      font-weight: bold;
+    ">
+      ${
+        index === 0
+          ? "🚗 출발지"
+          : index === locations.length - 1
+          ? "🏁 도착지"
+          : `📍 경유지 ${index}`
+      }
+    </div>
+  `,
+});
 
-    // 출발지 (origin)
+
+
+  let isOpen = false;
+
+  window.kakao.maps.event.addListener(marker, "click", () => {
+    if (isOpen) {
+      infoWindow.close();
+      isOpen = false;
+    } else {
+      infoWindow.open(map, marker);
+      isOpen = true;
+    }
+  });
+});
+
+
+
+    // 출발지 
     const origin = `${locations[0].position.getLng()},${locations[0].position.getLat()}`;
-    // 도착지 (destination)
+
+    // 도착지
     const destination = `${locations[locations.length - 1].position.getLng()},${locations[locations.length - 1].position.getLat()}`;
 
-    // 경유지 (waypoints) - 출발지, 도착지 제외한 중간 위치들
+    // 출발지, 도착지 제외한 중간 위치들
      let waypointLocations = locations.slice(1, locations.length - 1);
      if (waypointLocations.length > 3) {
          waypointLocations = waypointLocations.slice(0, 3);
         }
-     
-        console.log("경유지 좌표들:");
-waypointLocations.forEach((loc, idx) => {
-  console.log(`경유지${idx + 1}:`, loc.position.getLng(), loc.position.getLat());
-});
 
-
+    //경유지
     const waypoints = waypointLocations
       .map((loc) => `${loc.position.getLng()},${loc.position.getLat()}`)
-      .join("|"); // waypoints 구분자는 '|' 입니다
+      .join("|"); // waypoints 구분자는 '|'
 
 
     // GET 요청 쿼리 파라미터 구성
@@ -77,8 +112,8 @@ waypointLocations.forEach((loc, idx) => {
         }
 
         const bestRoute = data.routes.reduce((prev, curr) => {
-  return curr.distance < prev.distance ? curr : prev;
-});
+            return curr.distance < prev.distance ? curr : prev;
+        });
 
         const linePath = [];
 
