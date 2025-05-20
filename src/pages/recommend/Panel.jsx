@@ -68,7 +68,7 @@ const Panel = () => {
               선택 장소
             </Typography>
             <Typography variant="h6" >
-              {selectedPlaces.length} / 5
+              {selectedPlaces.length} / 4
             </Typography>
           </Box>
           {selectedPlaces.length === 0 ? (

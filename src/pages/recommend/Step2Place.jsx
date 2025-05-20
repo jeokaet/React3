@@ -116,15 +116,15 @@ const Step2Place = () => {
         cafe: "카페",
         bar: "바",
         bakery: "빵집",
-        tourist_attraction: "관광명소",
+        tourist_attraction: "관광지",
         museum: "박물관",
         zoo: "동물원",
         amusement_park: "놀이공원",
         aquarium: "아쿠아리움",
-        shopping_mall: "쇼핑몰",
-        clothing_store: "의류매장",
+        shopping_mall: "쇼핑",
+        clothing_store: "쇼핑",
         park: "공원",
-        natural_feature: "자연경관",
+        natural_feature: "관광지",
     };
 
 
@@ -290,8 +290,8 @@ const Step2Place = () => {
                         itemContent={(index, place) => {
                             const isAdded = selectedPlaces.some((p) => p.name === place.name);
                             const togglePlace = () => {
-                                if (!isAdded && selectedPlaces.length >= 5) {
-                                    alert("최대 5개까지만 선택할 수 있습니다.");
+                                if (!isAdded && selectedPlaces.length >= 4) {
+                                    alert("최대 4개까지만 선택할 수 있습니다.");
                                     return;
                                 }
 

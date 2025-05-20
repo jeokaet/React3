@@ -14,7 +14,7 @@ function AdminPage() {
         <Grid>
           <AdminSidebar/>
         </Grid>
-        <Grid>
+        <Grid sx={{ minHeight: "100%" , width:"80%" }}>
         <Routes>
             <Route path="/" element={<DashBoard/>}></Route>
             <Route path="/dashBoard" element={<DashBoard/>}></Route>
