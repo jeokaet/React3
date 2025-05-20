@@ -25,7 +25,6 @@ function Mainpage() {
     const [showScrollTop, setShowScrollTop] = useState(false);
 
     useEffect(() => {
-        //        if (!isSearching) {
         setStep(1);
         setStartingPoint("");
         setSelectedPlaces([]);
@@ -39,15 +38,15 @@ function Mainpage() {
                 console.error("에러 발생:", error);
                 alert("지역 목록을 불러오는데 실패했습니다.");
             });
-    }, [])
-    useEffect(() => {
+
         const handleScroll = () => {
             setShowScrollTop(window.scrollY > 300);
         };
 
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    }, [])
+ 
 
     const handleRegionClick = (regionName) => {
         setRegion(regionName);
@@ -253,7 +252,7 @@ function Mainpage() {
                         </Typography>
                         <Box sx={{ display: "flex", alignItems: "center", width: "100%", gap:5 }}>
                             <img src="/images/HJM.png" alt="HJM" style={{ height: 60, width:200 }} />
-                            <img src="/images/keduit.png" alt="HJM" style={{ height: 60,  width:200 }} />
+                            <img src="/images/keduit.png" alt="kedit" style={{ height: 60,  width:200 }} />
                         </Box>
                     </Grid>
                 </Grid>
